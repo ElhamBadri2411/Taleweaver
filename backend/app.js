@@ -8,6 +8,7 @@ import { configDotenv } from "dotenv";
 export const app = express()
 configDotenv()
 
+
 try {
   await db.authenticate();
   // Automatically detect all of your defined models and create (or modify) the tables for you.

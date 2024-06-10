@@ -1,0 +1,32 @@
+
+services:
+  # TODO: Add frontend
+  taleweaver_backend:
+    container_name: taleweaver_backend
+    build: ./backend/ 
+    image: taleweaver/backend
+    ports:
+      - "3000:3000"
+    environment:
+      - POSTGRES_DB=temp
+      - POSTGRES_USER=temp
+      - POSTGRES_PASSWORD=temp
+      - POSTGRES_HOST=taleweaver_db
+    depends_on:
+      - taleweaver_db
+    restart: always
+
+  taleweaver_db:
+    container_name: taleweaver_db
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=temp
+      - POSTGRES_USER=temp
+      - POSTGRES_PASSWORD=temp
+    volumes:
+      - taleweaver_db_data:/var/lib/postgresql/data
+
+volumes:
+  taleweaver_db_data: {}
