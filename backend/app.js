@@ -4,6 +4,7 @@ import userRoutes from "./routes/users_router.js"
 import booksRoutes from "./routes/books_router.js"
 import db from "./utils/db.js";
 import { configDotenv } from "dotenv";
+import imageRoutes from "./routes/images_router.js"
 
 export const app = express()
 configDotenv()
@@ -26,7 +27,9 @@ const PORT = 3000;
 
 // routes
 app.use("/books", booksRoutes)
-app.use("/user", userRoutes)
+app.use("/users", userRoutes)
+app.use("/api/images", imageRoutes)
+
 
 app.listen(PORT, (err) => {
   if (err) console.log(err);
