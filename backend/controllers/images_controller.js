@@ -1,5 +1,9 @@
 import OpenAI from "openai";
 import crypto from 'crypto'
+import axios from "axios";
+import path from "path";
+import { fileURLToPath } from 'url';
+import fs from "fs"
 
 const OPEN_API_KEY = process.env.OPEN_API_KEY
 
@@ -17,10 +21,15 @@ const generateImage = async (req, res, next) => {
     const response = await openai.images.generate({
       prompt: text
     })
-    const imageUrl = response.data.data[0].url;
+    console.log(response);
+    const imageUrl = response.data[0].url;
 
     // fetch image
     const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+
+
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
 
     // Save the image to the local file system
     const imageHash = crypto.createHash('md5').update(imageResponse.data).digest('hex');

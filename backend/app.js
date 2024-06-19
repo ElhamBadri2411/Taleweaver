@@ -5,10 +5,17 @@ import booksRoutes from "./routes/books_router.js"
 import db from "./utils/db.js";
 import { configDotenv } from "dotenv";
 import imageRoutes from "./routes/images_router.js"
+import cors from "cors"
 
 export const app = express()
 configDotenv()
 
+const corsoptions = {
+  origin: "http://localhost:4200",
+  credentials: true
+};
+
+app.use(cors(corsoptions));
 
 try {
   await db.authenticate();
