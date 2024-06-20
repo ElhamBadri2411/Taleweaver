@@ -16,6 +16,7 @@ TaleWeaver is a web application that allows users to create personalized picture
 
 - **Frontend Framework:** Use Angular to create a Single Page Application (SPA).
 - **Backend Framework: E**xpress.js as the core backend API to handle data storage, retrieval, and processing.
+- **Database**: Postgres, using sequelize as an ORM
 - **RESTful API:** Ensuring that the application's API follows RESTful principles for efficient and organized communication.
 - **Deployment:** Deploy the application on a Virtual Machine on Google Cloud using Docker, Docker compose and GitHub actions
 - **General public:** It will be deployed on a Virtual Machine where anyone can access
