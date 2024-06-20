@@ -6,6 +6,12 @@ import db from "./utils/db.js";
 import { configDotenv } from "dotenv";
 import imageRoutes from "./routes/images_router.js"
 import cors from "cors"
+import path from 'path'
+import { fileURLToPath } from "url";
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const app = express()
 configDotenv()
@@ -31,6 +37,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const PORT = 3000;
+console.log(path.join(__dirname, 'generated-images'))
+
+app.use('/api/generated-images', express.static(path.join(__dirname, 'generated-images')));
 
 // routes
 app.use("/books", booksRoutes)

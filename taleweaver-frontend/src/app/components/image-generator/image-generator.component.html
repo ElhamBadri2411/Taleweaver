@@ -1,16 +1,27 @@
-<div class="image-generator">
-  <h1>Picture Book Image Generator</h1>
-  <form [formGroup]="form" (ngSubmit)="generateImage()">
-    <textarea
-      formControlName="text"
-      placeholder="Enter text for image generation"
-    ></textarea>
-    <button type="submit">Generate Image</button>
-  </form>
+<div class="flex flex-col items-center justify-center min-h-screen text-center p-6">
   @if(imageUrl){
   <div>
-    <h2>Generated Image:</h2>
-    <img [src]="imageUrl" alt="Generated" />
+    <img [src]="imageUrl" alt="Generated" class="max-w-full max-h-[600px] mb-4 rounded-lg" />
+  </div>
+  } @else if (isGeneratingImage) {
+  <div class="w-[600px] h-[600px] bg-primary-content flex items-center justify-center mb-4 rounded-lg">
+    <h2>Generating your Image</h2>
+    <span class="loading loading-spinner loading-lg mx-5"></span>
+  </div>
+  } @else {
+  <div class="w-[600px] h-[600px] bg-primary-content flex items-center justify-center mb-4 rounded-lg">
   </div>
   }
+  <div class="divider"></div>
+  <form [formGroup]="form" class="flex flex-col items-center w-full max-w-full">
+    <textarea formControlName="text" placeholder="Write your story here ..."
+      class="textarea textarea-secondary border-none outline-none focus:outline-none resize-none w-[900px] h-[200px] text-2xl text-secondary-content">
+    </textarea>
+  </form>
+  <div class="flex flex-row justify-start w-[600px] mt-3">
+    <button (click)="generateImage()" class="btn btn-primary">
+      <ng-icon name="heroSparklesSolid"></ng-icon>
+      <span class="ml-2">Generate Image</span>
+    </button>
+  </div>
 </div>

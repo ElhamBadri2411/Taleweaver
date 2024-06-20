@@ -21,4 +21,5 @@ export class ImagesService {
   generateImage(text: string): Observable<Image> {
     return this.http.post<Image>(`${this.endpoint}`, { text });
   }
+
 }
