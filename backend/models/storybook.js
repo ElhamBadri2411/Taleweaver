@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import db from "../utils/db.js"
 import { User } from "./user.js";
-import { Story } from "./story.js";
+import { Page } from "./page.js";
 
 
 export const StoryBook = db.define("StoryBook", {
@@ -15,5 +15,5 @@ export const StoryBook = db.define("StoryBook", {
 // User.hasMany(StoryBook, { onDelete: 'CASCADE', hooks: true });
 // StoryBook.belongsTo(User);
 
-StoryBook.hasMany(Story, { onDelete: 'CASCADE', hooks: true });
-Story.belongsTo(StoryBook);
+StoryBook.hasMany(Page, { onDelete: 'CASCADE', hooks: true });
+Page.belongsTo(StoryBook);

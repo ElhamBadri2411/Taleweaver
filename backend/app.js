@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import userRoutes from "./routes/users_router.js"
 import storybookRouter from "./routes/storybooks_router.js";
-import storyRouter from "./routes/story_router.js";
+import pageRouter from "./routes/page_router.js";
 import db from "./utils/db.js";
 import { configDotenv } from "dotenv";
 
@@ -27,7 +27,7 @@ const PORT = 3000;
 
 // routes
 app.use("/api/storybooks", storybookRouter)
-app.use("/api/stories", storyRouter)
+app.use("/api/pages", pageRouter)
 app.use("/user", userRoutes)
 
 app.listen(PORT, (err) => {

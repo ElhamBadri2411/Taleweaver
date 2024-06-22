@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import db from "../utils/db.js"
 
 
-export const Story = db.define("Story", {
+export const Page = db.define("Page", {
     paragraph: {
         type: DataTypes.TEXT,
         allowNull: false
