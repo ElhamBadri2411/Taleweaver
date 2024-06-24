@@ -5,10 +5,24 @@ import storybookRouter from "./routes/storybooks_router.js";
 import pageRouter from "./routes/page_router.js";
 import db from "./utils/db.js";
 import { configDotenv } from "dotenv";
+import imageRoutes from "./routes/images_router.js"
+import cors from "cors"
+import path from 'path'
+import { fileURLToPath } from "url";
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const app = express()
 configDotenv()
 
+const corsoptions = {
+  origin: "http://localhost:4200",
+  credentials: true
+};
+
+app.use(cors(corsoptions));
 
 try {
   await db.authenticate();
@@ -24,8 +38,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const PORT = 3000;
+console.log(path.join(__dirname, 'generated-images'))
+
+app.use('/api/generated-images', express.static(path.join(__dirname, 'generated-images')));
 
 // routes
+
+app.use("/api/images", imageRoutes)
 app.use("/api/storybooks", storybookRouter)
 app.use("/api/pages", pageRouter)
 app.use("/user", userRoutes)
