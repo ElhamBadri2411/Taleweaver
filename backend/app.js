@@ -1,7 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
 import userRoutes from "./routes/users_router.js"
-import booksRoutes from "./routes/books_router.js"
+import storybookRouter from "./routes/storybooks_router.js";
+import pageRouter from "./routes/page_router.js";
 import db from "./utils/db.js";
 import { configDotenv } from "dotenv";
 
@@ -25,7 +26,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const PORT = 3000;
 
 // routes
-app.use("/books", booksRoutes)
+app.use("/api/storybooks", storybookRouter)
+app.use("/api/pages", pageRouter)
 app.use("/user", userRoutes)
 
 app.listen(PORT, (err) => {
