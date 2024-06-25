@@ -7,14 +7,20 @@ import { StoryBook } from "../models/storybook.js";
 // @access private
 const createStoryBook = async (req, res, next) => {
   try {
-    const { title } = req.body;
+    const { title, description } = req.body;
     if (!title || typeof title !== "string" || title.length === 0) {
       return res.status(422).json({
         error:
           "Invalid input parameters. Expected title to be a string with length > 0",
       });
     }
-    const storyBook = await StoryBook.create({ title });
+    if (!description || typeof description !== "string" || description.length === 0) {
+      return res.status(422).json({
+        error:
+          "Invalid input parameters. Expected title to be a description with length > 0",
+      });
+    }
+    const storyBook = await StoryBook.create({ title, description });
     res.status(201).json(storyBook);
   } catch (error) {
     return res.status(400).json({ error: "Cannot create storyBook" });

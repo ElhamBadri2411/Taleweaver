@@ -5,12 +5,14 @@ import {
     deletePage, 
     getPageById, 
     getPagesByStoryBookId, 
-    updatePage
+    updatePage,
+  addPage
     } from "../controllers/page_controller.js";
 
 const pageRouter = Router();
 
 pageRouter.post("/", createPage);
+pageRouter.post("/new", addPage);
 pageRouter.delete("/:id", deletePage);
 pageRouter.get("/:id", getPageById);
 pageRouter.get("/storybook/:id", getPagesByStoryBookId);

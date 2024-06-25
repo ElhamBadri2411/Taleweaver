@@ -18,7 +18,7 @@ const createPage = async (req, res, next) => {
           "Invalid input parameters. Expected paragraph to be a string with length > 0",
       });
     }
-    
+
     // if (!image || typeof image !== "object") {
     //   return res.status(422).json({
     //     error:
@@ -28,7 +28,24 @@ const createPage = async (req, res, next) => {
     // const page = await Page.create({ paragraph, image });
 
     // For now, we will not include image
-    const page = await Page.create({ paragraph, StoryBookId: storyBookId});
+    const page = await Page.create({ paragraph, StoryBookId: storyBookId });
+    res.status(201).json(page);
+  } catch (error) {
+    return res.status(400).json({ error: "Cannot create page" });
+  }
+}
+
+// @route POST api/pages/new
+// @desc Add an empty page to a storybook 
+// @access private
+const addPage = async (req, res, next) => {
+  try {
+    const { storyBookId } = req.body;
+    const book = await StoryBook.findByPk(storyBookId);
+    if (!book) {
+      return res.status(404).json({ error: "StoryBook not found" });
+    }
+    const page = await Page.create({ StoryBookId: storyBookId });
     res.status(201).json(page);
   } catch (error) {
     return res.status(400).json({ error: "Cannot create page" });
@@ -116,10 +133,11 @@ const updatePage = async (req, res, next) => {
   }
 }
 
-export { 
-  createPage, 
-  deletePage, 
-  getPageById, 
-  getPagesByStoryBookId, 
-  updatePage
+export {
+  createPage,
+  deletePage,
+  getPageById,
+  getPagesByStoryBookId,
+  updatePage,
+  addPage
 }
