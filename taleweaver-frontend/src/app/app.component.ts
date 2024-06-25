@@ -10,11 +10,5 @@ import { Router, RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'taleweaver-frontend';
-  noDashboard = true;
   constructor(private router: Router) {}
-
-  showDashboard() {
-    this.router.navigate(['/dashboard']);
-    this.noDashboard = false;
-  }
 }
