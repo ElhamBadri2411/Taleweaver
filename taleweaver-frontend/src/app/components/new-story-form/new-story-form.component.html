@@ -1,0 +1,56 @@
+<div class="min-h-screen bg-base-300 flex items-center justify-center p-6">
+  <div class="card w-full max-w-4xl shadow-lg bg-base-100 p-6">
+    <div class="card-body">
+      <h2 class="card-title text-center text-4xl mb-6">Create a New Story</h2>
+      <form [formGroup]="form" (ngSubmit)="createStory()">
+        <div class="form-control mb-4">
+          <label class="label text-xl">Title</label>
+          <input type="text" formControlName="title" placeholder="Story Title"
+            class="input input-bordered text-lg p-3" />
+          @if (form.get('title')?.invalid && form.get('title')?.touched){
+          <ng-container>
+            <div class="text-red-500 mt-1">
+              @if(form.get('title')?.hasError('required')){
+              <small>Title is required.</small>
+              }
+              @if(form.get('title')?.hasError('minlength')){
+              <small>Title must be at least 5 characters.</small>
+              }
+              @if(form.get('title')?.hasError('maxlength')){
+              <small>Title cannot exceed 30 characters.</small>
+              }
+            </div>
+          </ng-container>
+          }
+        </div>
+
+        <div class="form-control mb-4">
+          <label class="label text-xl">Please provide a small description/summary of the story</label>
+          <textarea formControlName="description" placeholder="Story Description"
+            class="textarea textarea-bordered text-lg p-3 h-32"></textarea>
+          @if (form.get('description')?.invalid && form.get('description')?.touched){
+          <ng-container>
+            <div class="text-red-500 mt-1">
+              @if (form.get("description")?.hasError("required")) {
+              <small>Description is required.</small>
+              }
+              @if (form.get("description")?.hasError("minlength")) {
+              <small>Description must be at least 15 characters.</small>
+              }
+              @if (form.get("description")?.hasError("maxlength")) {
+              <small>Description cannot exceed 250 characters.</small>
+              }
+            </div>
+          </ng-container>
+          }
+        </div>
+
+        <div class="form-control mt-6">
+          <button type="submit" class="btn btn-primary w-full text-lg p-3" [disabled]="form.invalid">
+            Create Story
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
