@@ -5,10 +5,14 @@ import { Page } from "./page.js";
 
 
 export const StoryBook = db.define("StoryBook", {
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    }
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
 })
 
 // Add back later, when user is implemented

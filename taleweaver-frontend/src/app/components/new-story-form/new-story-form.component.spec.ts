@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ImageGeneratorComponent } from './image-generator.component';
+import { NewStoryFormComponent } from './new-story-form.component';
 
-describe('ImageGeneratorComponent', () => {
-  let component: ImageGeneratorComponent;
-  let fixture: ComponentFixture<ImageGeneratorComponent>;
+describe('NewStoryFormComponent', () => {
+  let component: NewStoryFormComponent;
+  let fixture: ComponentFixture<NewStoryFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ImageGeneratorComponent],
+      imports: [NewStoryFormComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ImageGeneratorComponent);
+    fixture = TestBed.createComponent(NewStoryFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

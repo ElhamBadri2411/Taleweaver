@@ -1,7 +1,9 @@
 import { Routes } from '@angular/router';
 import { ImageGeneratorComponent } from './components/image-generator/image-generator.component';
+import { NewStoryFormComponent } from './components/new-story-form/new-story-form.component';
 
 export const routes: Routes = [
   { path: 'image-generator', component: ImageGeneratorComponent },
-  { path: '', redirectTo: 'image-generator', pathMatch: 'full' }
+  { path: 'new-story', component: NewStoryFormComponent },
+  { path: '', redirectTo: '', pathMatch: 'full' },
 ];
