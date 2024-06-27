@@ -47,7 +47,7 @@ app.use('/api/generated-images', express.static(path.join(__dirname, 'generated-
 app.use("/api/images", imageRoutes)
 app.use("/api/storybooks", storybookRouter)
 app.use("/api/pages", pageRouter)
-app.use("/user", userRoutes)
+app.use("/api/users", userRoutes)
 
 app.listen(PORT, (err) => {
   if (err) console.log(err);
