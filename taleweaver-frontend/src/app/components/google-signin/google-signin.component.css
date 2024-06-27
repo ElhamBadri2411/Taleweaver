@@ -1,9 +1,13 @@
 body {
+  background-image: url('2.png');
   height: 100vh; /* Full viewport height */
-  background-color: #f0f0f0; /* Fallback color */
-  background-image: url('John-Mark_Kuznietsov_2016-12-13_\(Unsplash\).jpg');
+  background-color: #292828;
+  
   background-position: 100% 0;
-  background-size:50%;
+  /*background-size:100%, 100%;*/
+  background-size: 100vw 100vh;
+  background-repeat:no-repeat;
+  
 }
 
 .google-signin {
