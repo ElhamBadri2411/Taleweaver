@@ -9,5 +9,11 @@ import { Router, RouterOutlet } from '@angular/router';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent {
-  constructor() {}
+  constructor(private router: Router) { }
+
+
+  navigateToCreateNewStory() {
+    this.router.navigate(['/new-story'])
+
+  }
 }
