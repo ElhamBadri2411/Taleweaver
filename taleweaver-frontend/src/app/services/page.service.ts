@@ -33,6 +33,15 @@ export class PageService {
   }
 
   /**
+   * Get the page of a storybook by id
+   * @param id The id of the Page
+   * @returns Observable<Page>
+   */
+  getPagesByStoryBookId(id: number): Observable<Page> {
+    return this.http.get<Page>(`${this.endpoint}/storybooks/${id}`)
+  }
+
+  /**
    * Get all the pages of a storybook by id
    * @param id The id of the storybook
    * @returns Observable<Page>

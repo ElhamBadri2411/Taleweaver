@@ -10,5 +10,9 @@ export const Page = db.define("Page", {
   image: {
     type: DataTypes.JSON,
     allowNull: true
+  },
+  position: {
+    type: DataTypes.NUMBER,
+    allowNull: false
   }
 })

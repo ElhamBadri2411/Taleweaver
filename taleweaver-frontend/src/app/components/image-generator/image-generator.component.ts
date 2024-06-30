@@ -32,14 +32,12 @@ export class ImageGeneratorComponent implements OnInit {
     private fb: FormBuilder,
     private imagesService: ImagesService,
   ) {
-    // Ensure service is injected
-    // Initialize the form in the constructor
     this.form = this.fb.group({
       text: [''],
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   generateImage() {
     this.isGeneratingImage = true;

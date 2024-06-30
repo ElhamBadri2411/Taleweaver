@@ -83,7 +83,7 @@ const getPageById = async (req, res, next) => {
   }
 }
 
-// @route GET api/pages/storybook/:id
+// @route GET api/pages/storybooks/:id
 // @desc  Get all pages by a storybook id
 // @access private
 const getPagesByStoryBookId = async (req, res, next) => {
