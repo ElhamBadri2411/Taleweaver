@@ -5,12 +5,12 @@ import { Observable } from 'rxjs';
 import { Page } from '../classes/Page';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PageService {
   private endpoint = environment.apiUrl + 'pages';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Adds a page to a storybook
@@ -19,7 +19,7 @@ export class PageService {
    */
   addPage(id: number): Observable<Page> {
     return this.http.post<Page>(`${this.endpoint}/new`, {
-      storyBookId: id
+      storyBookId: id,
     });
   }
 
@@ -29,7 +29,7 @@ export class PageService {
    * @returns Observable<Page>
    */
   getPageById(id: number): Observable<Page> {
-    return this.http.get<Page>(`${this.endpoint}/${id}`)
+    return this.http.get<Page>(`${this.endpoint}/${id}`);
   }
 
   /**
@@ -38,7 +38,7 @@ export class PageService {
    * @returns Observable<Page>
    */
   getPagesByStoryBookId(id: number): Observable<Page> {
-    return this.http.get<Page>(`${this.endpoint}/storybooks/${id}`)
+    return this.http.get<Page>(`${this.endpoint}/storybooks/${id}`);
   }
 
   /**
@@ -48,8 +48,7 @@ export class PageService {
    */
   updatePage(id: number, paragraph: string): Observable<Page> {
     return this.http.patch<Page>(`${this.endpoint}/${id}`, {
-      paragraph
-    })
+      paragraph,
+    });
   }
-
 }

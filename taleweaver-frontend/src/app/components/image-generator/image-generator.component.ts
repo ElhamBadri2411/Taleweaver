@@ -37,7 +37,7 @@ export class ImageGeneratorComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   generateImage() {
     this.isGeneratingImage = true;

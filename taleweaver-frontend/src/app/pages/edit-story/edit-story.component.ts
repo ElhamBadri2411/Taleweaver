@@ -7,8 +7,6 @@ import { PageListComponent } from '../../components/page-list/page-list.componen
   standalone: true,
   imports: [ImageGeneratorComponent, PageListComponent],
   templateUrl: './edit-story.component.html',
-  styleUrl: './edit-story.component.css'
+  styleUrl: './edit-story.component.css',
 })
-export class EditStoryComponent {
-
-}
+export class EditStoryComponent {}

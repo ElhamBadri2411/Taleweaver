@@ -1,6 +1,6 @@
 export interface Page {
-  id: Number,
-  paragraph: string,
-  image: string,
-  order: Number
+  id: Number;
+  paragraph: string;
+  image: string;
+  order: Number;
 }

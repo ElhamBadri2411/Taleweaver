@@ -10,7 +10,7 @@ import { StoryBook } from '../classes/StoryBook';
 export class StoryService {
   private endpoint = environment.apiUrl + 'storybooks';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Creates a storybook

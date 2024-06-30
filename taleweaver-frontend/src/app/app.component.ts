@@ -16,7 +16,8 @@ export class AppComponent {
 
   constructor(
     private readonly google: GoogleApiService,
-    private router: Router) { }
+    private router: Router,
+  ) {}
 
   signInWithGoogle() {
     this.google.signIn();

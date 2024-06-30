@@ -54,7 +54,7 @@ export class NewStoryFormComponent implements OnInit {
     this.storyService.createStory(title, description).subscribe({
       next: (res) => {
         console.log(res);
-        this.form.reset()
+        this.form.reset();
         // reroute to list of stories page after
       },
       error: (error) => {
@@ -63,5 +63,5 @@ export class NewStoryFormComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

@@ -10,11 +10,10 @@ import { bootstrapGoogle } from '@ng-icons/bootstrap-icons';
   imports: [CommonModule, NgIconComponent],
   templateUrl: './google-signin.component.html',
   styleUrl: './google-signin.component.css',
-  viewProviders: [provideIcons({ bootstrapGoogle })]
+  viewProviders: [provideIcons({ bootstrapGoogle })],
 })
 export class GoogleSigninComponent {
-
-  constructor(private readonly google: GoogleApiService) { }
+  constructor(private readonly google: GoogleApiService) {}
 
   signInWithGoogle() {
     this.google.signIn();
@@ -24,8 +23,7 @@ export class GoogleSigninComponent {
     this.google.signOut();
   }
 
-  isSignedIn(){
+  isSignedIn() {
     return this.google.isLoggedIn();
   }
-
 }

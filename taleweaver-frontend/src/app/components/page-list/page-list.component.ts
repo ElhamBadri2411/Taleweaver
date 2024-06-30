@@ -22,73 +22,96 @@ import { heroPlus } from '@ng-icons/heroicons/outline';
   viewProviders: [provideIcons({ heroPlus })],
 })
 export class PageListComponent {
-  pages: Page[]
+  pages: Page[];
+  selectedPageId: Number;
 
   constructor(private pageService: PageService) {
-    this.pages = [{
-      id: 0,
-      paragraph: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      image:
-        environment.apiUrl +
-        'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-      order: 0
-    }, {
-      id: 0,
-      paragraph: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      image:
-        environment.apiUrl +
-        'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-      order: 0
-    }, {
-      id: 0,
-      paragraph: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      image:
-        environment.apiUrl +
-        'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-      order: 0
-    }, {
-      id: 0,
-      paragraph: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      image:
-        environment.apiUrl +
-        'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-      order: 0
-    }, {
-      id: 0,
-      paragraph: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      image:
-        environment.apiUrl +
-        'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-      order: 0
-    }, {
-      id: 0,
-      paragraph: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      image:
-        environment.apiUrl +
-        'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-      order: 0
-    }, {
-      id: 0,
-      paragraph: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      image:
-        environment.apiUrl +
-        'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-      order: 0
-    }, {
-      id: 0,
-      paragraph: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      image:
-        environment.apiUrl +
-        'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-      order: 0
-    }, {
-      id: 0,
-      paragraph: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-      image:
-        environment.apiUrl +
-        'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-      order: 0
-    }
-    ]
+    this.pages = [
+      {
+        id: 0,
+        paragraph:
+          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
+        image:
+          environment.apiUrl +
+          'generated-images/d5040800b70f442631e26b4e8cfaa259.png',
+        order: 0,
+      },
+      {
+        id: 0,
+        paragraph:
+          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
+        image:
+          environment.apiUrl +
+          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
+        order: 0,
+      },
+      {
+        id: 0,
+        paragraph:
+          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
+        image:
+          environment.apiUrl +
+          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
+        order: 0,
+      },
+      {
+        id: 0,
+        paragraph:
+          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
+        image:
+          environment.apiUrl +
+          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
+        order: 0,
+      },
+      {
+        id: 0,
+        paragraph:
+          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
+        image:
+          environment.apiUrl +
+          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
+        order: 0,
+      },
+      {
+        id: 0,
+        paragraph:
+          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
+        image:
+          environment.apiUrl +
+          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
+        order: 0,
+      },
+      {
+        id: 0,
+        paragraph:
+          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
+        image:
+          environment.apiUrl +
+          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
+        order: 0,
+      },
+      {
+        id: 0,
+        paragraph:
+          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
+        image:
+          environment.apiUrl +
+          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
+        order: 0,
+      },
+      {
+        id: 0,
+        paragraph:
+          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
+        image:
+          environment.apiUrl +
+          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
+        order: 0,
+      },
+    ];
   }
+
+  selectPage(id: any) {}
+
+  addNewPage() {}
 }

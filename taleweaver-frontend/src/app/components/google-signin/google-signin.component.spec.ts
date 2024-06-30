@@ -8,9 +8,8 @@ describe('GoogleSigninComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GoogleSigninComponent]
-    })
-    .compileComponents();
+      imports: [GoogleSigninComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(GoogleSigninComponent);
     component = fixture.componentInstance;

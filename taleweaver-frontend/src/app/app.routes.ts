@@ -9,5 +9,5 @@ export const routes: Routes = [
   { path: 'new-story', component: NewStoryFormComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'edit-story', component: EditStoryComponent },
-  { path: '', redirectTo: '', pathMatch: 'full' }
+  { path: '', redirectTo: '', pathMatch: 'full' },
 ];
