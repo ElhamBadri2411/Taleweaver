@@ -1,8 +1,8 @@
 <div class="grid grid-cols-9">
   <div class="col-span-1">
-    <app-page-list />
+    <app-page-list [bookId]="bookId" />
   </div>
   <div class="col-span-8 justify-self-center">
-    <app-image-generator />
+    <app-image-generator [bookId]="bookId" [pageId]="selectedPageId " />
   </div>
 </div>

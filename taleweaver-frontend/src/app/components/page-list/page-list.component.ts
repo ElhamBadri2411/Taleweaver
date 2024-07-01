@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -21,9 +21,13 @@ import { heroPlus } from '@ng-icons/heroicons/outline';
   styleUrl: './page-list.component.css',
   viewProviders: [provideIcons({ heroPlus })],
 })
-export class PageListComponent {
+export class PageListComponent implements OnInit {
+
+  @Input() bookId: string;
+  @Output() pageSelected = new EventEmitter<number>()
+
   pages: Page[];
-  selectedPageId: Number;
+  selectedPageId: number | null = null;
 
   constructor(private pageService: PageService) {
     this.pages = [
@@ -37,13 +41,13 @@ export class PageListComponent {
         order: 0,
       },
       {
-        id: 0,
+        id: 1,
         paragraph:
           'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
         image:
           environment.apiUrl +
           'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-        order: 0,
+        order: 1,
       },
       {
         id: 0,
@@ -111,7 +115,37 @@ export class PageListComponent {
     ];
   }
 
-  selectPage(id: any) {}
+  loadPages() {
+    this.pageService.getPagesByStoryBookId(+this.bookId).subscribe({
+      next: (pages) => {
+        console.log(pages, "PAGES HERE")
+        this.pages = pages
+      },
+      error: (error) => {
+        console.log("ERROPR")
+        console.error(error)
+      }
+    })
+  }
 
-  addNewPage() {}
+  ngOnInit() {
+    this.loadPages()
+  }
+
+  selectPage(id: number) {
+    this.selectedPageId = id
+    this.pageSelected.emit(id)
+  }
+
+  addNewPage() {
+    this.pageService.addPage(+this.bookId).subscribe({
+      next: (newPage) => {
+        this.pages.push(newPage);
+        this.selectPage(+newPage.id);
+      },
+      error: (error) => {
+        console.error('Error adding new page:', error);
+      }
+    });
+  }
 }

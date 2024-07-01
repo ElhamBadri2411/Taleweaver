@@ -10,7 +10,7 @@ import { Page } from '../classes/Page';
 export class PageService {
   private endpoint = environment.apiUrl + 'pages';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Adds a page to a storybook
@@ -37,8 +37,8 @@ export class PageService {
    * @param id The id of the Page
    * @returns Observable<Page>
    */
-  getPagesByStoryBookId(id: number): Observable<Page> {
-    return this.http.get<Page>(`${this.endpoint}/storybooks/${id}`);
+  getPagesByStoryBookId(id: number): Observable<Page[]> {
+    return this.http.get<Page[]>(`${this.endpoint}/storybooks/${id}`);
   }
 
   /**

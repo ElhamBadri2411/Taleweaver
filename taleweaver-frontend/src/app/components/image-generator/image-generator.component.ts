@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -21,6 +21,10 @@ import { heroSparklesSolid } from '@ng-icons/heroicons/solid';
   viewProviders: [provideIcons({ heroSparklesSolid })],
 })
 export class ImageGeneratorComponent implements OnInit {
+  @Input() bookId: string;
+  @Input() pageId: number | null;
+
+
   form: FormGroup;
   imageUrl: string = '';
   testImageUrl: string =
@@ -37,7 +41,11 @@ export class ImageGeneratorComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.pageId !== null) {
+      //fetch page data + populate form
+    }
+  }
 
   generateImage() {
     this.isGeneratingImage = true;

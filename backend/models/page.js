@@ -12,7 +12,7 @@ export const Page = db.define("Page", {
     allowNull: true
   },
   position: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false
   }
 })

@@ -8,6 +8,6 @@ export const routes: Routes = [
   { path: 'signin', component: GoogleSigninComponent },
   { path: 'new-story', component: NewStoryFormComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'edit-story', component: EditStoryComponent },
+  { path: 'books/:bookId/edit', component: EditStoryComponent },
   { path: '', redirectTo: '', pathMatch: 'full' },
 ];
