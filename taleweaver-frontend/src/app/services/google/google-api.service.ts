@@ -22,7 +22,7 @@ export class GoogleApiService {
   constructor(private readonly oAuthService: OAuthService, private router: Router) { 
     oAuthService.configure(oAuthConfig)
     //Need to change this line when not running app on local host
-    oAuthService.logoutUrl="https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue="+environment.originLocation+"/signin";
+    oAuthService.logoutUrl = `https://www.google.com/accounts/Logout`;
     oAuthService.loadDiscoveryDocument().then( () => {
       // // This method just tries to parse the token(s) within the url when
       // // the auth-server redirects the user back to the web-app
@@ -35,24 +35,25 @@ export class GoogleApiService {
           //oAuthService.initLoginFlow()
           //Im not sure but this process might be unsafe, im just redirecting them if they try to go to anything else
           //hopefully wont cause any security issues
-          this.router.navigate(['/signin']);
+          this.router.navigate(['/']);
         } else {
           oAuthService.loadUserProfile().then( (userProfile) => {
             //this.userProfileSubject.next(userProfile as UserInfo)
             console.log(JSON.stringify(userProfile))
           })
+          this.router.navigate(['/dashboard']);
         }
-
       })
     });
   }
+  
   signIn() {
     this.oAuthService.initLoginFlow();
   }
 
   signOut() {
-    this.oAuthService.logOut();
-    //this.router.navigate(['/signin']);
+    this.oAuthService.logOut(true);
+    this.router.navigate(['/']);
   }
 
   isLoggedIn(): boolean {
