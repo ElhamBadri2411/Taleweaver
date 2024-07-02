@@ -18,12 +18,6 @@ export class NavBarComponent {
     private router: Router
   ) {}
 
-  onInit() {
-    if (!this.isSignedIn()) {
-      this.router.navigate(['/']);
-    }
-  }
-
   isSignedIn(){
     return this.google.isLoggedIn();
   }

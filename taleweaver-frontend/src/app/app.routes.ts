@@ -3,10 +3,11 @@ import { IndexComponent } from './pages/index/index.component';
 import { ImageGeneratorComponent } from './components/image-generator/image-generator.component';
 import { NewStoryFormComponent } from './components/new-story-form/new-story-form.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { AuthService } from './services/auth.service';
 
 export const routes: Routes = [
   { path: '', component: IndexComponent},
-  { path: 'image-generator', component: ImageGeneratorComponent },
-  { path: 'new-story', component: NewStoryFormComponent },
-  { path: 'dashboard', component: DashboardComponent },
+  { path: 'image-generator', component: ImageGeneratorComponent, canActivate: [AuthService]},
+  { path: 'new-story', component: NewStoryFormComponent, canActivate: [AuthService]},
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthService]},
 ];
