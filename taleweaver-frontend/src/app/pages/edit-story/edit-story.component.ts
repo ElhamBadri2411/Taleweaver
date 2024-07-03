@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ImageGeneratorComponent } from '../../components/image-generator/image-generator.component';
 import { PageListComponent } from '../../components/page-list/page-list.component';
 import { CommonModule } from '@angular/common';
@@ -15,6 +15,8 @@ export class EditStoryComponent implements OnInit {
   bookId: string;
   selectedPageId: number | null = null;
 
+  @ViewChild(PageListComponent) pageListComponent: PageListComponent;
+
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -23,5 +25,12 @@ export class EditStoryComponent implements OnInit {
 
   onPageSelected(pageId: number) {
     this.selectedPageId = pageId;
+  }
+
+  onImageGenerated() {
+    if (this.pageListComponent) {
+      this.pageListComponent.loadPages();
+    }
+
   }
 }

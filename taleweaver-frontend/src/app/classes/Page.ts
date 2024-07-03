@@ -1,6 +1,11 @@
 export interface Page {
-  id: Number;
+  id: number;
   paragraph: string;
-  image: string;
-  order: Number;
+  image: ImageData;
+  order: number;
+}
+
+export interface ImageData {
+  prompt: string,
+  path: string
 }

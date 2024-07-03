@@ -4,13 +4,13 @@
 </div>
 <div
   class="flex flex-col gap-y-4 px-4 py-2 border-r-primary-content bg-base-300 border-r-2 max-w-64 max-h-[96vh] min-h-[96vh] overflow-y-auto">
-  @for (page of pages; track page.id) {
-  <div
+  @for (page of pages; track page.id; let idx = $index) {
+  <div (click)="selectPage(page.id)"
     class="group w-40 h-40 min-w-40 min-h-40 bg-base-200 rounded-lg relative border-transparent border-2 hover:border-secondary-content hover:cursor-pointer transition-all duration-200 ease-in">
     <span
       class="badge badge-neutral badge-lg absolute z-40 top-1.5 left-1.5 group-hover:bg-secondary-content group-hover:text-primary-content">{{
-      page.order }}</span>
-    <img src="{{ page.image }}" alt="image{{ page.id }}" class="w-full h-full object-cover rounded-lg" />
+      idx + 1 }}</span>
+    <img src="{{ imageUrlBase +  page.image.path }}" alt="image{{ page.id }}" class="w-full h-full object-cover rounded-lg" />
   </div>
   @if ($last) {
   <div (click)="addNewPage()"

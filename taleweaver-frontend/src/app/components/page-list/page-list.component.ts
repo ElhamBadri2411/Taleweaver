@@ -4,9 +4,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { PageService } from '../../services/page.service';
 import { Page } from '../../classes/Page';
-import { environment } from '../../../environments/environment';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroPlus } from '@ng-icons/heroicons/outline';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-page-list',
@@ -22,97 +22,15 @@ import { heroPlus } from '@ng-icons/heroicons/outline';
   viewProviders: [provideIcons({ heroPlus })],
 })
 export class PageListComponent implements OnInit {
-
   @Input() bookId: string;
   @Output() pageSelected = new EventEmitter<number>()
 
   pages: Page[];
   selectedPageId: number | null = null;
+  imageUrlBase = environment.apiUrl
 
   constructor(private pageService: PageService) {
-    this.pages = [
-      {
-        id: 0,
-        paragraph:
-          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
-        image:
-          environment.apiUrl +
-          'generated-images/d5040800b70f442631e26b4e8cfaa259.png',
-        order: 0,
-      },
-      {
-        id: 1,
-        paragraph:
-          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
-        image:
-          environment.apiUrl +
-          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-        order: 1,
-      },
-      {
-        id: 0,
-        paragraph:
-          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
-        image:
-          environment.apiUrl +
-          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-        order: 0,
-      },
-      {
-        id: 0,
-        paragraph:
-          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
-        image:
-          environment.apiUrl +
-          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-        order: 0,
-      },
-      {
-        id: 0,
-        paragraph:
-          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
-        image:
-          environment.apiUrl +
-          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-        order: 0,
-      },
-      {
-        id: 0,
-        paragraph:
-          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
-        image:
-          environment.apiUrl +
-          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-        order: 0,
-      },
-      {
-        id: 0,
-        paragraph:
-          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
-        image:
-          environment.apiUrl +
-          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-        order: 0,
-      },
-      {
-        id: 0,
-        paragraph:
-          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
-        image:
-          environment.apiUrl +
-          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-        order: 0,
-      },
-      {
-        id: 0,
-        paragraph:
-          'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
-        image:
-          environment.apiUrl +
-          'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png',
-        order: 0,
-      },
-    ];
+    this.pages = [];
   }
 
   loadPages() {
@@ -134,6 +52,7 @@ export class PageListComponent implements OnInit {
 
   selectPage(id: number) {
     this.selectedPageId = id
+    console.log(this.selectedPageId)
     this.pageSelected.emit(id)
   }
 
