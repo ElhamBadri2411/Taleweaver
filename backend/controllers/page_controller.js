@@ -45,9 +45,12 @@ const addPage = async (req, res, next) => {
     if (!book) {
       return res.status(404).json({ error: "StoryBook not found" });
     }
-    const page = await Page.create({ StoryBookId: storyBookId });
+
+    const page = await Page.create({ StoryBookId: storyBookId, position: 1 });
+
     res.status(201).json(page);
   } catch (error) {
+    console.error(error)
     return res.status(400).json({ error: "Cannot create page" });
   }
 }
@@ -83,11 +86,12 @@ const getPageById = async (req, res, next) => {
   }
 }
 
-// @route GET api/pages/storybook/:id
+// @route GET api/pages/storybooks/:id
 // @desc  Get all pages by a storybook id
 // @access private
 const getPagesByStoryBookId = async (req, res, next) => {
   try {
+    console.log(req.params)
     const pages = await Page.findAll({
       where: { StoryBookId: req.params.id },
     });

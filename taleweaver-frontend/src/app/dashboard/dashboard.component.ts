@@ -6,9 +6,15 @@ import { Router, RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [RouterOutlet],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent {
-  constructor() {
+  constructor(private router: Router) { }
+
+
+  navigateToCreateNewStory() {
+    this.router.navigate(['/new-story'])
+
   }
 }
+

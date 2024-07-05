@@ -1,106 +1,97 @@
 body {
   background-image: url('2.png');
   height: 100vh; /* Full viewport height */
-  background-color: #292828;
-  
+  background-color: #f0f0f0; /* Fallback color */
+  background-image: url("John-Mark_Kuznietsov_2016-12-13_\(Unsplash\).jpg");
   background-position: 100% 0;
-  /*background-size:100%, 100%;*/
-  background-size: 100vw 100vh;
-  background-repeat:no-repeat;
-  
+  background-size: 50%;
 }
 
 .google-signin {
-    /*text-align: center;*/
-    color: white; /* Set default text color to white */
-    padding: 20px; /* Add padding for content */
-    max-width: 800px; /* Set maximum width for content */
-    margin-left: auto; /* Center content horizontally */
-    margin-right: auto;
-  }
-  
+  /*text-align: center;*/
+  color: white; /* Set default text color to white */
+  padding: 20px; /* Add padding for content */
+  max-width: 800px; /* Set maximum width for content */
+  margin-left: auto; /* Center content horizontally */
+  margin-right: auto;
+}
+
+.title {
+  margin: 50px auto;
+  font-family: "Rock Salt", serif;
+  font-size: 80px;
+  margin-bottom: 20px;
+  color: white; /* Set text font color to white */
+  text-align: left;
+  margin-left: -200px;
+}
+
+@media (max-width: 768px) {
   .title {
-    margin: 50px auto;
-    font-family: 'Rock Salt', serif;
-    font-size: 80px;
-    margin-bottom: 20px;
-    color: white; /* Set text font color to white */
-    text-align: left;
-    margin-left: -200px;
-  }
-
-
-  @media (max-width: 768px) {
-    .title {
-      margin-left: 0; /* Reset left margin for smaller screens */
-      text-align: center; /* Center title on smaller screens */
-      font-size: 80px; /* Reduce font size for smaller screens if necessary */
+    margin-left: 0; /* Reset left margin for smaller screens */
+    text-align: center; /* Center title on smaller screens */
+    font-size: 80px; /* Reduce font size for smaller screens if necessary */
     max-width: 100%; /* Allow title to expand to full width on smaller screens */
-    }
   }
+}
 
- 
+.text-box {
+  /*background-color: rgba(255, 255, 255, 0.1);*/ /* Semi-transparent white background */
+  padding: 20px; /* Add padding inside the text box */
+  border-radius: 8px; /* Rounded corners */
+  text-align: left; /* Align text inside the box to the left */
+  width: 100%; /* Set width of text box */
+  max-width: 800px; /* Max width of text box */
+  margin-left: -100px;
+}
 
-  .text-box {
-    /*background-color: rgba(255, 255, 255, 0.1);*/ /* Semi-transparent white background */
-    padding: 20px; /* Add padding inside the text box */
-    border-radius: 8px; /* Rounded corners */
-    text-align: left; /* Align text inside the box to the left */
-    width: 100%; /* Set width of text box */
-    max-width: 800px; /* Max width of text box */
-    margin-left: -100px;
-  }
+.text {
+  font-size: 1.2rem;
+  color: white; /* Set text font color to white */
+  margin-bottom: 30px;
+  font-family: "Rhodium Libre", serif;
+  margin: 0;
+  color: #d2d2d2;
+}
 
-  
-  
-  .text {
-    font-size: 1.2rem;
-    color: white; /* Set text font color to white */
-    margin-bottom: 30px;
-    font-family: 'Rhodium Libre', serif;
-    margin: 0;
-    color: #D2D2D2;
-  }
-  
-  
-  .google-signin-button {
-    display: inline-block;
-    background-color: #DB4437; /* Google red */
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-    margin-top: 20px; /* Add spacing between text box and button */
-  }
-  
-  .google-signin-button:hover {
-    background-color: #C53727; /* Darker shade of Google red */
-  }
-  
-  .google-signin-button img {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-    vertical-align: middle;
-  }
+.google-signin-button {
+  display: inline-block;
+  background-color: #db4437; /* Google red */
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  margin-top: 20px; /* Add spacing between text box and button */
+}
 
-  .google-signin-button2 {
-    background-color: #4285F4;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 4px;
-    text-align: left;
-    margin-top: 20px;
-  }
-  .google-signin-button2:hover {
-    background-color: #357AE8;
-  }
+.google-signin-button:hover {
+  background-color: #c53727; /* Darker shade of Google red */
+}
+
+.google-signin-button img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.google-signin-button2 {
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  text-align: left;
+  margin-top: 20px;
+}
+.google-signin-button2:hover {
+  background-color: #357ae8;
+}
