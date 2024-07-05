@@ -1,0 +1,49 @@
+<div>
+  <head>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rhodium+Libre&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div>
+      <div class="google-signin">
+        <h1 class="title">TALEWEAVER</h1>
+        <div class="text-box">
+          <p class="text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit
+            lectus enim id euismod. Gravida at praesent aliquam, at natoque at
+            leo. Faucibus quam ipsum mi eget consectetur posuere dui vulputate
+            magna.
+          </p>
+
+          <button
+            *ngIf="!isSignedIn()"
+            (click)="signInWithGoogle()"
+            class="btn btn-primary mt-5"
+          >
+            <ng-icon name="bootstrapGoogle"></ng-icon>
+            <span class="ml-2">Sign In with Google</span>
+          </button>
+
+          <button
+            class="btn btn-primary mt-5"
+            *ngIf="isSignedIn()"
+            (click)="signOutWithGoogle()"
+          >
+            <ng-icon name="bootstrapGoogle"></ng-icon>
+            <span class="ml-2">Sign Out</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</div>
+

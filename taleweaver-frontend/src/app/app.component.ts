@@ -13,8 +13,11 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent {
   title = 'taleweaver-frontend';
-  
-  constructor(private readonly google: GoogleApiService, private router: Router){}
+
+  constructor(
+    private readonly google: GoogleApiService,
+    private router: Router,
+  ) {}
 
   signInWithGoogle() {
     this.google.signIn();

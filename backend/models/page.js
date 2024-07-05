@@ -9,6 +9,11 @@ export const Page = db.define("Page", {
   },
   image: {
     type: DataTypes.JSON,
-    allowNull: true
+    allowNull: true,
+    defaultValue: {},
+  },
+  position: {
+    type: DataTypes.INTEGER,
+    allowNull: false
   }
 })

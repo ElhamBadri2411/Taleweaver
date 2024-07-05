@@ -15,7 +15,7 @@ import { bootstrapGoogle } from '@ng-icons/bootstrap-icons';
 
 export class IndexComponent {
   constructor(
-    private readonly google: GoogleApiService, 
+    private readonly google: GoogleApiService,
     private router: Router
   ) {}
 

@@ -1,0 +1,8 @@
+<div class="grid grid-cols-9">
+  <div class="col-span-1">
+    <app-page-list [bookId]="bookId" (pageSelected)="onPageSelected($event)" />
+  </div>
+  <div class="col-span-8 justify-self-center">
+    <app-image-generator [bookId]="bookId" [pageId]="selectedPageId" (imageGenerated)="onImageGenerated()" />
+  </div>
+</div>

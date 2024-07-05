@@ -10,6 +10,13 @@ import cors from "cors"
 import path from 'path'
 import { fileURLToPath } from "url";
 
+// socket/real time collab imports
+import ws from 'ws'
+import http from 'http'
+import * as Y from 'yjs'
+import { WebsocketProvider } from "y-websocket";
+
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,13 +50,25 @@ console.log(path.join(__dirname, 'generated-images'))
 app.use('/api/generated-images', express.static(path.join(__dirname, 'generated-images')));
 
 // routes
-
 app.use("/api/images", imageRoutes)
 app.use("/api/storybooks", storybookRouter)
 app.use("/api/pages", pageRouter)
 app.use("/api/users", userRoutes)
 
-app.listen(PORT, (err) => {
+
+const server = http.createServer(app)
+
+const doc = new Y.Doc()
+const wsProvider = new WebsocketProvider('ws://localhost:1234', 'my-roomname', doc, { WebSocketPolyfill: ws })
+
+wsProvider.on('connection', (ws) => {
+  console.log(ws)
+})
+
+server.listen(PORT, (err) => {
   if (err) console.log(err);
-  else console.log("HTTP server on http://localhost:%s", PORT);
+  else {
+    console.log("HTTP server on http://localhost:%s", PORT);
+    console.log('Websocket server running on ws://localhost:1234')
+  }
 });
