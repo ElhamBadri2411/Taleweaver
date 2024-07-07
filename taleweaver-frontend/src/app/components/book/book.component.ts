@@ -9,24 +9,33 @@ import { CommonModule } from '@angular/common';
   styleUrl: './book.component.css'
 })
 export class BookComponent {
-  pages: any[] = [
+  frontPages: any[] = [
     { page: 1, story: 'This is the first page' },
     { page: 2, story: 'This is the second page' },
     { page: 3, story: 'This is the third page' },
     { page: 4, story: 'This is the fourth page' },
+    { page: 5, story: 'This is the fivth page' },
+    { page: 6, story: 'This is the sixth page' },
+    { page: 7, story: 'This is the seventh page' },
+    { page: 8, story: 'This is the eighth page' },
+    { page: 9, story: 'This is the ninth page' },
+    { page: 10, story: 'This is the tenth page' },
+    { page: 11, story: 'This is the eleventh page' },
   ];
-
-  flippedPages: any[] = [];
+  fliped: any[] = [];
+  length: number = this.frontPages.length;
 
   isFlipped: number[] = [];
   coverIsFlipped: number = 0;
   backCoverIsFlipped: number = 0;
 
   constructor() {
-    //should be handled by the backend later
-    this.pages.reverse();
-
-    this.pages.forEach(() => this.isFlipped.push(0));
+    this.frontPages.reverse();
+    if (this.frontPages.length % 2 !== 0) {
+      this.frontPages.unshift({ page: this.length + 1, story: 'This is the last page' });
+      this.length += 1;
+    }
+    this.frontPages.forEach(() => this.isFlipped.push(0));
   }
 
   flipCover() {
@@ -39,28 +48,20 @@ export class BookComponent {
 
   flipPage(index: number) {
     this.isFlipped[index] += 1;
-
-    if (this.isFlipped[index] % 2 === 0) {
-        this.movePages(this.flippedPages, this.pages);
-    } else {
-        this.movePages(this.pages, this.flippedPages);
-    }
-
-    console.log(this.pages);
-    console.log(this.flippedPages);
-    console.log(this.isFlipped);
+    this.isFlipped[index-1] += 1;
+    this.flip(index);
   }
 
-  movePages(fromArray: any[], toArray: any[]) {
-      const moveLength = 2;
-
-      if (fromArray.length >= moveLength) {
-          for (let i = 0; i < moveLength; i++) {
-              toArray.unshift(fromArray[fromArray.length - moveLength + i]);
-          }
-          fromArray.splice(fromArray.length - moveLength, moveLength);
-      } else if (fromArray.length === 1) {
-          toArray.unshift(fromArray.pop());
-      }
+  flip(index: number){
+    if (this.isFlipped[index] % 2 !== 0) {
+      this.fliped.push(this.frontPages[index]);
+      this.fliped.push(this.frontPages[index-1]);
+      this.frontPages.splice(index-1, 2);
+    }
+    else{
+      this.frontPages.push(this.fliped[this.length - index]);
+      this.frontPages.push(this.fliped[this.length - index-1]);
+      this.fliped.splice(-2);
+    }
   }
 }

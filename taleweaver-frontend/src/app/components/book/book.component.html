@@ -1,4 +1,4 @@
-<div class="book-wrapper py-2 pr-10 flex justify-end">
+<div class="book-wrapper flex justify-centre">
     <div class="storybook">
       <div class="storybook-cover" 
       [class.flip-left]="coverIsFlipped === 0? false : (coverIsFlipped % 2 !== 0 ? true : false)"
@@ -11,45 +11,33 @@
           </div>
         </div>
       </div>
-      <!-- <div class="storybook-pages" *ngFor="let page of pages; let i = index">
-        <div class="storybook-page back"
-         [class.flip-left]="isFlipped[p.page] === 0? false : (isFlipped[p.page] % 2 !== 0 ? true : false)"
-         [class.flip-right]="isFlipped[p.page] === 0? false : (isFlipped[p.page] % 2 === 0 ? true : false)"
-         (click)="flipPage(i)">
-          <div class="story m-2 text-xs">
-              <p class="story-text">{{ pages[i + 1]?.story }}</p>
-          </div>
-        </div>
-        <div class="storybook-page front" 
-        [class.flip-left]="isFlipped[p.page] === 0? false : (isFlipped[p.page] % 2 !== 0 ? true : false)"
-        [class.flip-right]="isFlipped[p.page] === 0? false : (isFlipped[p.page] % 2 === 0 ? true : false)"
-        (click)="flipPage(i)">
-            <div class="story m-2 text-xs">
-                <p class="story-text">{{ pages[p.page].story }}</p>
-            </div>
-        </div>
-      </div> -->
-      <div *ngFor="let p of flippedPages; let i = index">
+
+      <!-- back of the page -->
+      <div *ngFor="let p of fliped; let i = index">
         <div class="storybook-pages">
-          <div class="storybook-page back"
-            [class.flip-left]="isFlipped[p.page-1] === 0? false : (isFlipped[p.page-1] % 2 !== 0 ? true : false)"
-            [class.flip-right]="isFlipped[p.page-1] === 0? false : (isFlipped[p.page-1] % 2 === 0 ? true : false)"
-            (click)="flipPage(p.page-1)">
-            <div class="story m-2 text-xs">
-                <p class="story-text">{{ flippedPages[i+1]?.story }}</p>
+          <div class="storybook-page back text-xs"
+            [class.flip-left]="isFlipped[length-i] === 0? false : (isFlipped[length-i] % 2 !== 0 ? true : false)"
+            [class.flip-right]="isFlipped[length-i] === 0? false : (isFlipped[length-i] % 2 === 0 ? true : false)"
+            (click)="flipPage(length-i)">
+            <div class="story m-2">
+                <p class="story-text">{{ p.story }}</p>
             </div>
+            <div class="storybook-page-number lining-nums font-bold">{{ p.page }}</div>
           </div>
         </div>
       </div>
-      <div *ngFor="let p of pages; let i = index;">
+
+      <!-- front of the page -->
+      <div *ngFor="let p of frontPages; let i = index;">
         <div class="storybook-pages">
-          <div class="storybook-page front" 
-            [class.flip-left]="isFlipped[p.page-1] === 0? false : (isFlipped[p.page-1] % 2 !== 0 ? true : false)"
-            [class.flip-right]="isFlipped[p.page-1] === 0? false : (isFlipped[p.page-1] % 2 === 0 ? true : false)"
-            (click)="flipPage(p.page-1)">
-            <div class="story m-2 text-xs">
+          <div class="storybook-page front text-xs" 
+            [class.flip-left]="isFlipped[i] === 0? false : (isFlipped[i] % 2 !== 0 ? true : false)"
+            [class.flip-right]="isFlipped[i] === 0? false : (isFlipped[i] % 2 === 0 ? true : false)"
+            (click)="flipPage(i)">
+            <div class="story m-2">
                 <p class="story-text">{{ p.story }}</p>
             </div>
+            <div class="storybook-page-number lining-nums font-bold">{{ p.page }}</div>
           </div>
         </div>
       </div>
