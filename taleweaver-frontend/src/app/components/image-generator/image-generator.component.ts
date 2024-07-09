@@ -8,6 +8,8 @@ import { environment } from '../../../environments/environment';
 import { heroSparklesSolid, heroXCircleSolid } from '@ng-icons/heroicons/solid';
 import { PageService } from '../../services/page.service';
 import { debounceTime, takeUntil, Subject } from 'rxjs';
+import * as Y from 'yjs'
+import { WebsocketProvider } from "y-websocket";
 
 @Component({
   selector: 'app-image-generator',
@@ -27,7 +29,10 @@ export class ImageGeneratorComponent implements OnInit, OnChanges, OnDestroy {
   @Input() pageId: number | null;
   @Output() imageGenerated = new EventEmitter<void>()
 
+  // for cleanup purposes
   private destroy = new Subject<void>();
+
+  // emits and recieves strings
   private autoSave = new Subject<string>();
 
 
@@ -41,6 +46,9 @@ export class ImageGeneratorComponent implements OnInit, OnChanges, OnDestroy {
   isSaving: boolean = false;
   isEditing: boolean = false;
 
+  yDoc: Y.Doc;
+  provider: WebsocketProvider;
+  yMap: Y.Map<any>;
 
 
   constructor(
@@ -51,11 +59,28 @@ export class ImageGeneratorComponent implements OnInit, OnChanges, OnDestroy {
     this.form = this.fb.group({
       text: [''],
     });
+
+    this.yDoc = new Y.Doc()
+    this.provider = new WebsocketProvider('ws://localhost:3000', 'page-edit-room', this.yDoc)
+    this.yMap = this.yDoc.getMap('page-data')
   }
 
   ngOnInit(): void {
     this.loadPageData()
     this.autoSaveSetup()
+
+    // reading
+    this.yMap.observe(event => {
+      const text = this.yMap.get('text') || '';
+      this.form.get('text')?.setValue(text, { emitEvent: false });
+      const imageUrl = this.yMap.get('imageUrl') || '';
+      this.imageUrl = imageUrl;
+    });
+
+    // writing
+    this.form.get('text')?.valueChanges.pipe(takeUntil(this.destroy)).subscribe(val => {
+      this.yMap.set('text', val);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -123,7 +148,6 @@ export class ImageGeneratorComponent implements OnInit, OnChanges, OnDestroy {
 
     }
   }
-
 
   generateImage() {
     this.isGeneratingImage = true;

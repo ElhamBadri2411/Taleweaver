@@ -11,10 +11,10 @@ import path from 'path'
 import { fileURLToPath } from "url";
 
 // socket/real time collab imports
-import ws from 'ws'
+import { WebSocketServer } from 'ws'
 import http from 'http'
+import { setupWSConnection } from 'y-websocket/bin/utils'
 import * as Y from 'yjs'
-import { WebsocketProvider } from "y-websocket";
 
 
 
@@ -57,18 +57,38 @@ app.use("/api/users", userRoutes)
 
 
 const server = http.createServer(app)
+const wss = new WebSocketServer({ server })
 
-const doc = new Y.Doc()
-const wsProvider = new WebsocketProvider('ws://localhost:1234', 'my-roomname', doc, { WebSocketPolyfill: ws })
+const docs = new Map()
 
-wsProvider.on('connection', (ws) => {
-  console.log(ws)
-})
+wss.on('connection', (conn, request) => {
+  console.log("WebSocket connection established");
+  const url = new URL(request.url, `http://${request.headers.host}`);
+  const roomName = url.searchParams.get('room') || 'default-room';
+
+  console.log(`Client connected to room: ${roomName}`);
+
+  let doc = docs.get(roomName);
+
+  if (!doc) {
+    doc = new Y.Doc();
+    docs.set(roomName, doc);
+  }
+
+  setupWSConnection(conn, request, { docName: roomName, doc: doc });
+
+  conn.on("open", () => {
+    console.log(`Client connected to room: ${roomName}`)
+  })
+
+  conn.on('close', () => {
+    console.log(`Client disconnected from room: ${roomName}`);
+  });
+});
 
 server.listen(PORT, (err) => {
   if (err) console.log(err);
   else {
     console.log("HTTP server on http://localhost:%s", PORT);
-    console.log('Websocket server running on ws://localhost:1234')
   }
 });
