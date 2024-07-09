@@ -61,26 +61,13 @@ export class ImageGeneratorComponent implements OnInit, OnChanges, OnDestroy {
     });
 
     this.yDoc = new Y.Doc()
-    this.provider = new WebsocketProvider('ws://localhost:3000', 'page-edit-room', this.yDoc)
-    this.yMap = this.yDoc.getMap('page-data')
   }
 
   ngOnInit(): void {
+    console.log(this.yDoc)
     this.loadPageData()
     this.autoSaveSetup()
-
-    // reading
-    this.yMap.observe(event => {
-      const text = this.yMap.get('text') || '';
-      this.form.get('text')?.setValue(text, { emitEvent: false });
-      const imageUrl = this.yMap.get('imageUrl') || '';
-      this.imageUrl = imageUrl;
-    });
-
-    // writing
-    this.form.get('text')?.valueChanges.pipe(takeUntil(this.destroy)).subscribe(val => {
-      this.yMap.set('text', val);
-    });
+    this.initYjs()
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -93,7 +80,47 @@ export class ImageGeneratorComponent implements OnInit, OnChanges, OnDestroy {
     this.destroy.complete()
   }
 
+  updateFormAndImage(): void {
+    const pageData = this.yMap.get(`page-${this.pageId}`);
+    if (pageData) {
+      this.form.get('text')?.setValue(pageData.text || '', { emitEvent: false });
+      this.imageUrl = pageData.imageUrl || '';
+    }
+  }
 
+  initYjs(): void {
+    const roomName = `book-${this.bookId}`;
+    this.provider = new WebsocketProvider('ws://localhost:3000', roomName, this.yDoc, {
+      params: {
+        pageId: this.pageId?.toString() || '1',
+        bookId: this.bookId.toString()
+      },
+      disableBc: true
+    });
+    this.yMap = this.yDoc.getMap('page-data');
+
+    // server sync
+    this.provider.on('sync', (isSynced: boolean) => {
+      if (isSynced) {
+        this.updateFormAndImage()
+        this.yMap.observe(e => {
+          if (e.keysChanged.has(`page-${this.pageId}`)) {
+            const pageData = this.yMap.get(`page-${this.pageId}`);
+            console.log('PAGEDATA', pageData)
+            this.form.get('text')?.setValue(pageData.text || '', { emitEvent: false });
+            this.imageUrl = pageData.imageUrl || '';
+          }
+        });
+      }
+    });
+
+    // writing
+    this.form.get('text')?.valueChanges.pipe(takeUntil(this.destroy)).subscribe(val => {
+      const pageData = this.yMap.get(`page-${this.pageId}`) || {};
+      pageData.text = val;
+      this.yMap.set(`page-${this.pageId}`, pageData);
+    });
+  }
 
   autoSaveSetup(): void {
     this.form.get('text')?.valueChanges.pipe(
@@ -138,6 +165,10 @@ export class ImageGeneratorComponent implements OnInit, OnChanges, OnDestroy {
           this.form.patchValue({ text: res.paragraph })
           if (res.image.path) {
             this.imageUrl = environment.apiUrl + res.image.path
+            const pageData = this.yMap.get(`page-${this.pageId}`) || {};
+            this.imageUrl = environment.apiUrl + res.image.path;
+            pageData.imageUrl = this.imageUrl;
+            this.yMap.set(`page-${this.pageId}`, pageData)
           }
         },
         error: (error) => {
@@ -155,7 +186,10 @@ export class ImageGeneratorComponent implements OnInit, OnChanges, OnDestroy {
     this.imagesService.generateImage(text, this.pageId || 1).subscribe(
       (res) => {
         console.log(res);
+        const pageData = this.yMap.get(`page-${this.pageId}`) || {};
         this.imageUrl = environment.apiUrl + res.imagePath;
+        pageData.imageUrl = this.imageUrl;
+        this.yMap.set(`page-${this.pageId}`, pageData)
         this.isGeneratingImage = false;
         this.imageGenerated.emit()
       },

@@ -14,7 +14,6 @@ import { fileURLToPath } from "url";
 import { WebSocketServer } from 'ws'
 import http from 'http'
 import { setupWSConnection } from 'y-websocket/bin/utils'
-import * as Y from 'yjs'
 
 
 
@@ -61,29 +60,10 @@ const wss = new WebSocketServer({ server })
 
 const docs = new Map()
 
-wss.on('connection', (conn, request) => {
-  console.log("WebSocket connection established");
-  const url = new URL(request.url, `http://${request.headers.host}`);
-  const roomName = url.searchParams.get('room') || 'default-room';
-
-  console.log(`Client connected to room: ${roomName}`);
-
-  let doc = docs.get(roomName);
-
-  if (!doc) {
-    doc = new Y.Doc();
-    docs.set(roomName, doc);
-  }
-
-  setupWSConnection(conn, request, { docName: roomName, doc: doc });
-
-  conn.on("open", () => {
-    console.log(`Client connected to room: ${roomName}`)
+wss.on("connection", (conn, request) => {
+  return setupWSConnection(conn, request, {
+    gc: true
   })
-
-  conn.on('close', () => {
-    console.log(`Client disconnected from room: ${roomName}`);
-  });
 });
 
 server.listen(PORT, (err) => {
