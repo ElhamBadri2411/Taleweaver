@@ -144,7 +144,7 @@
 
   /* flip to left */
   .flip-left {
-    animation: flip-to-left 0.5s ease-in-out forwards;
+    animation: flip-to-left 0.4s ease-in-out forwards;
     transform: translateZ(1px);
   }
   .storybook-cover.flip-left {
@@ -163,7 +163,7 @@
 
   /* flip to right */
   .flip-right {
-    animation: flip-to-right 0.5s ease-in-out forwards;
+    animation: flip-to-right 0.4s ease-in-out forwards;
     transform: translateZ(1px);
   }
   .storybook-cover.flip-right {

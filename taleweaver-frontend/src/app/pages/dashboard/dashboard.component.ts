@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 import { NavBarComponent } from "../../components/nav-bar/nav-bar.component";
+import { GoogleApiService } from '../../services/google/google-api.service';
+import { StoryService } from '../../services/story.service';
 import { trigger, transition, animate, style, state } from '@angular/animations';
 
 @Component({
@@ -9,7 +11,7 @@ import { trigger, transition, animate, style, state } from '@angular/animations'
     standalone: true,
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.css',
-    imports: [RouterOutlet, NavBarComponent, CommonModule],
+    imports: [NavBarComponent, CommonModule],
     animations: [
       trigger('zoomToLeft', [
         state('initial', style({
@@ -26,18 +28,37 @@ import { trigger, transition, animate, style, state } from '@angular/animations'
   })
 
 export class DashboardComponent {
-  isClicked: boolean = false;
+  isClicked: boolean[] = [];
+  storyBooks: any[] = [];
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private google: GoogleApiService,
+    private storyService: StoryService
+  ) { }
+
+  bookClicked(index: number) {
+    this.isClicked[index] = true;
+    console.log(this.isClicked);
   }
 
-  bookClicked() {
-    this.isClicked = true;
+  formatDate(date: string) {
+    return new Date(date).toLocaleDateString();
   }
 
   onAnimationDone(event: any) {
-    if (this.isClicked) {
+    if (this.isClicked.includes(true)){
       this.router.navigate(['/storybook']);
     }
+  }
+
+  ngOnInit() {
+    const id = this.google.getUserId();
+    this.storyService.getStoryBooks(id).subscribe((books) => {
+      this.storyBooks = books;
+      this.storyBooks.forEach(element => {
+        this.isClicked.push(false);
+      });
+    });
   }
 }

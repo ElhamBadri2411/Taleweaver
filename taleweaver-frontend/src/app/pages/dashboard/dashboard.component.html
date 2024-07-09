@@ -31,15 +31,15 @@
   </div>
 
   <div class="books-wrapper mx-5 my-10">
-    <div class="storybook" 
-     [@zoomToLeft]="isClicked ? 'zoom' : 'initial'"
-     (click)="bookClicked()" 
+    <div class="storybook" *ngFor="let storyBook of storyBooks; let i = index"
+     [@zoomToLeft]="isClicked[i]? 'zoom' : 'initial'"
+     (click)="bookClicked(i)"
      (@zoomToLeft.done)="onAnimationDone($event)">
       <div class="storybook-cover">
         <div class="storybook-skin py-3 pl-3 pr-8">
           <div class="storybook-skin-content">
-            <div class="storybook-title font-bold text-base truncate">My First Story Book</div>
-            <div class="storybook-date lining-nums font-bold">Edited: 2024/07/02</div>
+            <div class="storybook-title font-bold text-base truncate">{{storyBook.title}}</div>
+            <div class="storybook-date lining-nums font-bold">{{formatDate(storyBook.createdAt)}}</div>
           </div>
         </div>
       </div>
