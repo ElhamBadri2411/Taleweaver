@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GoogleApiService } from '../../services/google/google-api.service';
-import { Router } from '@angular/router';
+import { UserService } from '../../services/user.service';
 
 
 @Component({
@@ -13,10 +13,18 @@ import { Router } from '@angular/router';
 })
 
 export class NavBarComponent {
+  DisplayName: string = '';
   constructor(
     private readonly google: GoogleApiService,
-    private router: Router
-  ) {}
+    private userService: UserService,
+  ) { }
+
+  ngOnInit() {
+    const id = this.google.getUserId();
+    this.userService.getUserById(id).subscribe((user) => {
+      this.DisplayName = user.displayName;
+    });
+  }
 
   isSignedIn(){
     return this.google.isLoggedIn();

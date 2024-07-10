@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { verifyToken } from "../middleware/auth.js";
 
 import {
   createStoryBook,
@@ -10,10 +11,10 @@ import {
 
 const storybookRouter = Router();
 
-storybookRouter.post("/", createStoryBook);
-storybookRouter.get("/users/:id", getStoryBooks);
-storybookRouter.get("/:id", getStoryBookById);
-storybookRouter.patch("/:id", renameStoryBook);
-storybookRouter.delete("/:id", deleteStoryBook);
+storybookRouter.post("/", verifyToken, createStoryBook);
+storybookRouter.get("/users/:id", verifyToken, getStoryBooks);
+storybookRouter.get("/:id", verifyToken, getStoryBookById);
+storybookRouter.patch("/:id", verifyToken, renameStoryBook);
+storybookRouter.delete("/:id", verifyToken, deleteStoryBook);
 
 export default storybookRouter;

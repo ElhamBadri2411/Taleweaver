@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { verifyToken } from "../middleware/auth.js";
 
 import {
   generateImage
@@ -6,6 +7,6 @@ import {
 
 const router = Router()
 
-router.post("/", generateImage)
+router.post("/", verifyToken, generateImage)
 
 export default router

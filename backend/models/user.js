@@ -7,7 +7,7 @@ export const User = db.define("User", {
   googleId: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true
+    primaryKey: true,
   },
   email: {
     type: DataTypes.STRING,
@@ -21,10 +21,6 @@ export const User = db.define("User", {
     type: DataTypes.STRING,
     allowNull: false
   },
-  photoUrl: {
-    type: DataTypes.STRING,
-    allowNull: true
-  }
 });
 
 // Define associations

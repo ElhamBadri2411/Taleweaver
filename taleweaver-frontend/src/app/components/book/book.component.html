@@ -1,0 +1,51 @@
+<div class="book-wrapper flex justify-centre">
+    <div class="storybook">
+      <div class="storybook-cover" 
+      [class.flip-left]="coverIsFlipped === 0? false : (coverIsFlipped % 2 !== 0 ? true : false)"
+      [class.flip-right]="coverIsFlipped === 0? false : (coverIsFlipped % 2 === 0 ? true : false)"
+      (click)="flipCover()">
+        <div class="storybook-skin py-3 pl-3 pr-8">
+          <div class="storybook-skin-content">
+            <div class="storybook-title font-bold text-sm truncate">{{cover.title}}</div>
+            <div class="storybook-date lining-nums font-bold">Edited: {{formatDate(cover.createdAt)}}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- back of the page -->
+      <div *ngFor="let p of fliped; let i = index">
+        <div class="storybook-pages">
+          <div class="storybook-page back text-xs"
+            [class.flip-left]="isFlipped[length-i] === 0? false : (isFlipped[length-i] % 2 !== 0 ? true : false)"
+            [class.flip-right]="isFlipped[length-i] === 0? false : (isFlipped[length-i] % 2 === 0 ? true : false)"
+            (click)="flipPage(length-i)">
+            <div class="story m-2">
+                <p class="story-text">{{ p.story }}</p>
+            </div>
+            <div class="storybook-page-number lining-nums font-bold">{{ p.page }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- front of the page -->
+      <div *ngFor="let p of frontPages; let i = index;">
+        <div class="storybook-pages">
+          <div class="storybook-page front text-xs" 
+            [class.flip-left]="isFlipped[i] === 0? false : (isFlipped[i] % 2 !== 0 ? true : false)"
+            [class.flip-right]="isFlipped[i] === 0? false : (isFlipped[i] % 2 === 0 ? true : false)"
+            (click)="flipPage(i)">
+            <div class="story m-2">
+                <p class="story-text">{{ p.story }}</p>
+            </div>
+            <div class="storybook-page-number lining-nums font-bold">{{ p.page }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="storybook-backcover" 
+        [class.flip-left]="backCoverIsFlipped === 0? false : (backCoverIsFlipped % 2 !== 0 ? true : false)"
+        [class.flip-right]="backCoverIsFlipped === 0? false : (backCoverIsFlipped % 2 === 0 ? true : false)"
+       (click)="flipBackCover()"></div>
+    </div>
+  </div>
+  

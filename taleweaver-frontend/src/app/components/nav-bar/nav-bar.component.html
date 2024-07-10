@@ -23,12 +23,14 @@
                 <summary>
                     <div class="avatar placeholder">
                         <div class="bg-neutral-content text-neutral w-8 rounded-full">
-                            <span class="text-m font-bold">K</span>
+                            <span *ngIf="isSignedIn(); else guest" class="text-m font-bold" >{{DisplayName[0]}}</span>
+                            <ng-template #guest>
+                                <span class="text-m font-bold">G</span>
+                            </ng-template>
                         </div>
                     </div>
                 </summary>
                 <ul class="p-2 w-max">
-                  <li><a>Setting</a></li>
                   <li><a *ngIf="isSignedIn()" (click)="signOutWithGoogle()">Logout</a></li>
                 </ul>
               </details>
