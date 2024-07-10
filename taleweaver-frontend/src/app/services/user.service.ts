@@ -3,7 +3,6 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../classes/User';
-import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +11,7 @@ export class UserService {
   private endpoint = environment.apiUrl + 'users';
 
   constructor(
-    private http: HttpClient,
-    private storage: StorageService
+    private http: HttpClient
   ) { }
 
   getHeaders(): HttpHeaders {

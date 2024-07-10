@@ -5,7 +5,6 @@ import { environment } from '../../../environments/environment';
 import { NavigationEnd } from '@angular/router';
 import { filter, take } from 'rxjs/operators';
 import { UserService } from '../user.service';
-import { StorageService } from '../storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +13,7 @@ export class GoogleApiService {
   constructor(
     private readonly oAuthService: OAuthService, 
     private router: Router,
-    private userService: UserService,
-    private storage: StorageService
+    private userService: UserService
   ) { 
     console.log('Google API Service Initialized');
     this.initConfigurations();
@@ -32,7 +30,7 @@ export class GoogleApiService {
       showDebugInformation: true,
     };
     this.oAuthService.configure(oAuthConfig);
-    this.oAuthService.setupAutomaticSilentRefresh();
+    // this.oAuthService.setupAutomaticSilentRefresh();
     this.oAuthService.loadDiscoveryDocumentAndTryLogin().then(() => {
       if (this.oAuthService.hasValidAccessToken()) {
         this.router.events.pipe(

@@ -16,13 +16,18 @@ import { trigger, transition, animate, style, state } from '@angular/animations'
       trigger('zoomToLeft', [
         state('initial', style({
           transform: 'scale(1)',
+          zIndex: 0,
         })),
         state('zoom', style({
-          transform: 'translate(430%, -100%) scale(2.45)',
+          transform: 'scale(2.45)',
+          zIndex: 1000,
+          position: 'fixed',
+          top: '30%',
+          left: '30%',
         })),
         transition('initial => zoom', [
-          animate('0.4s')
-        ])
+          animate('0.8s cubic-bezier(0.25, 0.5, 0.25, 1)')
+        ]),
       ])
     ]
   })
@@ -43,12 +48,14 @@ export class DashboardComponent {
   }
 
   formatDate(date: string) {
-    return new Date(date).toLocaleDateString();
+    return new Date(date).toLocaleString();
   }
 
   onAnimationDone(event: any) {
     if (this.isClicked.includes(true)){
-      this.router.navigate(['/storybook']);
+      const index = this.isClicked.indexOf(true);
+      const id = this.storyBooks[index].id;
+      this.router.navigate(['/storybook', id]);
     }
   }
 

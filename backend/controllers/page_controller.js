@@ -78,7 +78,7 @@ const getPageById = async (req, res, next) => {
   try {
     const page = await Page.findByPk(req.params.id);
     if (!page) {
-      return res.status(404).json({ error: "Page not found" });
+      return res.status(200).json({});
     }
     res.status(200).json(page);
   } catch (error) {

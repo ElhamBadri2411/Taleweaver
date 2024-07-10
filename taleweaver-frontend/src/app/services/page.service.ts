@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Page } from '../classes/Page';
 
@@ -11,6 +11,12 @@ export class PageService {
   private endpoint = environment.apiUrl + 'pages';
 
   constructor(private http: HttpClient) { }
+  getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
 
   /**
    * Adds a page to a storybook
@@ -19,8 +25,8 @@ export class PageService {
    */
   addPage(id: number): Observable<Page> {
     return this.http.post<Page>(`${this.endpoint}/new`, {
-      storyBookId: id,
-    });
+      storyBookId: id
+    }, { headers: this.getHeaders() });
   }
 
   /**
@@ -29,7 +35,7 @@ export class PageService {
    * @returns Observable<Page>
    */
   getPageById(id: number): Observable<Page> {
-    return this.http.get<Page>(`${this.endpoint}/${id}`);
+    return this.http.get<Page>(`${this.endpoint}/${id}`,{ headers: this.getHeaders() });
   }
 
   /**
@@ -48,7 +54,8 @@ export class PageService {
    */
   updatePage(id: number, paragraph: string): Observable<Page> {
     return this.http.patch<Page>(`${this.endpoint}/${id}`, {
-      paragraph,
-    });
+      paragraph
+    },
+    { headers: this.getHeaders() });
   }
 }

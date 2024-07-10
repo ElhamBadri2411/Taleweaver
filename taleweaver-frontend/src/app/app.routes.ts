@@ -25,5 +25,5 @@ export const routes: Routes = [
     canActivate: [AuthService],
   },
   { path: 'books/:bookId/edit', component: EditStoryComponent },
-  { path: 'storybook', component: StoryBookComponent, canActivate: [AuthService]}
+  { path: 'storybook/:id', component: StoryBookComponent, canActivate: [AuthService]}
 ];

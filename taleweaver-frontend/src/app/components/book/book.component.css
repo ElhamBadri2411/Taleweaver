@@ -1,24 +1,25 @@
 @import url('https://fonts.googleapis.com/css?family=Cormorant+Garamond:300,400,600|Tulpen+One&display=swap');
 .book-wrapper {
     font-family: 'Cormorant Garamond', serif;
+    padding-top: 2.5vh;
   }
   
   .storybook {
-    height: 250px;
-    width: 175px;
+    height: 300px;
+    width: 200px;
     position: relative;
     transition: 0.4s ease-in-out;
     border-radius: 5px 15px 15px 5px;
     transform-origin: left center 0px;
     display: inline-block;
     perspective: 800px;
-    zoom: 245%;
+    zoom: 200%;
   }
   
   .storybook-cover,
   .storybook-backcover {
-    height: 250px;
-    width: 175px;
+    height: 300px;
+    width: 200px;
     position: absolute;
     border-radius: 5px 15px 15px 5px;
     background: #665564;
@@ -87,7 +88,7 @@
   .storybook-page {
     top: 2.5%;
     height: 95%;
-    width: 170px;
+    width: 190px;
     position: absolute;
     background-color: #fbfae8;
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
@@ -157,7 +158,7 @@
     z-index: 2;
   }
   .storybook-backcover.flip-left{
-    z-index: 3;
+    z-index: 4;
   }
 
 
@@ -167,7 +168,7 @@
     transform: translateZ(1px);
   }
   .storybook-cover.flip-right {
-    z-index: 3;
+    z-index: 4;
   }
   .storybook-page.flip-right {
     z-index: 2;

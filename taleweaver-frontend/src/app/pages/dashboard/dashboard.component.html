@@ -30,7 +30,7 @@
     </div>
   </div>
 
-  <div class="books-wrapper mx-5 my-10">
+  <div class="books-wrapper mx-5 my-10 flex flex-wrap">
     <div class="storybook" *ngFor="let storyBook of storyBooks; let i = index"
      [@zoomToLeft]="isClicked[i]? 'zoom' : 'initial'"
      (click)="bookClicked(i)"
@@ -39,7 +39,7 @@
         <div class="storybook-skin py-3 pl-3 pr-8">
           <div class="storybook-skin-content">
             <div class="storybook-title font-bold text-base truncate">{{storyBook.title}}</div>
-            <div class="storybook-date lining-nums font-bold">{{formatDate(storyBook.createdAt)}}</div>
+            <div class="storybook-date lining-nums font-bold">Edited: {{formatDate(storyBook.createdAt)}}</div>
           </div>
         </div>
       </div>

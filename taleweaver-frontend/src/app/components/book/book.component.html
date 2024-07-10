@@ -6,8 +6,8 @@
       (click)="flipCover()">
         <div class="storybook-skin py-3 pl-3 pr-8">
           <div class="storybook-skin-content">
-            <div class="storybook-title font-bold text-sm truncate">My First Story Book</div>
-            <div class="storybook-date lining-nums font-bold">Edited: 2024/07/02</div>
+            <div class="storybook-title font-bold text-sm truncate">{{cover.title}}</div>
+            <div class="storybook-date lining-nums font-bold">Edited: {{formatDate(cover.createdAt)}}</div>
           </div>
         </div>
       </div>

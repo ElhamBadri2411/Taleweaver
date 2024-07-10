@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PageService } from '../../services/page.service';
+import { StoryService } from '../../services/story.service';
+import { ActivatedRoute } from '@angular/router';
+import { Page } from '../../classes/Page';
 
 @Component({
   selector: 'app-book',
@@ -9,19 +13,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './book.component.css'
 })
 export class BookComponent {
-  frontPages: any[] = [
-    { page: 1, story: 'This is the first page' },
-    { page: 2, story: 'This is the second page' },
-    { page: 3, story: 'This is the third page' },
-    { page: 4, story: 'This is the fourth page' },
-    { page: 5, story: 'This is the fivth page' },
-    { page: 6, story: 'This is the sixth page' },
-    { page: 7, story: 'This is the seventh page' },
-    { page: 8, story: 'This is the eighth page' },
-    { page: 9, story: 'This is the ninth page' },
-    { page: 10, story: 'This is the tenth page' },
-    { page: 11, story: 'This is the eleventh page' },
-  ];
+  cover: any = {};
+  frontPages: any[] = [];
   fliped: any[] = [];
   length: number = this.frontPages.length;
 
@@ -29,14 +22,11 @@ export class BookComponent {
   coverIsFlipped: number = 0;
   backCoverIsFlipped: number = 0;
 
-  constructor() {
-    this.frontPages.reverse();
-    if (this.frontPages.length % 2 !== 0) {
-      this.frontPages.unshift({ page: this.length + 1, story: 'This is the last page' });
-      this.length += 1;
-    }
-    this.frontPages.forEach(() => this.isFlipped.push(0));
-  }
+  constructor( 
+    private pageService: PageService,
+    private storyService: StoryService,
+    private route: ActivatedRoute, 
+  ){ }
 
   flipCover() {
     this.coverIsFlipped += 1;
@@ -63,5 +53,37 @@ export class BookComponent {
       this.frontPages.push(this.fliped[this.length - index-1]);
       this.fliped.splice(-2);
     }
+  }
+
+  formatDate(date: string) {
+    return new Date(date).toLocaleString();
+  }
+
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      const id = params['id'];
+      this.storyService.getStoryById(id).subscribe((story) => {
+        this.cover = story;
+      });
+      this.pageService.getPageById(id).subscribe((res) => {
+          if (Object.keys(res).length === 0){
+            this.length = 2;
+            this.frontPages.push({ page: 1, story: 'No Content For This Story Yet' });
+            this.frontPages.unshift({ page: 2, story: '' });
+            this.frontPages.forEach(() => this.isFlipped.push(0));
+          }
+          else{
+            console.log(res);
+          }
+          // this.frontPages = [res];
+          // this.length = this.frontPages.length;
+          // this.frontPages.reverse();
+          // if (this.frontPages.length % 2 !== 0) {
+          //   this.frontPages.unshift({ page: this.length + 1, story: 'This is the last page' });
+          //   this.length += 1;
+          // }
+          // this.frontPages.forEach(() => this.isFlipped.push(0));
+      });
+    });
   }
 }

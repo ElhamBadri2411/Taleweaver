@@ -57,6 +57,7 @@ const getStoryBookById = async (req, res, next) => {
 // @desc  Get all storybook by a user
 // @access private
 const getStoryBooks = async (req, res, next) => {
+  // do pagination later
   try {
     if (!req.params.id) {
       return res.status(400).json({ error: "Invalid input parameters" });
@@ -68,6 +69,7 @@ const getStoryBooks = async (req, res, next) => {
   
     const books = await StoryBook.findAll({
       where: { UserGoogleId: req.params.id },
+      order: [["createdAt", "DESC"]],
     });
   
     if (!books) {
