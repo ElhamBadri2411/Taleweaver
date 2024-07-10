@@ -65,7 +65,7 @@ export class BookComponent {
       this.storyService.getStoryById(id).subscribe((story) => {
         this.cover = story;
       });
-      this.pageService.getPageById(id).subscribe((res) => {
+      this.pageService.getPagesByStoryBookId(id).subscribe((res) => {
           if (Object.keys(res).length === 0){
             this.length = 2;
             this.frontPages.push({ page: 1, story: 'No Content For This Story Yet' });

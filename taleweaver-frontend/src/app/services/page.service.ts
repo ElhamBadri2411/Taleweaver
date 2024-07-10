@@ -44,7 +44,7 @@ export class PageService {
    * @returns Observable<Page>
    */
   getPagesByStoryBookId(id: number): Observable<Page[]> {
-    return this.http.get<Page[]>(`${this.endpoint}/storybooks/${id}`);
+    return this.http.get<Page[]>(`${this.endpoint}/storybooks/${id}`, { headers: this.getHeaders() });
   }
 
   /**
