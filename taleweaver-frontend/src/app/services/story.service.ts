@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { StoryBook } from '../classes/StoryBook';
 
@@ -9,6 +9,9 @@ import { StoryBook } from '../classes/StoryBook';
 })
 export class StoryService {
   private endpoint = environment.apiUrl + 'storybooks';
+  private headers = new HttpHeaders({
+    'Authorization': 'Bearer ' + localStorage.getItem('token')
+  });
 
   constructor(private http: HttpClient) {}
 
@@ -22,7 +25,7 @@ export class StoryService {
     return this.http.post<StoryBook>(`${this.endpoint}`, {
       title,
       description,
-    });
+    }, { headers: this.headers });  
   }
 
   /**
@@ -31,7 +34,7 @@ export class StoryService {
    * @returns Observable<any>
    */
   deleteStory(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.endpoint}/${id}`);
+    return this.http.delete<any>(`${this.endpoint}/${id}`, { headers: this.headers });
   }
 
   /**
@@ -40,7 +43,7 @@ export class StoryService {
    * @returns Observable<StoryBook>
    */
   getStoryById(id: number): Observable<StoryBook> {
-    return this.http.get<StoryBook>(`${this.endpoint}/${id}`);
+    return this.http.get<StoryBook>(`${this.endpoint}/${id}`, { headers: this.headers });
   }
 
   /**
@@ -48,10 +51,9 @@ export class StoryService {
    * @param id User id of the user we want to fetch the books for
    * @returns Observable<StoryBook>
    */
-  getBooksByUser(id: number): Observable<StoryBook[]> {
-    return this.http.get<StoryBook[]>(`${this.endpoint}/user/${id}`);
+  getStoryBooks(id: string): Observable<StoryBook[]> {
+    return this.http.get<StoryBook[]>(`${this.endpoint}/users/${id}`, { headers: this.headers });
   }
-
   /**
    * Rename a storybook
    * @param id The id of the story to be fetched
@@ -60,6 +62,6 @@ export class StoryService {
   renameStory(id: number, newTitle: string): Observable<StoryBook> {
     return this.http.patch<StoryBook>(`${this.endpoint}/${id}`, {
       title: newTitle,
-    });
+    }, { headers: this.headers });
   }
 }

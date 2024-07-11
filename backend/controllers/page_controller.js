@@ -86,7 +86,7 @@ const getPageById = async (req, res, next) => {
   try {
     const page = await Page.findByPk(req.params.id);
     if (!page) {
-      return res.status(404).json({ error: "Page not found" });
+      return res.status(404).json({ error: "Pages not found" });
     }
     res.status(200).json(page);
   } catch (error) {
@@ -107,7 +107,7 @@ const getPagesByStoryBookId = async (req, res, next) => {
       ]
     });
     if (!pages) {
-      return res.status(404).json({ error: "Pages not found" });
+      return res.status(200).json({});
     }
     res.status(200).json(pages);
   } catch (error) {
