@@ -7,29 +7,29 @@ import { StoryService } from '../../services/story.service';
 import { trigger, transition, animate, style, state } from '@angular/animations';
 
 @Component({
-    selector: 'app-dashboard',
-    standalone: true,
-    templateUrl: './dashboard.component.html',
-    styleUrl: './dashboard.component.css',
-    imports: [NavBarComponent, CommonModule],
-    animations: [
-      trigger('zoomToLeft', [
-        state('initial', style({
-          transform: 'scale(1)',
-          opacity: 1,
-          zIndex: 0,
-        })),
-        state('zoom', style({
-          transform: 'translateY(-50%) translateX(-50%) scale(2)',
-          opacity: 0,
-          zIndex: 1000,
-        })),
-        transition('initial => zoom', [
-          animate('0.8s cubic-bezier(0.25, 0.5, 0.25, 1)')
-        ]),
-      ])
-    ]
-  })
+  selector: 'app-dashboard',
+  standalone: true,
+  templateUrl: './dashboard.component.html',
+  styleUrl: './dashboard.component.css',
+  imports: [NavBarComponent, CommonModule],
+  animations: [
+    trigger('zoomToLeft', [
+      state('initial', style({
+        transform: 'scale(1)',
+        opacity: 1,
+        zIndex: 0,
+      })),
+      state('zoom', style({
+        transform: 'translateY(-50%) translateX(-50%) scale(2)',
+        opacity: 0,
+        zIndex: 1000,
+      })),
+      transition('initial => zoom', [
+        animate('0.8s cubic-bezier(0.25, 0.5, 0.25, 1)')
+      ]),
+    ])
+  ]
+})
 
 export class DashboardComponent {
   isClicked: boolean[] = [];
@@ -51,11 +51,20 @@ export class DashboardComponent {
   }
 
   onAnimationDone(event: any) {
-    if (this.isClicked.includes(true)){
+    if (this.isClicked.includes(true)) {
       const index = this.isClicked.indexOf(true);
       const id = this.storyBooks[index].id;
       this.router.navigate(['/storybook', id]);
     }
+  }
+
+  navigateToCreateNewStory() {
+    this.router.navigate(['/new-story'])
+  }
+
+  navigateToEditPage(bookId: string): void {
+    this.router.navigate([`/books/${bookId}/edit`])
+
   }
 
   ngOnInit() {

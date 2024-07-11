@@ -14,7 +14,6 @@ export class DashboardComponent {
 
   navigateToCreateNewStory() {
     this.router.navigate(['/new-story'])
-
   }
 }
 

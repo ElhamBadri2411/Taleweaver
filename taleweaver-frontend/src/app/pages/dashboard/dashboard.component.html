@@ -2,48 +2,58 @@
 <div class="content">
   <div class="functions flex justify-between px-10 py-5 shadow-xl">
     <div class="card card-side bg-secondary shadow-xl mx-5">
-        <div class="card-body">
-          <h2 class="card-title text-accent-content">USE OUR TEMPLATE</h2>
-          <p class="text-accent-content text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit lectus enim id euismod. Gravida at praesent aliquam, at natoque at leo. Faucibus quam ipsum mi eget consectetur posuere dui vulputate magna.</p>
-          <div class="card-actions justify-end">
-            <button class="btn btn-outline">START NOW!</button>
-          </div>
+      <div class="card-body">
+        <h2 class="card-title text-accent-content">Create a new Tale ...</h2>
+        <p class="text-accent-content text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit
+          lectus enim id euismod. Gravida at praesent aliquam, at natoque at leo. Faucibus quam ipsum mi eget
+          consectetur posuere dui vulputate magna.</p>
+        <div class="card-actions justify-end">
+          <button (click)="navigateToCreateNewStory()" class="btn btn-outline">Create a Tale</button>
         </div>
+      </div>
     </div>
     <div class="card card-side bg-purple-900 shadow-xl mx-5">
-        <div class="card-body">
-          <h2 class="card-title text-accent-content">FEATURE 2</h2>
-          <p class="text-accent-content text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit lectus enim id euismod. Gravida at praesent aliquam, at natoque at leo. Faucibus quam ipsum mi eget consectetur posuere dui vulputate magna.</p>
-          <div class="card-actions justify-end">
-            <button class="btn btn-outline">START NOW!</button>
-          </div>
+      <div class="card-body">
+        <h2 class="card-title text-accent-content">FEATURE 2</h2>
+        <p class="text-accent-content text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit
+          lectus enim id euismod. Gravida at praesent aliquam, at natoque at leo. Faucibus quam ipsum mi eget
+          consectetur posuere dui vulputate magna.</p>
+        <div class="card-actions justify-end">
+          <button class="btn btn-outline">START NOW!</button>
         </div>
+      </div>
     </div>
     <div class="card card-side bg-pink-900 shadow-xl mx-5">
-        <div class="card-body">
-          <h2 class="card-title text-accent-content">FEATURE 3</h2>
-          <p class="text-accent-content text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit lectus enim id euismod. Gravida at praesent aliquam, at natoque at leo. Faucibus quam ipsum mi eget consectetur posuere dui vulputate magna.</p>
-          <div class="card-actions justify-end">
-            <button class="btn btn-outline">START NOW!</button>
-          </div>
+      <div class="card-body">
+        <h2 class="card-title text-accent-content">FEATURE 3</h2>
+        <p class="text-accent-content text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit
+          lectus enim id euismod. Gravida at praesent aliquam, at natoque at leo. Faucibus quam ipsum mi eget
+          consectetur posuere dui vulputate magna.</p>
+        <div class="card-actions justify-end">
+          <button class="btn btn-outline">START NOW!</button>
         </div>
+      </div>
     </div>
   </div>
 
   <div class="books-wrapper mx-5 my-10 flex flex-wrap">
-    <div class="storybook" *ngFor="let storyBook of storyBooks; let i = index"
-     [@zoomToLeft]="isClicked[i]? 'zoom' : 'initial'"
-     (click)="bookClicked(i)"
-     (@zoomToLeft.done)="onAnimationDone($event)">
-      <div class="storybook-cover">
-        <div class="storybook-skin py-3 pl-3 pr-8">
-          <div class="storybook-skin-content">
-            <div class="storybook-title font-bold text-base truncate">{{storyBook.title}}</div>
-            <div class="storybook-date lining-nums font-bold">Edited: {{formatDate(storyBook.createdAt)}}</div>
+    @for( storyBook of storyBooks; track storyBook.id; let i = $index){
+    <div class="flex flex-col
+      ">
+      <div class="storybook" [@zoomToLeft]="isClicked[i]? 'zoom' : 'initial'" (click)="bookClicked(i)"
+        (@zoomToLeft.done)="onAnimationDone($event)">
+        <div class="storybook-cover">
+          <div class="storybook-skin py-3 pl-3 pr-8">
+            <div class="storybook-skin-content">
+              <div class="storybook-title font-bold text-base truncate">{{storyBook.title}}</div>
+              <div class="storybook-date lining-nums font-bold">Edited: {{formatDate(storyBook.createdAt)}}</div>
+            </div>
           </div>
         </div>
+        <div class="storybook-page"></div>
       </div>
-      <div class="storybook-page"></div>
+      <button (click)='navigateToEditPage(storyBook.id)'>Edit</button>
     </div>
+    }
   </div>
 </div>

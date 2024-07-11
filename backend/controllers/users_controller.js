@@ -8,6 +8,7 @@ dotenv.config();
 // @desc  Create a new user
 // @access public
 const createUser = async (req, res, next) => {
+  console.log(req)
   try {
     const { id_token } = req.body;
     if (!id_token) {
@@ -33,8 +34,9 @@ const createUser = async (req, res, next) => {
     const token = jwt.sign({ userId: user.googleId }, process.env.JWT_SECRET, {});
     res.status(201).json(token);
   } catch (error) {
+    console.log(error)
     return res.status(400).json({ error: "Cannot create user" });
-  } 
+  }
 };
 
 // @route GET api/users/:id

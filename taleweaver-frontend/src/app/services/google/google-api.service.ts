@@ -11,10 +11,10 @@ import { UserService } from '../user.service';
 })
 export class GoogleApiService {
   constructor(
-    private readonly oAuthService: OAuthService, 
+    private readonly oAuthService: OAuthService,
     private router: Router,
     private userService: UserService
-  ) { 
+  ) {
     console.log('Google API Service Initialized');
     this.initConfigurations();
   }
@@ -49,7 +49,7 @@ export class GoogleApiService {
                 console.error('Error creating user:', error);
               },
             );
-          } 
+          }
         });
       }
     });
