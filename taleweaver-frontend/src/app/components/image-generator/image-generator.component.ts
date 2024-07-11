@@ -21,10 +21,14 @@ import { heroSparklesSolid, heroXCircleSolid } from '@ng-icons/heroicons/solid';
 import { PageService } from '../../services/page.service';
 import { debounceTime, takeUntil, Subject } from 'rxjs';
 import Quill from 'quill';
+import QuillCursors from 'quill-cursors';
 import * as Y from 'yjs';
 import { QuillBinding } from 'y-quill';
 import { WebsocketProvider } from 'y-websocket';
-import QuillCursors from 'quill-cursors'
+import { Awareness } from 'y-protocols/awareness';
+
+// Register the QuillCursors module
+Quill.register('modules/cursors', QuillCursors);
 
 @Component({
   selector: 'app-image-generator',
@@ -64,6 +68,14 @@ export class ImageGeneratorComponent
   type!: Y.Text;
   binding!: QuillBinding;
   imageMap!: Y.Map<any>;
+  awareness!: Awareness;
+
+  activeUsers: { name: string; color: string }[] = [];
+
+  private colors: string[] = [
+    '#1be7ff', '#6eeb83', '#e4ff1a', '#ff9a1f', '#ff5714',
+    '#ff3c6f', '#cb6ce6', '#6c95e6', '#6ce6d6', '#e66c6c'
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -78,6 +90,8 @@ export class ImageGeneratorComponent
   ngOnInit(): void {
     this.initializeYjs();
     this.autoSaveSetup();
+
+    this.provider.awareness.on('change', this.handleAwarenessChange.bind(this));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -90,6 +104,7 @@ export class ImageGeneratorComponent
     this.destroy.next();
     this.destroy.complete();
     this.cleanupYjs();
+    this.provider.awareness.off('change', this.handleAwarenessChange);
   }
 
   ngAfterViewInit(): void {
@@ -102,6 +117,7 @@ export class ImageGeneratorComponent
         theme: 'bubble',
         modules: {
           toolbar: false, // Disable the toolbar
+          cursors: true,  // Enable the cursors module
         },
         placeholder: "Write your story here ..."
       });
@@ -109,6 +125,13 @@ export class ImageGeneratorComponent
       // Listen to Quill editor changes and update the form control
       this.quillEditor.on('text-change', () => {
         this.form.get('text')?.patchValue(this.quillEditor.getText());
+      });
+
+      // Update awareness when selection changes
+      this.quillEditor.on('selection-change', (range) => {
+        if (range) {
+          this.provider.awareness.setLocalStateField('selection', range);
+        }
       });
     }
   }
@@ -123,6 +146,13 @@ export class ImageGeneratorComponent
       this.bookId,
       this.ydoc
     );
+
+    // Assign a random color from the colors array
+    const randomColor = this.colors[Math.floor(Math.random() * this.colors.length)];
+    this.provider.awareness.setLocalStateField('user', {
+      name: 'Elham',
+      color: randomColor
+    });
 
     // Create or get the Y.Text type for the page content
     if (this.pageId !== null) {
@@ -183,7 +213,7 @@ export class ImageGeneratorComponent
           this.isSaving = false;
         },
         error: (error) => {
-          console.error('Save error:', error); // Add logging
+          console.error('Save error:', error);
           this.isSaving = false;
         },
       });
@@ -216,12 +246,11 @@ export class ImageGeneratorComponent
           }
         },
         error: (error) => {
-          console.error('Load error:', error); // Add logging
+          console.error('Load error:', error);
         },
       });
     }
   }
-
 
   generateImage() {
     this.isGeneratingImage = true;
@@ -235,8 +264,32 @@ export class ImageGeneratorComponent
       },
       (error: any) => {
         console.error('Error generating image:', error);
+        this.isGeneratingImage = false;
       }
     );
   }
-}
 
+  handleAwarenessChange(change: any): void {
+    const states = this.provider.awareness.getStates();
+    const cursors: any = this.quillEditor.getModule('cursors');
+
+    cursors.clearCursors();
+
+    this.activeUsers = [];
+
+    states.forEach((state: any, clientId: number) => {
+      if (state.user && clientId !== this.provider.awareness.clientID) {
+        cursors.createCursor(clientId, state.user.name, state.user.color);
+
+        if (state.selection) {
+          cursors.moveCursor(clientId, state.selection.index, state.selection.length);
+        }
+
+        this.activeUsers.push({
+          name: state.user.name,
+          color: state.user.color
+        });
+      }
+    });
+  }
+}

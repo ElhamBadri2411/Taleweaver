@@ -36,7 +36,6 @@ export class PageListComponent implements OnInit {
   loadPages() {
     this.pageService.getPagesByStoryBookId(+this.bookId).subscribe({
       next: (pages) => {
-        console.log(pages, "PAGES HERE")
         this.pages = pages
       },
       error: (error) => {
@@ -47,7 +46,6 @@ export class PageListComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("plc ONINTI")
     this.loadPages()
   }
 
