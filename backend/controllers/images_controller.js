@@ -22,6 +22,8 @@ const generateImage = async (req, res, next) => {
     return res.status(400).json({ error: 'Text is required to generate image' });
   }
 
+  const setup = "animated + cartoon style"
+
   try {
 
     // get page
@@ -35,7 +37,7 @@ const generateImage = async (req, res, next) => {
     imageData.prompt = text;
 
     const response = await openai.images.generate({
-      prompt: text,
+      prompt: setup + text,
       size: "512x512"
     })
     const imageUrl = response.data[0].url;
