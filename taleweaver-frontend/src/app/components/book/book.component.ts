@@ -66,7 +66,7 @@ export class BookComponent {
         this.cover = story;
       });
       this.pageService.getPagesByStoryBookId(id).subscribe((res) => {
-          if (Object.keys(res).length === 0){
+          if (res.length === 0){
             this.length = 2;
             this.frontPages.push({ page: 1, story: 'No Content For This Story Yet' });
             this.frontPages.unshift({ page: 2, story: '' });

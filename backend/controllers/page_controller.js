@@ -107,7 +107,7 @@ const getPagesByStoryBookId = async (req, res, next) => {
       ]
     });
     if (!pages) {
-      return res.status(200).json({});
+      return res.status(404).json({ error: "Pages not found" });
     }
     res.status(200).json(pages);
   } catch (error) {
