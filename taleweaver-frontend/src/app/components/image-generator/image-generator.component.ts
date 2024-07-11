@@ -1,4 +1,16 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  Output,
+  EventEmitter,
+  OnDestroy,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -8,8 +20,11 @@ import { environment } from '../../../environments/environment';
 import { heroSparklesSolid, heroXCircleSolid } from '@ng-icons/heroicons/solid';
 import { PageService } from '../../services/page.service';
 import { debounceTime, takeUntil, Subject } from 'rxjs';
-import * as Y from 'yjs'
-import { WebsocketProvider } from "y-websocket";
+import Quill from 'quill';
+import * as Y from 'yjs';
+import { QuillBinding } from 'y-quill';
+import { WebsocketProvider } from 'y-websocket';
+import QuillCursors from 'quill-cursors'
 
 @Component({
   selector: 'app-image-generator',
@@ -21,35 +36,34 @@ import { WebsocketProvider } from "y-websocket";
     NgIconComponent,
   ],
   templateUrl: './image-generator.component.html',
-  styleUrl: './image-generator.component.css',
+  styleUrls: ['./image-generator.component.css'],
   viewProviders: [provideIcons({ heroSparklesSolid, heroXCircleSolid })],
 })
-export class ImageGeneratorComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() bookId: string;
-  @Input() pageId: number | null;
-  @Output() imageGenerated = new EventEmitter<void>()
+export class ImageGeneratorComponent
+  implements OnInit, OnChanges, OnDestroy, AfterViewInit {
+  @Input() bookId!: string;
+  @Input() pageId: number | null = null;
+  @Output() imageGenerated = new EventEmitter<void>();
+  @ViewChild('editorContainer', { static: false }) editorContainer!: ElementRef;
 
-  // for cleanup purposes
   private destroy = new Subject<void>();
-
-  // emits and recieves strings
   private autoSave = new Subject<string>();
 
-
-  title: string = 'Test title'
+  title: string = 'Test title';
   form: FormGroup;
   imageUrl: string = '';
   testImageUrl: string =
-    environment.apiUrl +
-    'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png';
+    environment.apiUrl + 'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png';
   isGeneratingImage: boolean = false;
   isSaving: boolean = false;
   isEditing: boolean = false;
 
-  yDoc: Y.Doc;
-  provider: WebsocketProvider;
-  yMap: Y.Map<any>;
-
+  quillEditor!: Quill;
+  ydoc!: Y.Doc;
+  provider!: WebsocketProvider;
+  type!: Y.Text;
+  binding!: QuillBinding;
+  imageMap!: Y.Map<any>;
 
   constructor(
     private fb: FormBuilder,
@@ -59,84 +73,106 @@ export class ImageGeneratorComponent implements OnInit, OnChanges, OnDestroy {
     this.form = this.fb.group({
       text: [''],
     });
-
-    this.yDoc = new Y.Doc()
   }
 
   ngOnInit(): void {
-    console.log(this.yDoc)
-    this.loadPageData()
-    this.autoSaveSetup()
-    this.initYjs()
+    this.initializeYjs();
+    this.autoSaveSetup();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.loadPageData()
-  }
-
-
-  ngOnDestroy(): void {
-    this.destroy.next()
-    this.destroy.complete()
-  }
-
-  updateFormAndImage(): void {
-    const pageData = this.yMap.get(`page-${this.pageId}`);
-    if (pageData) {
-      this.form.get('text')?.setValue(pageData.text || '', { emitEvent: false });
-      this.imageUrl = pageData.imageUrl || '';
+    if (changes['pageId'] && !changes['pageId'].isFirstChange()) {
+      this.loadPageData();
     }
   }
 
-  initYjs(): void {
-    const roomName = `book-${this.bookId}`;
-    this.provider = new WebsocketProvider('ws://localhost:3000', roomName, this.yDoc, {
-      params: {
-        pageId: this.pageId?.toString() || '1',
-        bookId: this.bookId.toString()
-      },
-      disableBc: true
-    });
-    this.yMap = this.yDoc.getMap('page-data');
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
+    this.cleanupYjs();
+  }
 
-    // server sync
-    this.provider.on('sync', (isSynced: boolean) => {
-      if (isSynced) {
-        this.updateFormAndImage()
-        this.yMap.observe(e => {
-          if (e.keysChanged.has(`page-${this.pageId}`)) {
-            const pageData = this.yMap.get(`page-${this.pageId}`);
-            console.log('PAGEDATA', pageData)
-            this.form.get('text')?.setValue(pageData.text || '', { emitEvent: false });
-            this.imageUrl = pageData.imageUrl || '';
-          }
-        });
+  ngAfterViewInit(): void {
+    this.initializeQuillEditor();
+  }
+
+  initializeQuillEditor(): void {
+    if (this.editorContainer) {
+      this.quillEditor = new Quill(this.editorContainer.nativeElement, {
+        theme: 'bubble',
+        modules: {
+          toolbar: false, // Disable the toolbar
+        },
+        placeholder: "Write your story here ..."
+      });
+
+      // Listen to Quill editor changes and update the form control
+      this.quillEditor.on('text-change', () => {
+        this.form.get('text')?.patchValue(this.quillEditor.getText());
+      });
+    }
+  }
+
+  initializeYjs(): void {
+    this.cleanupYjs();
+
+    // Initialize Yjs
+    this.ydoc = new Y.Doc();
+    this.provider = new WebsocketProvider(
+      'ws://localhost:3000',
+      this.bookId,
+      this.ydoc
+    );
+
+    // Create or get the Y.Text type for the page content
+    if (this.pageId !== null) {
+      this.type = this.ydoc.getText(`page-${this.pageId}`);
+      if (this.quillEditor) {
+        this.binding = new QuillBinding(this.type, this.quillEditor, this.provider.awareness);
+
+        // Set Quill editor content from Yjs type initially
+        const delta = this.type.toDelta();
+        this.quillEditor.setContents(delta);
       }
-    });
+    }
 
-    // writing
-    this.form.get('text')?.valueChanges.pipe(takeUntil(this.destroy)).subscribe(val => {
-      const pageData = this.yMap.get(`page-${this.pageId}`) || {};
-      pageData.text = val;
-      this.yMap.set(`page-${this.pageId}`, pageData);
+    // Create or get the Y.Map for the image URL
+    this.imageMap = this.ydoc.getMap('images');
+    this.imageMap.observe(event => {
+      if (event.keysChanged.has(`page-${this.pageId}`)) {
+        this.imageUrl = this.imageMap.get(`page-${this.pageId}`) || '';
+      }
+      this.imageGenerated.emit();
     });
   }
 
-  autoSaveSetup(): void {
-    this.form.get('text')?.valueChanges.pipe(
-      takeUntil(this.destroy)
-    ).subscribe((val) => {
-      this.isEditing = true;
-      this.autoSave.next(val)
-    })
+  cleanupYjs(): void {
+    if (this.binding) {
+      this.binding.destroy();
+    }
+    if (this.provider) {
+      this.provider.destroy();
+    }
+    if (this.ydoc) {
+      this.ydoc.destroy();
+    }
+  }
 
-    this.autoSave.pipe(
-      debounceTime(2000),
-      takeUntil(this.destroy)
-    ).subscribe(text => {
-      this.isEditing = false;
-      this.savePage(text)
-    })
+  autoSaveSetup(): void {
+    this.form
+      .get('text')
+      ?.valueChanges.pipe(takeUntil(this.destroy))
+      .subscribe((val) => {
+        this.isEditing = true;
+        this.autoSave.next(val);
+      });
+
+    this.autoSave
+      .pipe(debounceTime(2000), takeUntil(this.destroy))
+      .subscribe((text) => {
+        this.isEditing = false;
+        this.savePage(text);
+      });
   }
 
   savePage(text: string): void {
@@ -144,58 +180,63 @@ export class ImageGeneratorComponent implements OnInit, OnChanges, OnDestroy {
       this.isSaving = true;
       this.pagesService.updatePage(this.pageId!, text).subscribe({
         next: (res) => {
-          console.log("SAVED")
-          this.isSaving = false
+          this.isSaving = false;
         },
         error: (error) => {
-          console.error(error)
-          this.isSaving = false
-        }
-      })
-
+          console.error('Save error:', error); // Add logging
+          this.isSaving = false;
+        },
+      });
     }
-
   }
 
   loadPageData(): void {
-    this.imageUrl = ''
+    this.imageUrl = '';
     if (this.pageId !== null) {
       this.pagesService.getPageById(this.pageId).subscribe({
         next: (res) => {
-          this.form.patchValue({ text: res.paragraph })
+          // Switch the Yjs text type for the new page
+          this.type = this.ydoc.getText(`page-${this.pageId}`);
+          if (this.binding) {
+            this.binding.destroy();
+          }
+          this.binding = new QuillBinding(this.type, this.quillEditor, this.provider.awareness);
+
+          if (res.paragraph) {
+            this.type.delete(0, this.type.length);
+            this.type.insert(0, res.paragraph);
+          }
+
+          // Set Quill editor content from Yjs type
+          const delta = this.type.toDelta();
+          this.quillEditor.setContents(delta);
+
           if (res.image.path) {
-            this.imageUrl = environment.apiUrl + res.image.path
-            const pageData = this.yMap.get(`page-${this.pageId}`) || {};
             this.imageUrl = environment.apiUrl + res.image.path;
-            pageData.imageUrl = this.imageUrl;
-            this.yMap.set(`page-${this.pageId}`, pageData)
           }
         },
         error: (error) => {
-          console.error(error)
-
-        }
-      })
-
+          console.error('Load error:', error); // Add logging
+        },
+      });
     }
   }
+
 
   generateImage() {
     this.isGeneratingImage = true;
     const text = this.form.get('text')?.value;
     this.imagesService.generateImage(text, this.pageId || 1).subscribe(
       (res) => {
-        console.log(res);
-        const pageData = this.yMap.get(`page-${this.pageId}`) || {};
         this.imageUrl = environment.apiUrl + res.imagePath;
-        pageData.imageUrl = this.imageUrl;
-        this.yMap.set(`page-${this.pageId}`, pageData)
+        this.imageMap.set(`page-${this.pageId}`, this.imageUrl); // Update Yjs map
         this.isGeneratingImage = false;
-        this.imageGenerated.emit()
+        this.imageGenerated.emit();
       },
       (error: any) => {
         console.error('Error generating image:', error);
-      },
+      }
     );
   }
 }
+

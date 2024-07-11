@@ -47,6 +47,7 @@ export class PageListComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("plc ONINTI")
     this.loadPages()
   }
 

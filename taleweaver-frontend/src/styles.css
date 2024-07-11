@@ -1,4 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'quill/dist/quill.core.css';
+@import 'quill/dist/quill.bubble.css';
+
+.ql-editor.ql-blank::before {
+  color: #9ca3af !important;
+}
+
+.ql-editor {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  min-height: 200px;
+  color: whitesmoke;
+}
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
