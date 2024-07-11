@@ -6,10 +6,12 @@
 }
 
 .ql-editor {
-  font-size: 1.5rem;
-  line-height: 2rem;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
   min-height: 200px;
   color: whitesmoke;
+  max-height: 200px;
+  min-width: 400px;
 }
 
 

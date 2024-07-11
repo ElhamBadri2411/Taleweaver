@@ -46,7 +46,15 @@ const addPage = async (req, res, next) => {
       return res.status(404).json({ error: "StoryBook not found" });
     }
 
-    const page = await Page.create({ StoryBookId: storyBookId, position: 1 });
+    const count = await Page.count({
+      where: {
+        StoryBookId: storyBookId
+      }
+    })
+
+    console.log(count)
+
+    const page = await Page.create({ StoryBookId: storyBookId, position: count + 1 });
 
     res.status(201).json(page);
   } catch (error) {
@@ -94,6 +102,9 @@ const getPagesByStoryBookId = async (req, res, next) => {
     console.log(req.params)
     const pages = await Page.findAll({
       where: { StoryBookId: req.params.id },
+      order: [
+        ['position', 'ASC']
+      ]
     });
     if (!pages) {
       return res.status(404).json({ error: "Pages not found" });

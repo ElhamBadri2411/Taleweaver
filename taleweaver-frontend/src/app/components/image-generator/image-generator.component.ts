@@ -91,6 +91,7 @@ export class ImageGeneratorComponent
     this.initializeYjs();
     this.autoSaveSetup();
 
+
     this.provider.awareness.on('change', this.handleAwarenessChange.bind(this));
   }
 
