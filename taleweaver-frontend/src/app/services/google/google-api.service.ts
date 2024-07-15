@@ -52,6 +52,9 @@ export class GoogleApiService {
           } 
         });
       }
+      else{
+        this.router.navigate(['/']);
+      }
     });
   }
 

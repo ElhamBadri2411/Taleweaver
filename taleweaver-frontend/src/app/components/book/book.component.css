@@ -13,7 +13,7 @@
     transform-origin: left center 0px;
     display: inline-block;
     perspective: 800px;
-    zoom: 200%;
+    zoom: 180%;
   }
   
   .storybook-cover,
@@ -101,7 +101,8 @@
   }
 
   .storybook-page.back .story{
-    transform: scale(-0.5, 0.5);
+    transform: scale(-1, 1);
+    font-size: xx-small;
   }
   
   .storybook-cover.flip-left .storybook-skin{
@@ -111,7 +112,7 @@
   }
 
   .story{
-    transform: scale(0.5);
+    font-size: xx-small;
   }
 
   .storybook-page-number {
@@ -178,4 +179,11 @@
   }
   .storybook-backcover.flip-right{
     z-index: 0;
+  }
+
+  .story-image{
+    width: 180px;
+    height: 180px;
+    object-fit: cover; 
+    border-radius: 10px;
   }

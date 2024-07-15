@@ -7,6 +7,6 @@ import {
 
 const router = Router()
 
-router.post("/", verifyToken, generateImage)
+router.post("/", generateImage)
 
 export default router

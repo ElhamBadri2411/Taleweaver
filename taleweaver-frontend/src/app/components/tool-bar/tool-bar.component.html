@@ -1,0 +1,37 @@
+<ul class="menu bg-base-300 shadow-md">
+    <li>
+      <a class="p-3 my-3 bg-base-200 shadow"
+      [ngClass]="{'opacity-50 btn-disabled': audioVisible}" 
+      (click)="!audioVisible && tts()">
+        <ng-icon class="text-4xl" name="bootstrapVolumeUpFill"></ng-icon>
+      </a>
+    </li>
+    <li>
+      <a class="p-3 my-3 bg-base-200 shadow" (click)="edit()">
+        <ng-icon class="text-4xl" name="bootstrapPencilSquare"></ng-icon>
+      </a>
+    </li>
+    <li>
+      <a class="p-3 my-3 bg-base-200 shadow" (click)="openModal()">
+        <ng-icon class="text-4xl" name="bootstrapTrash"></ng-icon>
+      </a>
+  </ul>
+
+  <div *ngIf="audioVisible" class="z-10 bg-base-300 rounded-full absolute top-20 left-20 shadow-lg p-2 my-3 flex items-center">
+    <audio controls class="w-52 shadow-inner">
+        <source src="{{audioUrl}}" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+    <ng-icon class="text-4xl mx-1 cursor-pointer" name="bootstrapX" (click)="closeAudio()"></ng-icon>
+</div>
+
+<div *ngIf="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-base-300 bg-opacity-50">
+  <div class="bg-base-300 rounded-lg p-6 shadow-lg">
+    <h2 class="text-xl font-bold mb-4">Confirm Deletion</h2>
+    <p>Are you sure you want to delete this Story Book?</p>
+    <div class="mt-4 flex justify-between">
+      <button (click)="closeModal()" class="ml-2 px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400">Cancel</button>
+      <button (click)="confirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Delete</button>
+    </div>    
+  </div>
+</div>
