@@ -7,7 +7,7 @@
         <div class="storybook-skin py-3 pl-3 pr-8">
           <div class="storybook-skin-content">
             <div class="storybook-title font-bold text-sm truncate">{{cover.title}}</div>
-            <div class="storybook-date lining-nums font-bold">Edited: {{formatDate(cover.createdAt)}}</div>
+            <div class="storybook-date lining-nums font-bold">Edited: {{formatDate(cover.updatedAt)}}</div>
           </div>
         </div>
       </div>
@@ -19,8 +19,9 @@
             [class.flip-left]="isFlipped[length-i] === 0? false : (isFlipped[length-i] % 2 !== 0 ? true : false)"
             [class.flip-right]="isFlipped[length-i] === 0? false : (isFlipped[length-i] % 2 === 0 ? true : false)"
             (click)="flipPage(length-i)">
-            <div class="story m-2">
-                <p class="story-text">{{ p.story }}</p>
+            <div class="story p-2">
+                <img *ngIf="p.image" [src]="imageUrlBase + p.image" class="story-image" />
+                <p class="story-text p-1 max-h-20 overflow-y-auto">{{ p.story }}</p>
             </div>
             <div class="storybook-page-number lining-nums font-bold">{{ p.page }}</div>
           </div>
@@ -34,8 +35,9 @@
             [class.flip-left]="isFlipped[i] === 0? false : (isFlipped[i] % 2 !== 0 ? true : false)"
             [class.flip-right]="isFlipped[i] === 0? false : (isFlipped[i] % 2 === 0 ? true : false)"
             (click)="flipPage(i)">
-            <div class="story m-2">
-                <p class="story-text">{{ p.story }}</p>
+            <div class="story p-2">
+                <img *ngIf="p.image" [src]="imageUrlBase + p.image" class="story-image" />
+                <p class="story-text p-1 max-h-30 overflow-y-auto">{{ p.story }}</p>
             </div>
             <div class="storybook-page-number lining-nums font-bold">{{ p.page }}</div>
           </div>

@@ -2,17 +2,19 @@
     <!-- logo -->
     <div class="navbar-start">
         <div class="flex-none pl-10">
-            <a class="text-xl logo">TaleWeaver</a>
+            <a class="text-xl logo" (click)="goToDashboard()">TaleWeaver</a>
           </div>
     </div>
 
     <!-- Search Bar -->
-    <div class="navbar-center w-1/2">
+    <div *ngIf="dashboard === true" class="navbar-center w-1/2">
         <div class="form-control w-full">            
             <input 
                 type="text" 
                 placeholder="Search for the story book you created" 
-                class="input input-bordered input-md"/>
+                class="input input-bordered input-md"
+                [(ngModel)]="searchTerm" 
+                (ngModelChange)="onInputChange(searchTerm)"/>
         </div>
     </div>
     

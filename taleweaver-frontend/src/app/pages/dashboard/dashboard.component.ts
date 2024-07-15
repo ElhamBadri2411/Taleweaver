@@ -5,6 +5,7 @@ import { NavBarComponent } from "../../components/nav-bar/nav-bar.component";
 import { GoogleApiService } from '../../services/google/google-api.service';
 import { StoryService } from '../../services/story.service';
 import { trigger, transition, animate, style, state } from '@angular/animations';
+import { DataService } from '../../services/data.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -38,7 +39,8 @@ export class DashboardComponent {
   constructor(
     private router: Router,
     private google: GoogleApiService,
-    private storyService: StoryService
+    private storyService: StoryService,
+    private dataService: DataService
   ) { }
 
   bookClicked(index: number) {
@@ -56,6 +58,10 @@ export class DashboardComponent {
       const id = this.storyBooks[index].id;
       this.router.navigate(['/storybook', id]);
     }
+  }
+
+  newStoryBook() {
+    this.router.navigate(['/new-story']);
   }
 
   ngOnInit() {

@@ -1,4 +1,3 @@
-<app-nav-bar></app-nav-bar>
 <div class="content">
   <div class="functions flex justify-between px-10 py-5 shadow-xl">
     <div class="card card-side bg-secondary shadow-xl mx-5">
@@ -6,7 +5,7 @@
           <h2 class="card-title text-accent-content">USE OUR TEMPLATE</h2>
           <p class="text-accent-content text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit lectus enim id euismod. Gravida at praesent aliquam, at natoque at leo. Faucibus quam ipsum mi eget consectetur posuere dui vulputate magna.</p>
           <div class="card-actions justify-end">
-            <button class="btn btn-outline">START NOW!</button>
+            <button class="btn btn-outline" (click)="newStoryBook()">START NOW!</button>
           </div>
         </div>
     </div>
@@ -39,7 +38,7 @@
         <div class="storybook-skin py-3 pl-3 pr-8">
           <div class="storybook-skin-content">
             <div class="storybook-title font-bold text-base truncate">{{storyBook.title}}</div>
-            <div class="storybook-date lining-nums font-bold">Edited: {{formatDate(storyBook.createdAt)}}</div>
+            <div class="storybook-date lining-nums font-bold">Edited: {{formatDate(storyBook.updatedAt)}}</div>
           </div>
         </div>
       </div>

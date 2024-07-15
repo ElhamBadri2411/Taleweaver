@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import userRoutes from "./routes/users_router.js"
 import storybookRouter from "./routes/storybooks_router.js";
 import pageRouter from "./routes/page_router.js";
+import ttsRouter from "./routes/tts_router.js";
 import db from "./utils/db.js";
 import { configDotenv } from "dotenv";
 import imageRoutes from "./routes/images_router.js"
@@ -47,9 +48,11 @@ const PORT = 3000;
 console.log(path.join(__dirname, 'generated-images'))
 
 app.use('/api/generated-images', express.static(path.join(__dirname, 'generated-images')));
+app.use('/api/generated-audio', express.static(path.join(__dirname, 'generated-audio')));
 
 // routes
 app.use("/api/images", imageRoutes)
+app.use("/api/tts", ttsRouter)
 app.use("/api/storybooks", storybookRouter)
 app.use("/api/pages", pageRouter)
 app.use("/api/users", userRoutes)

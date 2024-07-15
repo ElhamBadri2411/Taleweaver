@@ -22,7 +22,7 @@ const generateImage = async (req, res, next) => {
     return res.status(400).json({ error: 'Text is required to generate image' });
   }
 
-  const setup = "animated + cartoon style"
+  const setup = "Create an illustration that combines the whimsical elements of a storybook with the aesthetic of '80s anime. Use soft lines and a textured look, with a palette of gentle, muted colors, ensuring the composition is balanced and visually enchanting."
 
   try {
 

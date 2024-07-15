@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { PageService } from '../../services/page.service';
 import { StoryService } from '../../services/story.service';
 import { ActivatedRoute } from '@angular/router';
-import { Page } from '../../classes/Page';
+import { environment } from '../../../environments/environment';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-book',
@@ -17,6 +18,7 @@ export class BookComponent {
   frontPages: any[] = [];
   fliped: any[] = [];
   length: number = this.frontPages.length;
+  imageUrlBase = environment.apiUrl
 
   isFlipped: number[] = [];
   coverIsFlipped: number = 0;
@@ -26,6 +28,7 @@ export class BookComponent {
     private pageService: PageService,
     private storyService: StoryService,
     private route: ActivatedRoute, 
+    private dataService: DataService
   ){ }
 
   flipCover() {
@@ -68,21 +71,26 @@ export class BookComponent {
       this.pageService.getPagesByStoryBookId(id).subscribe((res) => {
           if (res.length === 0){
             this.length = 2;
-            this.frontPages.push({ page: 1, story: 'No Content For This Story Yet' });
-            this.frontPages.unshift({ page: 2, story: '' });
+            this.frontPages.push({ page: 1, story: 'No Content For This Story Yet'});
+            this.frontPages.unshift({ page: 2, story: ''});
             this.frontPages.forEach(() => this.isFlipped.push(0));
           }
           else{
-            console.log(res);
+            this.frontPages = res
+            .map(item => ({
+                page: item.position,
+                story: item.paragraph,
+                image: item.image.path
+            }));
+            this.length = this.frontPages.length;
+            this.dataService.updateData(this.frontPages.map(item => item.story).join(' '));
+            this.frontPages.reverse();
+            if (this.frontPages.length % 2 !== 0) {
+              this.frontPages.unshift({ page: this.length + 1, story: ''});
+              this.length += 1;
+            }
+            this.frontPages.forEach(() => this.isFlipped.push(0));
           }
-          // this.frontPages = [res];
-          // this.length = this.frontPages.length;
-          // this.frontPages.reverse();
-          // if (this.frontPages.length % 2 !== 0) {
-          //   this.frontPages.unshift({ page: this.length + 1, story: 'This is the last page' });
-          //   this.length += 1;
-          // }
-          // this.frontPages.forEach(() => this.isFlipped.push(0));
       });
     });
   }

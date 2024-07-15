@@ -2,7 +2,7 @@ export interface Page {
   id: number;
   paragraph: string;
   image: ImageData;
-  order: number;
+  position: number;
 }
 
 export interface ImageData {

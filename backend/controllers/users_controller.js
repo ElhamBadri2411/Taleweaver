@@ -33,6 +33,7 @@ const createUser = async (req, res, next) => {
     const token = jwt.sign({ userId: user.googleId }, process.env.JWT_SECRET, {});
     res.status(201).json(token);
   } catch (error) {
+    console.error(error);
     return res.status(400).json({ error: "Cannot create user" });
   } 
 };

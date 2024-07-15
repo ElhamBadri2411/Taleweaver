@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgIconComponent } from '@ng-icons/core';
 import { provideIcons } from '@ng-icons/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-story-form',
@@ -26,6 +27,7 @@ export class NewStoryFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private storyService: StoryService,
+    private router: Router
   ) {
     this.form = this.fb.group({
       title: [
@@ -55,7 +57,7 @@ export class NewStoryFormComponent implements OnInit {
       next: (res) => {
         console.log(res);
         this.form.reset();
-        // reroute to list of stories page after
+        this.router.navigate(['/dashboard']);
       },
       error: (error) => {
         console.error(error);
