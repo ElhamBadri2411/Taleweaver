@@ -1,5 +1,6 @@
 import { StoryBook } from "../models/storybook.js";
 import { User } from "../models/user.js";
+import { Op } from "sequelize";
 
 // Add authentication later
 
@@ -57,8 +58,8 @@ const getStoryBookById = async (req, res, next) => {
 // @desc  Get all storybook by a user
 // @access private
 const getStoryBooks = async (req, res, next) => {
-  // do pagination later
   try {
+    const filter = req.query.filter || '';
     if (!req.params.id) {
       return res.status(400).json({ error: "Invalid input parameters" });
     }
@@ -68,7 +69,12 @@ const getStoryBooks = async (req, res, next) => {
     }
   
     const books = await StoryBook.findAll({
-      where: { UserGoogleId: req.params.id },
+      where: { 
+        UserGoogleId: req.params.id,
+        title: {
+          [Op.like]: `%${filter}%`
+        },
+      },
       order: [["createdAt", "DESC"]],
     });
   

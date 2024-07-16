@@ -5,14 +5,17 @@ import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../../services/data.service';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { bootstrapXLg } from '@ng-icons/bootstrap-icons';
 
 
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgIconComponent],
   templateUrl: './nav-bar.component.html',
-  styleUrl: './nav-bar.component.css'
+  styleUrl: './nav-bar.component.css',
+  viewProviders: [provideIcons({ bootstrapXLg })]
 })
 
 export class NavBarComponent {
@@ -29,12 +32,14 @@ export class NavBarComponent {
   ) { }
 
   ngOnInit() {
-if (!this.fetchedDisplayName) {
-      const id = this.google.getUserId(); 
-      this.userService.getUserById(id).subscribe((user) => {
-        this.DisplayName = user.displayName;
-        this.fetchedDisplayName = true;
-      });
+    if (!this.fetchedDisplayName) {
+      if (this.google.isLoggedIn()) {
+        const id = this.google.getUserId(); 
+        this.userService.getUserById(id).subscribe((user) => {
+          this.DisplayName = user.displayName;
+          this.fetchedDisplayName = true;
+        });
+      }
     }
   }
 
@@ -50,7 +55,14 @@ if (!this.fetchedDisplayName) {
     this.router.navigate(['/dashboard']);
   }
 
-  onInputChange(value: string) {
-    // this.dataService.updateFilter(value);
+  clearSearch() {
+    this.searchTerm = '';
+    this.dataService.updateFilter(this.searchTerm);
+  }
+
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+        this.dataService.updateFilter(this.searchTerm);
+    }
   }
 }
