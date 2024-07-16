@@ -6,6 +6,7 @@ import { GoogleApiService } from '../../services/google/google-api.service';
 import { StoryService } from '../../services/story.service';
 import { trigger, transition, animate, style, state } from '@angular/animations';
 import { DataService } from '../../services/data.service';
+import { flush } from '@angular/core/testing';
 
 @Component({
     selector: 'app-dashboard',
@@ -45,7 +46,6 @@ export class DashboardComponent {
 
   bookClicked(index: number) {
     this.isClicked[index] = true;
-    console.log(this.isClicked);
   }
 
   formatDate(date: string) {
@@ -64,12 +64,16 @@ export class DashboardComponent {
     this.router.navigate(['/new-story']);
   }
 
+  
+
   ngOnInit() {
     const id = this.google.getUserId();
-    this.storyService.getStoryBooks(id).subscribe((books) => {
-      this.storyBooks = books;
-      this.storyBooks.forEach(element => {
-        this.isClicked.push(false);
+    this.dataService.filter$.subscribe(filter => {
+    this.storyService.getStoryBooks(id, filter).subscribe((books) => {
+        this.storyBooks = books;
+        this.storyBooks.forEach(element => {
+          this.isClicked.push(false);
+        });
       });
     });
   }

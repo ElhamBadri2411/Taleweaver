@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private oauthService: OAuthService) {}
+  constructor(
+    private oauthService: OAuthService,
+    private router: Router
+  ) {}
 
   canActivate(
     route: ActivatedRouteSnapshot, 
@@ -16,6 +19,12 @@ export class AuthService {
       var hasIdToken = this.oauthService.hasValidIdToken();
       var hasAccessToken = this.oauthService.hasValidAccessToken();
 
-      return (hasIdToken && hasAccessToken);
+      if (hasIdToken && hasAccessToken){
+        return true;
+      }
+      else {
+        this.router.navigate(['/']);
+        return false;
+      }
   }
 }
