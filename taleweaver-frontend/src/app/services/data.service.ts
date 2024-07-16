@@ -7,12 +7,13 @@ import { BehaviorSubject } from 'rxjs';
 export class DataService {
   constructor() { }
   private filter = new BehaviorSubject<string>('');
-  private dataSubject = new BehaviorSubject<string>('');
-  data$ = this.dataSubject.asObservable();
+  private bookContentSubject = new BehaviorSubject<string>('');
+
+  bookContent$ = this.bookContentSubject.asObservable();
   filter$ = this.filter.asObservable();
 
-  updateData(newData: string) {
-    this.dataSubject.next(newData);
+  updateBookContent(newData: string) {
+    this.bookContentSubject.next(newData);
   }
 
   updateFilter(newFilter: string) {

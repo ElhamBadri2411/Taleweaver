@@ -64,6 +64,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   isModalOpen = false;
   bookIdToDelete: string;
+  filter: string = '';
 
   constructor(
     private router: Router,
@@ -149,13 +150,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const id = this.google.getUserId();
-    this.dataService.filter$.subscribe((filter) => {
+    this.dataService.filter$.subscribe(filter => {
+      this.filter = filter;
       this.storyService.getStoryBooks(id, filter).subscribe((books) => {
-        this.storyBooks = books;
-        this.storyBooks.forEach((element) => {
-          this.isClicked.push(false);
+          this.storyBooks = books;
+          this.storyBooks.forEach(element => {
+            this.isClicked.push(false);
+          });
         });
-      });
     });
 
     // Check status of generating books every 5 seconds

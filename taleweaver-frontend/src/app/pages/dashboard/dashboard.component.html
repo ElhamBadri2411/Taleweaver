@@ -48,6 +48,11 @@
     </div>
   </div>
 
+  <div *ngIf="storyBooks.length === 0" class="my-10 text-center">
+    <div *ngIf="filter === ''; else hasFilter">No Stroy Books Yet, Create One Now!</div>
+    <ng-template #hasFilter>No Story Books Title Matches Your Search</ng-template>
+  </div>
+
   <div class="books-wrapper mx-5 my-10 flex flex-wrap">
     @for( storyBook of storyBooks; track storyBook.id; let i = $index){ @if
     (storyBook.isGenerating){

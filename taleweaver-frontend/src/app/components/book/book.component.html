@@ -13,14 +13,20 @@
       </div>
 
       <!-- back of the page -->
-      <div *ngFor="let p of fliped; let i = index">
+      <div *ngFor="let p of flipped; let i = index">
         <div class="storybook-pages">
           <div class="storybook-page back text-xs"
             [class.flip-left]="isFlipped[length-i] === 0? false : (isFlipped[length-i] % 2 !== 0 ? true : false)"
             [class.flip-right]="isFlipped[length-i] === 0? false : (isFlipped[length-i] % 2 === 0 ? true : false)"
             (click)="flipPage(length-i)">
             <div class="story p-2">
-                <img *ngIf="p.image" [src]="imageUrlBase + p.image" class="story-image" />
+                <img *ngIf="p.image; else noImage" [src]="imageUrlBase + p.image" class="story-image" />
+                <ng-template #noImage>
+                  <div *ngIf="p.image === undefined" class="relative flex justify-center items-center rounded-lg border-2 border-orange-100">
+                    <img class="story-image"/>
+                    <div class="absolute text-center text-orange-200">No Illustration Yet</div>
+                  </div>
+                </ng-template>
                 <p class="story-text p-1 max-h-20 overflow-y-auto">{{ p.story }}</p>
             </div>
             <div class="storybook-page-number lining-nums font-bold">{{ p.page }}</div>
@@ -36,7 +42,13 @@
             [class.flip-right]="isFlipped[i] === 0? false : (isFlipped[i] % 2 === 0 ? true : false)"
             (click)="flipPage(i)">
             <div class="story p-2">
-                <img *ngIf="p.image" [src]="imageUrlBase + p.image" class="story-image" />
+                <img *ngIf="p.image; else noImage" [src]="imageUrlBase + p.image" class="story-image" />
+                <ng-template #noImage>
+                  <div *ngIf="p.image === undefined" class="relative flex justify-center items-center rounded-lg border-2 border-orange-100">
+                    <img class="story-image"/>
+                    <div class="absolute text-center text-orange-200">No Illustration Yet</div>
+                  </div>
+                </ng-template>
                 <p class="story-text p-1 max-h-30 overflow-y-auto">{{ p.story }}</p>
             </div>
             <div class="storybook-page-number lining-nums font-bold">{{ p.page }}</div>
