@@ -26,7 +26,6 @@ const generateImage = async (req, res, next) => {
 
   try {
 
-    // get page
     const page = await Page.findByPk(pageId)
 
     if (!page) {
@@ -59,10 +58,14 @@ const generateImage = async (req, res, next) => {
       image: imageData
     })
 
-    res.json({ imagePath: `generated-images/${fileName}` });
+    if (res) {
+      res.json({ imagePath: `generated-images/${fileName}` });
+    }
   } catch (error) {
     console.error('Error generating or saving image:', error.response ? error.response.data : error.message);
-    res.status(500).json({ error: 'Failed to generate or save image' });
+    if (res) {
+      res.status(500).json({ error: 'Failed to generate or save image' });
+    }
   }
 }
 

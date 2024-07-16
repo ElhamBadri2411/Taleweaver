@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { NavBarComponent } from "../../components/nav-bar/nav-bar.component";
 import { GoogleApiService } from '../../services/google/google-api.service';
 import { StoryService } from '../../services/story.service';
 import { trigger, transition, animate, style, state } from '@angular/animations';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,10 +32,10 @@ import { trigger, transition, animate, style, state } from '@angular/animations'
     ])
   ]
 })
-
-export class DashboardComponent {
+export class DashboardComponent implements OnInit, OnDestroy {
   isClicked: boolean[] = [];
   storyBooks: any[] = [];
+  subscription: Subscription;
 
   constructor(
     private router: Router,
@@ -59,12 +61,32 @@ export class DashboardComponent {
   }
 
   navigateToCreateNewStory() {
-    this.router.navigate(['/new-story'])
+    this.router.navigate(['/new-story']);
   }
 
   navigateToEditPage(bookId: string): void {
-    this.router.navigate([`/books/${bookId}/edit`])
+    this.router.navigate([`/books/${bookId}/edit`]);
+  }
 
+  navigateToGenerateStory() {
+    this.router.navigate(['/generate-story']);
+  }
+
+  checkGeneratingStatus() {
+    this.storyBooks.forEach(book => {
+      if (book.isGenerating) {
+        this.storyService.getGenerationStatus(book.id).subscribe(
+          status => {
+            if (status.status === 'completed') {
+              book.isGenerating = false;
+            }
+          },
+          error => {
+            console.error('Error fetching generation status:', error);
+          }
+        );
+      }
+    });
   }
 
   ngOnInit() {
@@ -74,6 +96,18 @@ export class DashboardComponent {
       this.storyBooks.forEach(element => {
         this.isClicked.push(false);
       });
+
+      // Check status of generating books every 5 seconds
+      this.subscription = interval(5000).subscribe(() => {
+        this.checkGeneratingStatus();
+      });
     });
   }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 }
+
