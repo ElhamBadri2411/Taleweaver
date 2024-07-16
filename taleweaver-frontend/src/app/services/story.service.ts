@@ -49,11 +49,16 @@ export class StoryService {
   /**
    * Fetches all the storybooks of a user
    * @param id User id of the user we want to fetch the books for
+   * @param filter Filter to be applied to the books
    * @returns Observable<StoryBook>
    */
-  getStoryBooks(id: string): Observable<StoryBook[]> {
-    return this.http.get<StoryBook[]>(`${this.endpoint}/users/${id}`, { headers: this.headers });
+  getStoryBooks(id: string, filter?: string): Observable<StoryBook[]> {
+    const url = filter 
+        ? `${this.endpoint}/users/${id}?filter=${filter}`
+        : `${this.endpoint}/users/${id}`;
+    return this.http.get<StoryBook[]>(url, { headers: this.headers });
   }
+
   /**
    * Rename a storybook
    * @param id The id of the story to be fetched

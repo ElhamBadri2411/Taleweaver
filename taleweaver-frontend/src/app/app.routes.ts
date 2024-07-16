@@ -30,6 +30,15 @@ export const routes: Routes = [
     component: DashboardComponent,
     canActivate: [AuthService],
   },
-  { path: 'books/:bookId/edit', component: EditStoryComponent },
-  { path: 'storybook/:id', component: StoryBookComponent, canActivate: [AuthService] }
+  {
+    path: 'storybook/:bookId/edit',
+    component: EditStoryComponent,
+    canActivate: [AuthService],
+  },
+
+  {
+    path: 'storybook/:id',
+    component: StoryBookComponent,
+    canActivate: [AuthService],
+  },
 ];

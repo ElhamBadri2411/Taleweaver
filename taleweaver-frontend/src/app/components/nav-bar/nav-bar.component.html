@@ -2,17 +2,24 @@
     <!-- logo -->
     <div class="navbar-start">
         <div class="flex-none pl-10">
-            <a class="text-xl logo">TaleWeaver</a>
+            <a class="text-xl logo" (click)="goToDashboard()">TaleWeaver</a>
           </div>
     </div>
 
     <!-- Search Bar -->
-    <div class="navbar-center w-1/2">
-        <div class="form-control w-full">            
-            <input 
+    <div *ngIf="dashboard === true" class="navbar-center w-1/2">
+        <div class="form-control w-full mx-4">          
+            <label class="input input-bordered flex items-center gap-2">
+                <input
                 type="text" 
                 placeholder="Search for the story book you created" 
-                class="input input-bordered input-md"/>
+                class="grow"
+                [(ngModel)]="searchTerm"
+                (keydown)="onKeyDown($event)"/>
+                <button *ngIf="searchTerm" (click)="clearSearch()" class="cursor-pointer">
+                    <ng-icon class="text-2xl" name="bootstrapXLg"></ng-icon>
+                </button>
+            </label>
         </div>
     </div>
     

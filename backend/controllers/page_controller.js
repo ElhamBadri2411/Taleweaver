@@ -29,6 +29,8 @@ const createPage = async (req, res, next) => {
 
     // For now, we will not include image
     const page = await Page.create({ paragraph, StoryBookId: storyBookId });
+    book.changed('updatedAt', true);
+    await book.save();
     res.status(201).json(page);
   } catch (error) {
     return res.status(400).json({ error: "Cannot create page" });
@@ -55,7 +57,8 @@ const addPage = async (req, res, next) => {
     console.log(count)
 
     const page = await Page.create({ StoryBookId: storyBookId, position: count + 1 });
-
+    book.changed('updatedAt', true);
+    await book.save();
     res.status(201).json(page);
   } catch (error) {
     console.error(error)
@@ -73,6 +76,8 @@ const deletePage = async (req, res, next) => {
       return res.status(404).json({ error: "Page not found" });
     }
     await page.destroy();
+    book.changed('updatedAt', true);
+    await book.save();
     res.status(204).json();
   } catch (error) {
     return res.status(400).json({ error: "Cannot delete page" });
@@ -107,7 +112,7 @@ const getPagesByStoryBookId = async (req, res, next) => {
       ]
     });
     if (!pages) {
-      return res.status(200).json({});
+      return res.status(404).json({ error: "Pages not found" });
     }
     res.status(200).json(pages);
   } catch (error) {
@@ -142,6 +147,12 @@ const updatePage = async (req, res, next) => {
       // image: image,
     });
     await page.reload();
+
+    const storyBook = await StoryBook.findByPk(page.StoryBookId);
+    if (storyBook) {
+      storyBook.changed('updatedAt', true);
+      await storyBook.save();
+    }
     res.status(200).json(page);
   } catch (error) {
     return res.status(400).json({ error: "Cannot update page" });
