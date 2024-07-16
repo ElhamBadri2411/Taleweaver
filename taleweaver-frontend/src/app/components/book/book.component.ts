@@ -16,7 +16,7 @@ import { DataService } from '../../services/data.service';
 export class BookComponent {
   cover: any = {};
   frontPages: any[] = [];
-  fliped: any[] = [];
+  flipped: any[] = [];
   length: number = this.frontPages.length;
   imageUrlBase = environment.apiUrl
 
@@ -32,11 +32,16 @@ export class BookComponent {
   ){ }
 
   flipCover() {
-    this.coverIsFlipped += 1;
+    if (this.flipped.length === 0){
+      this.coverIsFlipped += 1;
+    }
   }
 
   flipBackCover() {
-    this.backCoverIsFlipped += 1;
+    if (this.frontPages.length === 0){
+      this.backCoverIsFlipped += 1;
+    }
+    
   }
 
   flipPage(index: number) {
@@ -47,14 +52,14 @@ export class BookComponent {
 
   flip(index: number){
     if (this.isFlipped[index] % 2 !== 0) {
-      this.fliped.push(this.frontPages[index]);
-      this.fliped.push(this.frontPages[index-1]);
+      this.flipped.push(this.frontPages[index]);
+      this.flipped.push(this.frontPages[index-1]);
       this.frontPages.splice(index-1, 2);
     }
     else{
-      this.frontPages.push(this.fliped[this.length - index]);
-      this.frontPages.push(this.fliped[this.length - index-1]);
-      this.fliped.splice(-2);
+      this.frontPages.push(this.flipped[this.length - index]);
+      this.frontPages.push(this.flipped[this.length - index-1]);
+      this.flipped.splice(-2);
     }
   }
 
@@ -71,8 +76,8 @@ export class BookComponent {
       this.pageService.getPagesByStoryBookId(id).subscribe((res) => {
           if (res.length === 0){
             this.length = 2;
-            this.frontPages.push({ page: 1, story: 'No Content For This Story Yet'});
-            this.frontPages.unshift({ page: 2, story: ''});
+            this.frontPages.push({ page: 1, story: 'No Content For This Story Yet', image: null});
+            this.frontPages.unshift({ page: 2, story: '', image: null});
             this.frontPages.forEach(() => this.isFlipped.push(0));
           }
           else{
@@ -83,14 +88,15 @@ export class BookComponent {
                 image: item.image.path
             }));
             this.length = this.frontPages.length;
-            this.dataService.updateData(this.frontPages.map(item => item.story).join(' '));
+            this.dataService.updateBookContent(this.frontPages.map(item => item.story).join(' '));
             this.frontPages.reverse();
             if (this.frontPages.length % 2 !== 0) {
-              this.frontPages.unshift({ page: this.length + 1, story: ''});
+              this.frontPages.unshift({ page: this.length + 1, story: '', image: null});
               this.length += 1;
             }
             this.frontPages.forEach(() => this.isFlipped.push(0));
           }
+          console.log(this.frontPages);
       });
     });
   }

@@ -58,8 +58,8 @@ export class ToolBarComponent {
   }
 
   ngOnInit() {
-    this.dataService.data$.subscribe(data => {
-      this.text = data;
+    this.dataService.bookContent$.subscribe(content => {
+      this.text = content;
     });
   }
 

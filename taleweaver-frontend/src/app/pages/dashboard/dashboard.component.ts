@@ -36,6 +36,7 @@ import { flush } from '@angular/core/testing';
 export class DashboardComponent {
   isClicked: boolean[] = [];
   storyBooks: any[] = [];
+  filter: string = '';
 
   constructor(
     private router: Router,
@@ -69,12 +70,13 @@ export class DashboardComponent {
   ngOnInit() {
     const id = this.google.getUserId();
     this.dataService.filter$.subscribe(filter => {
-    this.storyService.getStoryBooks(id, filter).subscribe((books) => {
-        this.storyBooks = books;
-        this.storyBooks.forEach(element => {
-          this.isClicked.push(false);
+      this.filter = filter;
+      this.storyService.getStoryBooks(id, filter).subscribe((books) => {
+          this.storyBooks = books;
+          this.storyBooks.forEach(element => {
+            this.isClicked.push(false);
+          });
         });
-      });
     });
   }
 }

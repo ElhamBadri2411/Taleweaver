@@ -37,19 +37,18 @@ export class GoogleApiService {
           filter(event => event instanceof NavigationEnd),
           take(1)
         ).subscribe(() => {
-          if (this.oAuthService.hasValidAccessToken()) {
-            const idToken = this.oAuthService.getIdToken();
-            this.userService.createUser(idToken).subscribe(
-              (token) => {
-                localStorage.setItem('token', token);
-                console.log('User created:', token);
+          const idToken = this.oAuthService.getIdToken();
+          this.userService.createUser(idToken).subscribe(
+            (token) => {
+              localStorage.setItem('token', token);
+              if (this.router.url === '/'){
                 this.router.navigate(['/dashboard']);
-              },
-              (error: any) => {
-                console.error('Error creating user:', error);
-              },
-            );
-          } 
+              }
+            },
+            (error: any) => {
+              console.error('Error creating user:', error);
+            },
+          );
         });
       }
       else{
