@@ -3,6 +3,7 @@ import { ImageGeneratorComponent } from '../../components/image-generator/image-
 import { PageListComponent } from '../../components/page-list/page-list.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { StoryService } from '../../services/story.service';
 
 @Component({
   selector: 'app-edit-story',
@@ -13,14 +14,28 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class EditStoryComponent implements OnInit {
   bookId: string;
+  bookTitle: string;
+  bookDesc: string;
   selectedPageId: number | null = null;
 
   @ViewChild(PageListComponent) pageListComponent: PageListComponent;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute,
+    private storyService: StoryService
+  ) { }
 
   ngOnInit() {
     this.bookId = this.route.snapshot.paramMap.get('bookId') || '';
+    this.storyService.getStoryById(+this.bookId).subscribe({
+      next: (res) => {
+        this.bookTitle = res.title
+        this.bookDesc = res.description
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+
   }
 
   onPageSelected(pageId: number) {

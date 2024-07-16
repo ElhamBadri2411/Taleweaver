@@ -39,13 +39,12 @@
   <div class="books-wrapper mx-5 my-10 flex flex-wrap">
     @for( storyBook of storyBooks; track storyBook.id; let i = $index){
     @if (storyBook.isGenerating){
-    <div class="flex flex-col">
-      <div class="storybook">
-        <div>
-          <span class="loading loading-ring loading-lg"></span>
-        </div>
-        <div>GENERATING THIS BOOK</div>
+    <div
+      class="flex flex-col items-center justify-center border-primary border rounded-tl-md rounded-bl-md mt-6 rounded-tr-xl rounded-br-xl h-[300px] w-[200px]">
+      <div>
+        <span class="loading loading-ring loading-lg"></span>
       </div>
+      <div>GENERATING THIS BOOK</div>
     </div>
     } @else {
     <div class="flex flex-col
