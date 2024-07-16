@@ -6,12 +6,17 @@ import {
   getStoryBookById,
   getStoryBooks,
   renameStoryBook,
-  deleteStoryBook
+  deleteStoryBook,
+  generateStoryBook,
+  getGenerationStatus,
 } from "../controllers/storybooks_controller.js";
 
 const storybookRouter = Router();
 
+// TODO: ADD AUTH
 storybookRouter.post("/", verifyToken, createStoryBook);
+storybookRouter.post("/generate", verifyToken, generateStoryBook);
+storybookRouter.get("/status/:id", verifyToken, getGenerationStatus);
 storybookRouter.get("/users/:id", verifyToken, getStoryBooks);
 storybookRouter.get("/:id", verifyToken, getStoryBookById);
 storybookRouter.patch("/:id", verifyToken, renameStoryBook);

@@ -13,7 +13,7 @@ export class StoryService {
     'Authorization': 'Bearer ' + localStorage.getItem('token')
   });
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Creates a storybook
@@ -25,7 +25,7 @@ export class StoryService {
     return this.http.post<StoryBook>(`${this.endpoint}`, {
       title,
       description,
-    }, { headers: this.headers });  
+    }, { headers: this.headers });
   }
 
   /**
@@ -69,4 +69,27 @@ export class StoryService {
       title: newTitle,
     }, { headers: this.headers });
   }
+
+  /**
+   * Creates a storybook and starts the generation process
+   * @param title Title of the storybook
+   * @param description A short summary/description of the storybook
+   * @returns Observable<{ message: string, storyId: string }>
+   */
+  generateStory(title: string, description: string): Observable<{ message: string, storyId: string }> {
+    return this.http.post<{ message: string, storyId: string }>(`${this.endpoint}/generate`, {
+      title,
+      description,
+    }, { headers: this.headers });
+  }
+
+  /**
+   * Gets the status of a generation
+   * @param id the id of the story
+   * @returns Observable<{ status: string, progres: number}>
+   */
+  getGenerationStatus(id: string): Observable<{ status: string, progress: number }> {
+    return this.http.get<{ status: string, progress: number }>(`${this.endpoint}/status/${id}`, { headers: this.headers });
+  }
+
 }

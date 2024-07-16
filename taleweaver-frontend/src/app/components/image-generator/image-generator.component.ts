@@ -50,10 +50,12 @@ export class ImageGeneratorComponent
   @Output() imageGenerated = new EventEmitter<void>();
   @ViewChild('editorContainer', { static: false }) editorContainer!: ElementRef;
 
+  @Input() bookTitle: string
+  @Input() bookDesc: string
+
   private destroy = new Subject<void>();
   private autoSave = new Subject<string>();
 
-  title: string = 'Test title';
   form: FormGroup;
   imageUrl: string = '';
   testImageUrl: string =
@@ -102,10 +104,10 @@ export class ImageGeneratorComponent
   }
 
   ngOnDestroy(): void {
-    this.destroy.next();
-    this.destroy.complete();
     this.cleanupYjs();
     this.provider.awareness.off('change', this.handleAwarenessChange);
+    this.destroy.next();
+    this.destroy.complete();
   }
 
   ngAfterViewInit(): void {

@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { StoryService } from '../../services/story.service';
 import { Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgIconComponent } from '@ng-icons/core';
 import { provideIcons } from '@ng-icons/core';
 import { Router } from '@angular/router';
+import { StoryService } from '../../services/story.service';
 
 @Component({
   selector: 'app-new-story-form',
@@ -17,11 +17,11 @@ import { Router } from '@angular/router';
     HttpClientModule,
     NgIconComponent,
   ],
-  templateUrl: './new-story-form.component.html',
-  styleUrl: './new-story-form.component.css',
+  templateUrl: './book-generation-form.component.html',
+  styleUrls: ['./book-generation-form.component.css'],
   viewProviders: [provideIcons({})],
 })
-export class NewStoryFormComponent implements OnInit {
+export class BookGenerationFormComponent implements OnInit {
   form: FormGroup;
 
   constructor(
@@ -49,16 +49,14 @@ export class NewStoryFormComponent implements OnInit {
     });
   }
 
-  createStory() {
+  generateStory() {
     const title = this.form.get('title')?.value;
     const description = this.form.get('description')?.value;
 
-    this.storyService.createStory(title, description).subscribe({
+    this.storyService.generateStory(title, description).subscribe({
       next: (res) => {
-        console.log(res);
         this.form.reset();
-        // reroute to list of stories page after
-        this.router.navigate(['/dashboard'])
+        this.router.navigate(['/dashboard']);
       },
       error: (error) => {
         console.error(error);
@@ -68,3 +66,4 @@ export class NewStoryFormComponent implements OnInit {
 
   ngOnInit(): void { }
 }
+

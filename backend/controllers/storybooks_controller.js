@@ -1,5 +1,6 @@
 import { StoryBook } from "../models/storybook.js";
 import { User } from "../models/user.js";
+import { storyQueue } from "../bullmq.js";
 import { Op } from "sequelize";
 
 // Add authentication later
@@ -22,25 +23,35 @@ const createStoryBook = async (req, res, next) => {
           "Invalid input parameters. Expected title to be a string with length > 0",
       });
     }
-    if (!description || typeof description !== "string" || description.length === 0) {
+    if (
+      !description ||
+      typeof description !== "string" ||
+      description.length === 0
+    ) {
       return res.status(422).json({
         error:
           "Invalid input parameters. Expected title to be a description with length > 0",
       });
     }
-    const storyBook = await StoryBook.create({ title, description, UserGoogleId: user.googleId});
+    const storyBook = await StoryBook.create({
+      title,
+      description,
+      UserGoogleId: user.googleId,
+    });
     res.status(201).json(storyBook);
   } catch (error) {
     return res.status(400).json({ error: "Cannot create storyBook" });
   }
-}
+};
 
 // @route GET api/storybooks/:id
 // @desc  Get a storybook by id
 // @access private
 const getStoryBookById = async (req, res, next) => {
   try {
-    const storyBook = await StoryBook.findByPk(req.params.id , { include: User.googleId });
+    const storyBook = await StoryBook.findByPk(req.params.id, {
+      include: User.googleId,
+    });
     if (!storyBook) {
       return res.status(404).json({ error: "StoryBook not found" });
     }
@@ -52,41 +63,41 @@ const getStoryBookById = async (req, res, next) => {
   } catch (error) {
     return res.status(400).json({ error: "Cannot get storyBook" });
   }
-}
+};
 
 // @route GET api/storybooks/users/:id
 // @desc  Get all storybook by a user
 // @access private
 const getStoryBooks = async (req, res, next) => {
   try {
-    const filter = req.query.filter || '';
+    const filter = req.query.filter || "";
     if (!req.params.id) {
       return res.status(400).json({ error: "Invalid input parameters" });
     }
-  
+
     if (req.userId !== req.params.id) {
       return res.status(403).json({ error: "Forbidden" });
     }
-  
+
     const books = await StoryBook.findAll({
-      where: { 
+      where: {
         UserGoogleId: req.params.id,
         title: {
-          [Op.like]: `%${filter}%`
+          [Op.like]: `%${filter}%`,
         },
       },
       order: [["createdAt", "DESC"]],
     });
-  
+
     if (!books) {
       return res.status(404).json({ error: "Books not found" });
     }
-  
+
     res.status(200).json(books);
   } catch (error) {
     return res.status(500).json({ error: "Internal server error" });
-  }  
-}
+  }
+};
 
 // @route PATCH api/storybooks/:id
 // @desc  Rename a storybook
@@ -100,7 +111,9 @@ const renameStoryBook = async (req, res, next) => {
           "Invalid input parameters. Expected title to be a string with length > 0",
       });
     }
-    const storyBook = await StoryBook.findByPk(req.params.id, { include: User.googleId });
+    const storyBook = await StoryBook.findByPk(req.params.id, {
+      include: User.googleId,
+    });
     if (!storyBook) {
       return res.status(404).json({ error: "StoryBook not found" });
     }
@@ -115,14 +128,17 @@ const renameStoryBook = async (req, res, next) => {
   } catch (error) {
     return res.status(400).json({ error: "Cannot rename storyBook" });
   }
-}
+};
 
 // @route DELETE api/storybooks/:id
 // @desc  Delete a storybook
 // @access private
 const deleteStoryBook = async (req, res, next) => {
+  console.log("DELETING BOOK\n", req.params.id, "\n", req.userId, "\n");
   try {
-    const storyBook = await StoryBook.findByPk(req.params.id, { include: User.googleId });
+    const storyBook = await StoryBook.findByPk(req.params.id, {
+      include: User.googleId,
+    });
     if (!storyBook) {
       return res.status(404).json({ error: "StoryBook not found" });
     }
@@ -134,13 +150,57 @@ const deleteStoryBook = async (req, res, next) => {
   } catch (error) {
     return res.status(400).json({ error: "Cannot delete storyBook" });
   }
-}
+};
 
+const generateStoryBook = async (req, res, next) => {
+  const { title, description } = req.body;
+  const userId = req.userId;
+  try {
+    const story = await StoryBook.create({
+      title,
+      description,
+      UserGoogleId: userId,
+      isGenerating: true,
+    });
+    const jobId = `job_${story.id}`;
+    await storyQueue.add(
+      "generateStory",
+      { storyId: story.id, title, description },
+      { jobId: jobId }
+    );
+    console.log("Added to storyQueue with jobId:", jobId);
+    res
+      .status(200)
+      .json({ message: "Story creation initiated", storyId: story.id });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create story" + error });
+  }
+};
+
+const getGenerationStatus = async (req, res, next) => {
+  const { id } = req.params;
+  const userId = req.userId;
+  const jobId = `job_${id}`;
+  try {
+    const job = await storyQueue.getJob(jobId);
+    if (job) {
+      const state = await job.getState();
+      console.log(job);
+      res.status(200).json({ status: state, progress: job.progress });
+    } else {
+      res.status(404).json({ error: "Job not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to get job status" });
+  }
+};
 
 export {
   createStoryBook,
   getStoryBookById,
   getStoryBooks,
   renameStoryBook,
-  deleteStoryBook
-}
+  deleteStoryBook,
+  generateStoryBook,
+  getGenerationStatus,
+};

@@ -27,6 +27,12 @@ services:
       - POSTGRES_PASSWORD=temp
     volumes:
       - taleweaver_db_data:/var/lib/postgresql/data
+  
+  taleweaver_redis:
+    container_name: taleweaver_redis
+    image: redis:alpine
+    ports:
+      - "6379:6379"
 
 volumes:
   taleweaver_db_data: {}

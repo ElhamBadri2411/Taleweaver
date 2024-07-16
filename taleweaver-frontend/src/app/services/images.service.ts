@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Image } from '../classes/Image';
 import { Observable } from 'rxjs';
 
@@ -11,6 +11,12 @@ export class ImagesService {
   private endpoint = environment.apiUrl + 'images';
 
   constructor(private http: HttpClient) { }
+  getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
 
   /**
    * Generates an image based on the provided text prompt.
@@ -18,6 +24,8 @@ export class ImagesService {
    * @returns Observable<ImageResponse>
    */
   generateImage(text: string, pageId: number): Observable<Image> {
-    return this.http.post<Image>(`${this.endpoint}`, { text, pageId });
+    return this.http.post<Image>(`${this.endpoint}`, { text, pageId }, {
+      headers: this.getHeaders()
+    });
   }
 }

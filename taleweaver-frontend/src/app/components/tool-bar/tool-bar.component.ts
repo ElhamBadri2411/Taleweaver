@@ -17,7 +17,14 @@ import { StoryService } from '../../services/story.service';
   imports: [NgIconComponent, CommonModule],
   templateUrl: './tool-bar.component.html',
   styleUrl: './tool-bar.component.css',
-  viewProviders: [provideIcons({ bootstrapVolumeUpFill, bootstrapPencilSquare, bootstrapX, bootstrapTrash})]
+  viewProviders: [
+    provideIcons({
+      bootstrapVolumeUpFill,
+      bootstrapPencilSquare,
+      bootstrapX,
+      bootstrapTrash,
+    }),
+  ],
 })
 export class ToolBarComponent {
   constructor(
@@ -26,18 +33,20 @@ export class ToolBarComponent {
     private dataService: DataService,
     private ttsService: TtsService,
     private storyService: StoryService
-  ) { }
+  ) {}
 
   text: string = '';
   @Output() stateChange = new EventEmitter<string>();
   audioVisible = false;
   isModalOpen = false;
-  baseUrl = environment.apiUrl
+  baseUrl = environment.apiUrl;
   bookId = this.route.snapshot.params['id'];
   audioUrl = `${this.baseUrl}generated-audio/${this.bookId}-output.mp3`;
 
   edit() {
-    const currentPath = this.route.snapshot.url.map(segment => segment.path).join('/');
+    const currentPath = this.route.snapshot.url
+      .map((segment) => segment.path)
+      .join('/');
     const newPath = currentPath + '/edit';
     this.router.navigate([newPath]);
   }
@@ -46,8 +55,7 @@ export class ToolBarComponent {
     this.ttsService.checkAudio(this.bookId).subscribe((res) => {
       if (res.exists) {
         this.audioVisible = true;
-      }
-      else {
+      } else {
         this.stateChange.emit('loading');
         this.ttsService.generateAudio(this.text, this.bookId).subscribe(() => {
           this.stateChange.emit('done');
@@ -58,12 +66,12 @@ export class ToolBarComponent {
   }
 
   ngOnInit() {
-    this.dataService.bookContent$.subscribe(content => {
+    this.dataService.bookContent$.subscribe((content) => {
       this.text = content;
     });
   }
 
-  closeAudio(){
+  closeAudio() {
     this.stateChange.emit('loading');
     this.ttsService.deleteAudio(this.bookId).subscribe(() => {
       this.audioVisible = false;

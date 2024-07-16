@@ -12,12 +12,13 @@ export const StoryBook = db.define("StoryBook", {
   description: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  isGenerating: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   }
 })
 
-// Add back later, when user is implemented
-// User.hasMany(StoryBook, { onDelete: 'CASCADE', hooks: true });
-// StoryBook.belongsTo(User);
 
 StoryBook.hasMany(Page, { onDelete: 'CASCADE', hooks: true });
 Page.belongsTo(StoryBook);
