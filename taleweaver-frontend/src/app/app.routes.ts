@@ -5,6 +5,8 @@ import { NewStoryFormComponent } from './components/new-story-form/new-story-for
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { EditStoryComponent } from './pages/edit-story/edit-story.component';
 import { AuthService } from './services/auth.service';
+import { StoryBookComponent } from './pages/story-book/story-book.component';
+import { BookGenerationFormComponent } from './components/book-generation-form/book-generation-form.component';
 
 export const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -19,9 +21,24 @@ export const routes: Routes = [
     canActivate: [AuthService],
   },
   {
+    path: 'generate-story',
+    component: BookGenerationFormComponent,
+    canActivate: [AuthService],
+  },
+  {
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [AuthService],
   },
-  { path: 'books/:bookId/edit', component: EditStoryComponent },
+  {
+    path: 'storybook/:bookId/edit',
+    component: EditStoryComponent,
+    canActivate: [AuthService],
+  },
+
+  {
+    path: 'storybook/:id',
+    component: StoryBookComponent,
+    canActivate: [AuthService],
+  },
 ];

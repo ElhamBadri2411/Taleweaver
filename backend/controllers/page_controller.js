@@ -29,6 +29,8 @@ const createPage = async (req, res, next) => {
 
     // For now, we will not include image
     const page = await Page.create({ paragraph, StoryBookId: storyBookId });
+    book.changed('updatedAt', true);
+    await book.save();
     res.status(201).json(page);
   } catch (error) {
     return res.status(400).json({ error: "Cannot create page" });
@@ -46,8 +48,16 @@ const addPage = async (req, res, next) => {
       return res.status(404).json({ error: "StoryBook not found" });
     }
 
-    const page = await Page.create({ StoryBookId: storyBookId, position: 1 });
+    const count = await Page.count({
+      where: {
+        StoryBookId: storyBookId
+      }
+    })
 
+
+    const page = await Page.create({ StoryBookId: storyBookId, position: count + 1 });
+    book.changed('updatedAt', true);
+    await book.save();
     res.status(201).json(page);
   } catch (error) {
     console.error(error)
@@ -65,6 +75,8 @@ const deletePage = async (req, res, next) => {
       return res.status(404).json({ error: "Page not found" });
     }
     await page.destroy();
+    book.changed('updatedAt', true);
+    await book.save();
     res.status(204).json();
   } catch (error) {
     return res.status(400).json({ error: "Cannot delete page" });
@@ -78,7 +90,7 @@ const getPageById = async (req, res, next) => {
   try {
     const page = await Page.findByPk(req.params.id);
     if (!page) {
-      return res.status(404).json({ error: "Page not found" });
+      return res.status(404).json({ error: "Pages not found" });
     }
     res.status(200).json(page);
   } catch (error) {
@@ -91,9 +103,11 @@ const getPageById = async (req, res, next) => {
 // @access private
 const getPagesByStoryBookId = async (req, res, next) => {
   try {
-    console.log(req.params)
     const pages = await Page.findAll({
       where: { StoryBookId: req.params.id },
+      order: [
+        ['position', 'ASC']
+      ]
     });
     if (!pages) {
       return res.status(404).json({ error: "Pages not found" });
@@ -131,6 +145,12 @@ const updatePage = async (req, res, next) => {
       // image: image,
     });
     await page.reload();
+
+    const storyBook = await StoryBook.findByPk(page.StoryBookId);
+    if (storyBook) {
+      storyBook.changed('updatedAt', true);
+      await storyBook.save();
+    }
     res.status(200).json(page);
   } catch (error) {
     return res.status(400).json({ error: "Cannot update page" });

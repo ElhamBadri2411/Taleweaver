@@ -1,21 +1,30 @@
 import { Injectable } from '@angular/core';
-import { GoogleApiService } from './google/google-api.service';
-import { Router } from '@angular/router';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private authService: GoogleApiService, private router: Router) {}
+  constructor(
+    private oauthService: OAuthService,
+    private router: Router
+  ) {}
 
-  canActivate(): boolean {
-    if (this.authService.isLoggedIn()) {
-      return true;
-    } else {
-      this.router.navigate(['/']);
-      return false;
-    }
+  canActivate(
+    route: ActivatedRouteSnapshot, 
+    state: RouterStateSnapshot) {
+
+      var hasIdToken = this.oauthService.hasValidIdToken();
+      var hasAccessToken = this.oauthService.hasValidAccessToken();
+
+      if (hasIdToken && hasAccessToken){
+        return true;
+      }
+      else {
+        this.router.navigate(['/']);
+        return false;
+      }
   }
-
 }

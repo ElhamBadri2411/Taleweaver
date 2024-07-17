@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import userRoutes from "./routes/users_router.js"
 import storybookRouter from "./routes/storybooks_router.js";
 import pageRouter from "./routes/page_router.js";
+import ttsRouter from "./routes/tts_router.js";
 import db from "./utils/db.js";
 import { configDotenv } from "dotenv";
 import imageRoutes from "./routes/images_router.js"
@@ -11,10 +12,9 @@ import path from 'path'
 import { fileURLToPath } from "url";
 
 // socket/real time collab imports
-import ws from 'ws'
+import { WebSocketServer } from 'ws'
 import http from 'http'
-import * as Y from 'yjs'
-import { WebsocketProvider } from "y-websocket";
+import { setupWSConnection } from 'y-websocket/bin/utils'
 
 
 
@@ -45,30 +45,32 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const PORT = 3000;
-console.log(path.join(__dirname, 'generated-images'))
 
 app.use('/api/generated-images', express.static(path.join(__dirname, 'generated-images')));
+app.use('/api/generated-audio', express.static(path.join(__dirname, 'generated-audio')));
 
 // routes
 app.use("/api/images", imageRoutes)
+app.use("/api/tts", ttsRouter)
 app.use("/api/storybooks", storybookRouter)
 app.use("/api/pages", pageRouter)
 app.use("/api/users", userRoutes)
 
 
 const server = http.createServer(app)
+const wss = new WebSocketServer({ server })
 
-const doc = new Y.Doc()
-const wsProvider = new WebsocketProvider('ws://localhost:1234', 'my-roomname', doc, { WebSocketPolyfill: ws })
+const docs = new Map()
 
-wsProvider.on('connection', (ws) => {
-  console.log(ws)
-})
+wss.on("connection", (conn, request) => {
+  return setupWSConnection(conn, request, {
+    gc: true
+  })
+});
 
 server.listen(PORT, (err) => {
   if (err) console.log(err);
   else {
     console.log("HTTP server on http://localhost:%s", PORT);
-    console.log('Websocket server running on ws://localhost:1234')
   }
 });

@@ -36,11 +36,15 @@ export class PageListComponent implements OnInit {
   loadPages() {
     this.pageService.getPagesByStoryBookId(+this.bookId).subscribe({
       next: (pages) => {
-        console.log(pages, "PAGES HERE")
         this.pages = pages
+
+        if (this.pages.length === 0) {
+          this.addNewPage()
+        } else {
+          this.selectPage(this.pages[0].id)
+        }
       },
       error: (error) => {
-        console.log("ERROPR")
         console.error(error)
       }
     })
@@ -48,11 +52,11 @@ export class PageListComponent implements OnInit {
 
   ngOnInit() {
     this.loadPages()
+
   }
 
   selectPage(id: number) {
     this.selectedPageId = id
-    console.log(this.selectedPageId)
     this.pageSelected.emit(id)
   }
 

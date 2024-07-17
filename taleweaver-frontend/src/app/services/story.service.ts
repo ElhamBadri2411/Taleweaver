@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { StoryBook } from '../classes/StoryBook';
 
@@ -9,8 +9,11 @@ import { StoryBook } from '../classes/StoryBook';
 })
 export class StoryService {
   private endpoint = environment.apiUrl + 'storybooks';
+  private headers = new HttpHeaders({
+    'Authorization': 'Bearer ' + localStorage.getItem('token')
+  });
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Creates a storybook
@@ -22,7 +25,7 @@ export class StoryService {
     return this.http.post<StoryBook>(`${this.endpoint}`, {
       title,
       description,
-    });
+    }, { headers: this.headers });
   }
 
   /**
@@ -31,7 +34,7 @@ export class StoryService {
    * @returns Observable<any>
    */
   deleteStory(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.endpoint}/${id}`);
+    return this.http.delete<any>(`${this.endpoint}/${id}`, { headers: this.headers });
   }
 
   /**
@@ -40,16 +43,20 @@ export class StoryService {
    * @returns Observable<StoryBook>
    */
   getStoryById(id: number): Observable<StoryBook> {
-    return this.http.get<StoryBook>(`${this.endpoint}/${id}`);
+    return this.http.get<StoryBook>(`${this.endpoint}/${id}`, { headers: this.headers });
   }
 
   /**
    * Fetches all the storybooks of a user
    * @param id User id of the user we want to fetch the books for
+   * @param filter Filter to be applied to the books
    * @returns Observable<StoryBook>
    */
-  getBooksByUser(id: number): Observable<StoryBook[]> {
-    return this.http.get<StoryBook[]>(`${this.endpoint}/user/${id}`);
+  getStoryBooks(id: string, filter?: string): Observable<StoryBook[]> {
+    const url = filter 
+        ? `${this.endpoint}/users/${id}?filter=${filter}`
+        : `${this.endpoint}/users/${id}`;
+    return this.http.get<StoryBook[]>(url, { headers: this.headers });
   }
 
   /**
@@ -60,6 +67,29 @@ export class StoryService {
   renameStory(id: number, newTitle: string): Observable<StoryBook> {
     return this.http.patch<StoryBook>(`${this.endpoint}/${id}`, {
       title: newTitle,
-    });
+    }, { headers: this.headers });
   }
+
+  /**
+   * Creates a storybook and starts the generation process
+   * @param title Title of the storybook
+   * @param description A short summary/description of the storybook
+   * @returns Observable<{ message: string, storyId: string }>
+   */
+  generateStory(title: string, description: string): Observable<{ message: string, storyId: string }> {
+    return this.http.post<{ message: string, storyId: string }>(`${this.endpoint}/generate`, {
+      title,
+      description,
+    }, { headers: this.headers });
+  }
+
+  /**
+   * Gets the status of a generation
+   * @param id the id of the story
+   * @returns Observable<{ status: string, progres: number}>
+   */
+  getGenerationStatus(id: string): Observable<{ status: string, progress: number }> {
+    return this.http.get<{ status: string, progress: number }>(`${this.endpoint}/status/${id}`, { headers: this.headers });
+  }
+
 }

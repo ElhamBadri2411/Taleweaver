@@ -22,23 +22,26 @@ const generateImage = async (req, res, next) => {
     return res.status(400).json({ error: 'Text is required to generate image' });
   }
 
+  const setup = "Create an illustration that combines the whimsical elements of a storybook with the aesthetic of '80s anime. Use soft lines and a textured look, with a palette of gentle, muted colors, ensuring the composition is balanced and visually enchanting."
+
   try {
 
-    // get page
     const page = await Page.findByPk(pageId)
 
     if (!page) {
       return res.status(404).json({ error: 'page not found' })
     }
-    console.log(page)
 
     imageData.prompt = text;
 
     const response = await openai.images.generate({
-      prompt: text,
+      prompt: setup + text,
       size: "512x512"
     })
     const imageUrl = response.data[0].url;
+    if (!imageUrl) {
+      console.log("imageURL not received")
+    }
 
 
     // fetch image
@@ -57,10 +60,14 @@ const generateImage = async (req, res, next) => {
       image: imageData
     })
 
-    res.json({ imagePath: `generated-images/${fileName}` });
+    if (res) {
+      res.json({ imagePath: `generated-images/${fileName}` });
+    }
   } catch (error) {
     console.error('Error generating or saving image:', error.response ? error.response.data : error.message);
-    res.status(500).json({ error: 'Failed to generate or save image' });
+    if (res) {
+      res.status(500).json({ error: 'Failed to generate or save image' });
+    }
   }
 }
 

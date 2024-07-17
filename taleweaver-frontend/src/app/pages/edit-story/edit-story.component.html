@@ -1,8 +1,9 @@
-<div class="grid grid-cols-9">
-  <div class="col-span-1">
+<div class="flex h-screen">
+  <div class="flex-shrink-0">
     <app-page-list [bookId]="bookId" (pageSelected)="onPageSelected($event)" />
   </div>
-  <div class="col-span-8 justify-self-center">
-    <app-image-generator [bookId]="bookId" [pageId]="selectedPageId" (imageGenerated)="onImageGenerated()" />
+  <div class="flex-grow flex justify-center items-center image-generate">
+    <app-image-generator [bookId]="bookId" [pageId]="selectedPageId" (imageGenerated)="onImageGenerated()"
+      class="w-full h-full p-4 lg:p-0" />
   </div>
 </div>
