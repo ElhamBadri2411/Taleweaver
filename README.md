@@ -23,13 +23,13 @@ TaleWeaver is a web application that allows users to create personalized picture
 - **Third-Party API:**
     - Integrate with an image generation API for generating images (gpt api)
     - text generation api for generating the story (if needed) (gpt api)
-    - text-to-speech api for reading out the book (eleven labs api)
+    - text-to-speech api for reading out the book (gcp)
 - **OAuth 2.0:** Implementing OAuth 2.0 as the authorization mechanism to ensure secure user authentication and authorization (google for login).
 
 ### How to Fulfill Additional Requirements
 
 - **Real-Time Features:** Implement real-time features so that multiple users can work on a book at the same time.
-- **Long-Running Task:** Give the app a simple topic/story/theme and it will create the whole storybook for you
+- **Long-Running Task:** Give the app a simple title and description and it will create the whole storybook for you
     - potentially the voice generation may take long too.
 
 ### Milestones
