@@ -4,10 +4,7 @@
       <div class="card-body">
         <h2 class="card-title text-accent-content">Create a new Tale ...</h2>
         <p class="text-accent-content text-sm">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit
-          lectus enim id euismod. Gravida at praesent aliquam, at natoque at
-          leo. Faucibus quam ipsum mi eget consectetur posuere dui vulputate
-          magna.
+          Unleash your creativity and weave a captivating story. Whether it's a heartwarming adventure or a thrilling mystery, every tale has the power to transport readers to new worlds. Let your imagination run wild and inspire others with your words.
         </p>
         <div class="card-actions justify-end">
           <button (click)="navigateToCreateNewStory()" class="btn btn-outline">
@@ -20,10 +17,7 @@
       <div class="card-body">
         <h2 class="card-title text-accent-content">Generate a new Tale...</h2>
         <p class="text-accent-content text-sm">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa elit
-          lectus enim id euismod. Gravida at praesent aliquam, at natoque at
-          leo. Faucibus quam ipsum mi eget consectetur posuere dui vulputate
-          magna.
+          Harness the power of AI to craft your next story! With advanced algorithms, you can effortlessly generate imaginative plots and vibrant characters. Watch as your ideas come to life, transforming your creative visions into captivating tales.
         </p>
         <div class="card-actions justify-end">
           <button (click)="navigateToGenerateStory()" class="btn btn-outline">
@@ -32,7 +26,7 @@
         </div>
       </div>
     </div>
-    <div class="card card-side bg-pink-900 shadow-xl mx-5">
+    <!-- <div class="card card-side bg-pink-900 shadow-xl mx-5">
       <div class="card-body">
         <h2 class="card-title text-accent-content">FEATURE 3</h2>
         <p class="text-accent-content text-sm">
@@ -45,7 +39,7 @@
           <button class="btn btn-outline">START NOW!</button>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <div *ngIf="storyBooks.length === 0" class="my-10 text-center">
@@ -57,12 +51,12 @@
     @for( storyBook of storyBooks; track storyBook.id; let i = $index){ @if
     (storyBook.isGenerating){
     <div
-      class="flex flex-col items-center justify-center border-primary border rounded-tl-md rounded-bl-md mt-6 rounded-tr-xl rounded-br-xl h-[300px] w-[200px]"
+      class="flex flex-col items-center justify-center border-orange-300 opacity-50 border-2 rounded-tl-md rounded-bl-md mt-6 mx-5 rounded-tr-xl rounded-br-xl h-[300px] w-[200px]"
     >
       <div>
         <span class="loading loading-ring loading-lg"></span>
       </div>
-      <div>GENERATING THIS BOOK</div>
+      <div>Generating Story...</div>
     </div>
     } @else {
     <div class="flex flex-col">
@@ -86,18 +80,18 @@
         </div>
         <div class="storybook-page"></div>
       </div>
-      <div class="flex flex-row mx-auto">
+      <div class="flex flex-row justify-around mx-auto bg-base-200 rounded-full shadow-inner shadow-base-300 w-[120px]">
         <button
-          class="px-4 bg-base-200 shadow"
+          class="p-1 pt-2"
           (click)="navigateToEditPage(storyBook.id)"
         >
-          <ng-icon class="text-4xl" name="bootstrapPencilSquare"></ng-icon>
+          <ng-icon class="text-2xl" name="bootstrapPencilSquare"></ng-icon>
         </button>
         <button
-          class="px-4 bg-base-200 shadow"
+          class="p-1 pt-2"
           (click)="openModal(storyBook.id)"
         >
-          <ng-icon class="text-4xl" name="bootstrapTrash"></ng-icon>
+          <ng-icon class="text-2xl" name="bootstrapTrash"></ng-icon>
         </button>
       </div>
     </div>

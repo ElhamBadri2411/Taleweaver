@@ -9,6 +9,7 @@
   transform-origin: left center 0px;
   display: inline-block;
   margin: 22px;
+  margin-bottom: 10px;
   perspective: 800px;
 }
 
