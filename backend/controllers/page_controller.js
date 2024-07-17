@@ -54,7 +54,6 @@ const addPage = async (req, res, next) => {
       }
     })
 
-    console.log(count)
 
     const page = await Page.create({ StoryBookId: storyBookId, position: count + 1 });
     book.changed('updatedAt', true);
@@ -104,7 +103,6 @@ const getPageById = async (req, res, next) => {
 // @access private
 const getPagesByStoryBookId = async (req, res, next) => {
   try {
-    console.log(req.params)
     const pages = await Page.findAll({
       where: { StoryBookId: req.params.id },
       order: [

@@ -15,7 +15,6 @@ export class GoogleApiService {
     private router: Router,
     private userService: UserService
   ) {
-    console.log('Google API Service Initialized');
     this.initConfigurations();
   }
 

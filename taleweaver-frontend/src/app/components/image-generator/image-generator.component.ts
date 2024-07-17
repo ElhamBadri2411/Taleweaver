@@ -58,8 +58,6 @@ export class ImageGeneratorComponent
 
   form: FormGroup;
   imageUrl: string = '';
-  testImageUrl: string =
-    environment.apiUrl + 'generated-images/20cbbc5619f1c04a5b32f0025461acf8.png';
   isGeneratingImage: boolean = false;
   isSaving: boolean = false;
   isEditing: boolean = false;
@@ -93,8 +91,9 @@ export class ImageGeneratorComponent
     this.initializeYjs();
     this.autoSaveSetup();
 
-
     this.provider.awareness.on('change', this.handleAwarenessChange.bind(this));
+    window.addEventListener('beforeunload', this.cleanupAwarenessState.bind(this));
+    window.addEventListener('beforeunload', this.cleanupYjs.bind(this));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -105,6 +104,9 @@ export class ImageGeneratorComponent
 
   ngOnDestroy(): void {
     this.cleanupYjs();
+    this.cleanupAwarenessState();
+    window.removeEventListener('beforeunload', this.cleanupAwarenessState.bind(this));
+    window.removeEventListener('beforeunload', this.cleanupYjs.bind(this));
     this.provider.awareness.off('change', this.handleAwarenessChange);
     this.destroy.next();
     this.destroy.complete();
@@ -127,6 +129,7 @@ export class ImageGeneratorComponent
 
       // Listen to Quill editor changes and update the form control
       this.quillEditor.on('text-change', () => {
+        console.log("TEX CHANGE")
         this.form.get('text')?.patchValue(this.quillEditor.getText());
       });
 
@@ -163,7 +166,10 @@ export class ImageGeneratorComponent
       if (this.quillEditor) {
         this.binding = new QuillBinding(this.type, this.quillEditor, this.provider.awareness);
 
-        // Set Quill editor content from Yjs type initially
+        console.log("LOG1", this.binding.type.toJSON());
+        console.log("LOG", this.quillEditor.getContents());
+
+        // set editor content to delta
         const delta = this.type.toDelta();
         this.quillEditor.setContents(delta);
       }
@@ -180,6 +186,7 @@ export class ImageGeneratorComponent
   }
 
   cleanupYjs(): void {
+    console.log("cleaning");
     if (this.binding) {
       this.binding.destroy();
     }
@@ -206,6 +213,10 @@ export class ImageGeneratorComponent
         this.isEditing = false;
         this.savePage(text);
       });
+  }
+
+  cleanupAwarenessState(): void {
+    this.provider.awareness.setLocalState(null);
   }
 
   savePage(text: string): void {

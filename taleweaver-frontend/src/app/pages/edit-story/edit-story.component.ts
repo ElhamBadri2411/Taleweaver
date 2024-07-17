@@ -43,7 +43,6 @@ export class EditStoryComponent implements OnInit {
   }
 
   onImageGenerated() {
-    console.log("onImageGenerated callsed")
     if (this.pageListComponent) {
       this.pageListComponent.loadPages();
     }

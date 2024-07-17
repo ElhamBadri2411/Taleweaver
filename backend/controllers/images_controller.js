@@ -31,7 +31,6 @@ const generateImage = async (req, res, next) => {
     if (!page) {
       return res.status(404).json({ error: 'page not found' })
     }
-    console.log(page)
 
     imageData.prompt = text;
 
@@ -40,6 +39,9 @@ const generateImage = async (req, res, next) => {
       size: "512x512"
     })
     const imageUrl = response.data[0].url;
+    if (!imageUrl) {
+      console.log("imageURL not received")
+    }
 
 
     // fetch image

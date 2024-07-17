@@ -1,7 +1,6 @@
 import { Worker, QueueEvents } from 'bullmq';
 import { generatePageContent } from './tasks.js';
 
-console.log("\n\nWORKER INIT\n\n")
 
 
 const connection = {
@@ -10,7 +9,6 @@ const connection = {
 };
 
 const worker = new Worker('storyQueue', async job => {
-  console.log("Worker processing job:", job.id);
   await generatePageContent(job);
 }, {
   connection,

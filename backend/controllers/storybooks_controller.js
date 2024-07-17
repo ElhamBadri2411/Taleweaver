@@ -134,7 +134,6 @@ const renameStoryBook = async (req, res, next) => {
 // @desc  Delete a storybook
 // @access private
 const deleteStoryBook = async (req, res, next) => {
-  console.log("DELETING BOOK\n", req.params.id, "\n", req.userId, "\n");
   try {
     const storyBook = await StoryBook.findByPk(req.params.id, {
       include: User.googleId,
@@ -168,7 +167,6 @@ const generateStoryBook = async (req, res, next) => {
       { storyId: story.id, title, description },
       { jobId: jobId }
     );
-    console.log("Added to storyQueue with jobId:", jobId);
     res
       .status(200)
       .json({ message: "Story creation initiated", storyId: story.id });
@@ -185,7 +183,6 @@ const getGenerationStatus = async (req, res, next) => {
     const job = await storyQueue.getJob(jobId);
     if (job) {
       const state = await job.getState();
-      console.log(job);
       res.status(200).json({ status: state, progress: job.progress });
     } else {
       res.status(404).json({ error: "Job not found" });

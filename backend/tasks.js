@@ -62,8 +62,9 @@ const generatePageContent = async (job) => {
     });
 
     const outline = outlineResponse.choices[0].message.content.split('\nPage ');
+    console.log(outline)
 
-    for (let i = 1; i < outline.length; i++) {
+    for (let i = 0; i < outline.length; i++) {
       const pageContent = outline[i].split('\n');
       const paragraph = pageContent.find(line => line.startsWith('Paragraph:')).replace('Paragraph: ', '').trim();
       const imagePrompt = pageContent.find(line => line.startsWith('Image Prompt:')).replace('Image Prompt: ', '').trim();

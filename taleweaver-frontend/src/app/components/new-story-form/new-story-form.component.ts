@@ -55,7 +55,6 @@ export class NewStoryFormComponent implements OnInit {
 
     this.storyService.createStory(title, description).subscribe({
       next: (res) => {
-        console.log(res);
         this.form.reset();
         // reroute to list of stories page after
         this.router.navigate(['/dashboard'])

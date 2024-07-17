@@ -8,7 +8,6 @@ dotenv.config();
 // @desc  Create a new user
 // @access public
 const createUser = async (req, res, next) => {
-  console.log(req)
   try {
     const { id_token } = req.body;
     if (!id_token) {

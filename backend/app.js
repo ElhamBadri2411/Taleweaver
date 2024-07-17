@@ -45,7 +45,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const PORT = 3000;
-console.log(path.join(__dirname, 'generated-images'))
 
 app.use('/api/generated-images', express.static(path.join(__dirname, 'generated-images')));
 app.use('/api/generated-audio', express.static(path.join(__dirname, 'generated-audio')));

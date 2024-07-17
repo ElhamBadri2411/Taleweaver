@@ -39,15 +39,12 @@ export class PageListComponent implements OnInit {
         this.pages = pages
 
         if (this.pages.length === 0) {
-          console.log("pages empty")
           this.addNewPage()
         } else {
-          console.log("pages not empty")
           this.selectPage(this.pages[0].id)
         }
       },
       error: (error) => {
-        console.log("ERROPR")
         console.error(error)
       }
     })
@@ -60,7 +57,6 @@ export class PageListComponent implements OnInit {
 
   selectPage(id: number) {
     this.selectedPageId = id
-    console.log(this.selectedPageId)
     this.pageSelected.emit(id)
   }
 
