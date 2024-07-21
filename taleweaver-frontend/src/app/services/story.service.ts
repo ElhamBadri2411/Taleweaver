@@ -52,11 +52,13 @@ export class StoryService {
    * @param filter Filter to be applied to the books
    * @returns Observable<StoryBook>
    */
-  getStoryBooks(id: string, filter?: string): Observable<StoryBook[]> {
+  getStoryBooks(id: string, page: number, filter?: string, limit?: number): Observable<{ pageOfBook: number, books: StoryBook[] }> {
     const url = filter 
-        ? `${this.endpoint}/users/${id}?filter=${filter}`
-        : `${this.endpoint}/users/${id}`;
-    return this.http.get<StoryBook[]>(url, { headers: this.headers });
+        ? (limit 
+          ? `${this.endpoint}/users/${id}?page=${page}&filter=${filter}&limit=${limit}`
+          :`${this.endpoint}/users/${id}?page=${page}&filter=${filter}`) 
+        : `${this.endpoint}/users/${id}?page=${page}`;
+    return this.http.get<{ pageOfBook: number, books: StoryBook[] }>(url, { headers: this.headers });
   }
 
   /**

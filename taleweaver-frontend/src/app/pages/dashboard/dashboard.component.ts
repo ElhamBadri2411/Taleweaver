@@ -65,6 +65,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isModalOpen = false;
   bookIdToDelete: string;
   filter: string = '';
+  page: number = 1;
+  totalPage: number = 0;
+  id = this.google.getUserId();
 
   constructor(
     private router: Router,
@@ -134,31 +137,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.closeModal(); // Close the modal after confirming
   }
 
-  delete(bookId: string) {
-    this.storyService.deleteStory(+bookId).subscribe(() => {
-      const id = this.google.getUserId();
-      this.dataService.filter$.subscribe((filter) => {
-        this.storyService.getStoryBooks(id, filter).subscribe((books) => {
-          this.storyBooks = books;
-          this.storyBooks.forEach((element) => {
-            this.isClicked.push(false);
-          });
+  getBooks() {
+    this.dataService.filter$.subscribe((filter) => {
+      this.filter = filter;
+      this.storyService.getStoryBooks(this.id, this.page, filter).subscribe((result) => {
+        this.storyBooks = result.books;
+        this.totalPage = result.pageOfBook;
+        this.storyBooks.forEach((element) => {
+          this.isClicked.push(false);
         });
       });
     });
   }
 
-  ngOnInit() {
-    const id = this.google.getUserId();
-    this.dataService.filter$.subscribe(filter => {
-      this.filter = filter;
-      this.storyService.getStoryBooks(id, filter).subscribe((books) => {
-          this.storyBooks = books;
-          this.storyBooks.forEach(element => {
-            this.isClicked.push(false);
-          });
-        });
+  delete(bookId: string) {
+    this.storyService.deleteStory(+bookId).subscribe(() => {
+      this.getBooks();
     });
+  }
+
+  ngOnInit() {
+    this.getBooks();
 
     // Check status of generating books every 5 seconds
     this.subscription = interval(5000).subscribe(() => {
@@ -169,6 +168,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
+    }
+  }
+
+  next(){
+    if(this.page < this.totalPage){
+      this.page++;
+      this.getBooks();
+    }
+  }
+
+  previous(){
+    if(this.page > 1){
+      this.page--;
+      this.getBooks();
     }
   }
 }

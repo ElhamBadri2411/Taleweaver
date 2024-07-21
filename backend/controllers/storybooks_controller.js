@@ -65,12 +65,14 @@ const getStoryBookById = async (req, res, next) => {
   }
 };
 
-// @route GET api/storybooks/users/:id
-// @desc  Get all storybook by a user
-// @access private
 const getStoryBooks = async (req, res, next) => {
   try {
     const filter = req.query.filter || "";
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    console.log("\n ----filter:", filter);
+
     if (!req.params.id) {
       return res.status(400).json({ error: "Invalid input parameters" });
     }
@@ -79,7 +81,9 @@ const getStoryBooks = async (req, res, next) => {
       return res.status(403).json({ error: "Forbidden" });
     }
 
-    const books = await StoryBook.findAll({
+    const offset = (page - 1) * limit;
+
+    const books = await StoryBook.findAndCountAll({
       where: {
         UserGoogleId: req.params.id,
         title: {
@@ -87,14 +91,22 @@ const getStoryBooks = async (req, res, next) => {
         },
       },
       order: [["createdAt", "DESC"]],
+      limit: limit,
+      offset: offset,
     });
 
-    if (!books) {
+    if (books.count === 0) {
       return res.status(404).json({ error: "Books not found" });
     }
 
-    res.status(200).json(books);
+    const pageOfBook = Math.ceil(books.count / limit);
+
+    res.status(200).json({
+      pageOfBook: pageOfBook,
+      books: books.rows,
+    });
   } catch (error) {
+    console.error("Error:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
