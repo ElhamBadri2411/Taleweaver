@@ -98,7 +98,7 @@ const getStoryBooks = async (req, res, next) => {
       offset: offset,
     });
 
-    if (books.count === 0) {
+    if (!books) {
       return res.status(404).json({ error: "Books not found" });
     }
 
@@ -109,7 +109,6 @@ const getStoryBooks = async (req, res, next) => {
       books: books.rows,
     });
   } catch (error) {
-    console.error("Error:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
