@@ -65,6 +65,9 @@ const getStoryBookById = async (req, res, next) => {
   }
 };
 
+// @route GET api/storybooks/users/:id
+// @desc  Get all storybook by a user
+// @access private
 const getStoryBooks = async (req, res, next) => {
   try {
     const filter = req.query.filter || "";
