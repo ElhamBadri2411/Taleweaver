@@ -7,6 +7,7 @@ import { EditStoryComponent } from './pages/edit-story/edit-story.component';
 import { AuthService } from './services/auth.service';
 import { StoryBookComponent } from './pages/story-book/story-book.component';
 import { BookGenerationFormComponent } from './components/book-generation-form/book-generation-form.component';
+import { CreditComponent } from './pages/credit/credit.component';
 
 export const routes: Routes = [
   { path: '', component: IndexComponent },
@@ -41,4 +42,10 @@ export const routes: Routes = [
     component: StoryBookComponent,
     canActivate: [AuthService],
   },
+
+  {
+    path: 'credit',
+    component: CreditComponent,
+    canActivate: [AuthService],
+  }
 ];

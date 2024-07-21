@@ -2,3 +2,11 @@
     <app-nav-bar [dashboard]="isDashboardRoute()"></app-nav-bar>
 </div>
 <router-outlet />
+
+<div *ngIf="!isCreditRoute()" 
+    class="text-base-content hover:text-orange-300 cursor-pointer py-4"
+    (click)="toCredit()">
+    <div class="container mx-auto px-4">
+        <p class="text-center">Credit Page</p>
+    </div>
+</div>
