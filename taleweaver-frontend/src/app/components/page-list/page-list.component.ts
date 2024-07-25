@@ -7,6 +7,8 @@ import { Page } from '../../classes/Page';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroPlus } from '@ng-icons/heroicons/outline';
 import { environment } from '../../../environments/environment';
+import { YjsService } from '../../services/yjs.service';
+import * as Y from 'yjs'
 
 @Component({
   selector: 'app-page-list',
@@ -28,8 +30,10 @@ export class PageListComponent implements OnInit {
   pages: Page[];
   selectedPageId: number | null = null;
   imageUrlBase = environment.apiUrl
+  pageList: Y.Array<any>
 
-  constructor(private pageService: PageService) {
+  constructor(private pageService: PageService,
+    private yjsService: YjsService) {
     this.pages = [];
   }
 
@@ -43,7 +47,6 @@ export class PageListComponent implements OnInit {
         } else {
           console.log("selected first page")
           this.selectPage(this.pages[0].id)
-
         }
       },
       error: (error) => {
@@ -68,6 +71,11 @@ export class PageListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.pageList = this.yjsService.ydoc.getArray('page-list')
+
+    this.pageList.observe((event) => {
+      this.loadPages()
+    })
     this.loadPages()
   }
 
@@ -81,6 +89,7 @@ export class PageListComponent implements OnInit {
       next: (newPage) => {
         this.pages.push(newPage);
         this.selectPage(+newPage.id);
+        this.pageList.push([newPage])
       },
       error: (error) => {
         console.error('Error adding new page:', error);

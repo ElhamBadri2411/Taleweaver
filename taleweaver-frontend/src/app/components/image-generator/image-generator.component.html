@@ -37,7 +37,7 @@
         <ng-icon name="heroSparklesSolid"></ng-icon>
         <span class="ml-2">Generate Image</span>
       </button>
-      <button (click)="deletePage()" class="btn btn-outline btn-error" [disabled]="isGeneratingImage || !form.valid" >
+      <button (click)="deletePage()" class="btn btn-outline btn-error" [disabled]="isGeneratingImage || !form.valid || pagesLen === 1" >
         <ng-icon name="heroXCircleSolid"></ng-icon>
         <span class="ml-2">Delete Page</span>
       </button>

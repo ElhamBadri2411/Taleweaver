@@ -49,6 +49,7 @@ export class ImageGeneratorComponent
   implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   @Input() bookId!: string;
   @Input() pageId: number | null = null;
+  @Input() pagesLen: number;
   @Output() imageGenerated = new EventEmitter<void>();
   @Output() pageDeleted = new EventEmitter<void>();
   @ViewChild('editorContainer', { static: false }) editorContainer!: ElementRef;
