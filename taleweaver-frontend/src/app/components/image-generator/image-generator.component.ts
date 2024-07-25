@@ -26,6 +26,7 @@ import * as Y from 'yjs';
 import { QuillBinding } from 'y-quill';
 import { WebsocketProvider } from 'y-websocket';
 import { Awareness } from 'y-protocols/awareness';
+import { GoogleApiService } from '../../services/google/google-api.service';
 
 // Register the QuillCursors module
 Quill.register('modules/cursors', QuillCursors);
@@ -80,7 +81,7 @@ export class ImageGeneratorComponent
   constructor(
     private fb: FormBuilder,
     private imagesService: ImagesService,
-    private pagesService: PageService
+    private pagesService: PageService,
   ) {
     this.form = this.fb.group({
       text: [''],
@@ -91,12 +92,15 @@ export class ImageGeneratorComponent
     this.initializeYjs();
     this.autoSaveSetup();
 
+    console.log("this.binding =", this.binding)
+
     this.provider.awareness.on('change', this.handleAwarenessChange.bind(this));
     window.addEventListener('beforeunload', this.cleanupAwarenessState.bind(this));
     window.addEventListener('beforeunload', this.cleanupYjs.bind(this));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log("IT BE CHANGING")
     if (changes['pageId'] && !changes['pageId'].isFirstChange()) {
       this.loadPageData();
     }
@@ -145,37 +149,30 @@ export class ImageGeneratorComponent
   initializeYjs(): void {
     this.cleanupYjs();
 
-    // Initialize Yjs
     this.ydoc = new Y.Doc();
-    this.provider = new WebsocketProvider(
-      'ws://localhost:3000',
-      this.bookId,
-      this.ydoc
-    );
+    this.provider = new WebsocketProvider('ws://localhost:3000', this.bookId, this.ydoc);
 
-    // Assign a random color from the colors array
     const randomColor = this.colors[Math.floor(Math.random() * this.colors.length)];
     this.provider.awareness.setLocalStateField('user', {
       name: 'Elham',
       color: randomColor
     });
 
-    // Create or get the Y.Text type for the page content
     if (this.pageId !== null) {
       this.type = this.ydoc.getText(`page-${this.pageId}`);
       if (this.quillEditor) {
-        this.binding = new QuillBinding(this.type, this.quillEditor, this.provider.awareness);
 
-        console.log("LOG1", this.binding.type.toJSON());
-        console.log("LOG", this.quillEditor.getContents());
+        if (!this.binding) {
+          this.binding = new QuillBinding(this.type, this.quillEditor, this.provider.awareness);
+        }
 
-        // set editor content to delta
-        const delta = this.type.toDelta();
-        this.quillEditor.setContents(delta);
+        if (this.quillEditor.getLength() === 0) { // Length 1 means only the default empty line
+          const delta = this.type.toDelta();
+          this.quillEditor.setContents(delta);
+        }
       }
     }
 
-    // Create or get the Y.Map for the image URL
     this.imageMap = this.ydoc.getMap('images');
     this.imageMap.observe(event => {
       if (event.keysChanged.has(`page-${this.pageId}`)) {
@@ -216,6 +213,7 @@ export class ImageGeneratorComponent
   }
 
   cleanupAwarenessState(): void {
+    // cleans the states of the cursors
     this.provider.awareness.setLocalState(null);
   }
 
@@ -246,14 +244,11 @@ export class ImageGeneratorComponent
           }
           this.binding = new QuillBinding(this.type, this.quillEditor, this.provider.awareness);
 
-          if (res.paragraph) {
+          // Only set content from backend if Yjs type is empty
+          if (this.type.length === 0 && res.paragraph) {
             this.type.delete(0, this.type.length);
             this.type.insert(0, res.paragraph);
           }
-
-          // Set Quill editor content from Yjs type
-          const delta = this.type.toDelta();
-          this.quillEditor.setContents(delta);
 
           if (res.image.path) {
             this.imageUrl = environment.apiUrl + res.image.path;
