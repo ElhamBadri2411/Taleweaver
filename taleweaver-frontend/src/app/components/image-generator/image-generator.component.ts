@@ -175,11 +175,20 @@ export class ImageGeneratorComponent
 
     this.imageMap = this.ydoc.getMap('images');
     this.imageMap.observe(event => {
-      if (event.keysChanged.has(`page-${this.pageId}`)) {
-        this.imageUrl = this.imageMap.get(`page-${this.pageId}`) || '';
-      }
+
+      event.keysChanged.forEach(key => {
+        console.log('key', key)
+        if (key === `page-${this.pageId}`) {
+          this.imageUrl = this.imageMap.get(`page-${this.pageId}`) || '';
+        }
+      })
+
+      // if (event.keysChanged.has(`page-${this.pageId}`)) {
+      //   this.imageUrl = this.imageMap.get(`page-${this.pageId}`) || '';
+      // }
       this.imageGenerated.emit();
     });
+
   }
 
   cleanupYjs(): void {
@@ -264,7 +273,8 @@ export class ImageGeneratorComponent
   deletePage(): void {
     this.pagesService.deletePage(this.pageId!).subscribe({
       next: (res) => {
-        this.imageGenerated.emit()
+        this.imageMap.set(`page-${this.pageId}-deleted`, 'deleted'); // Update Yjs map
+        this.imageGenerated.emit();
         return
       },
       error: (error): void => {
