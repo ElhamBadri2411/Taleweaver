@@ -261,6 +261,21 @@ export class ImageGeneratorComponent
     }
   }
 
+  deletePage(): void {
+    this.pagesService.deletePage(this.pageId!).subscribe({
+      next: (res) => {
+        this.imageGenerated.emit()
+        return
+      },
+      error: (error): void => {
+        console.error(error)
+        return
+
+      }
+    })
+
+  }
+
   generateImage() {
     this.isGeneratingImage = true;
     const text = this.form.get('text')?.value;

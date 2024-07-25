@@ -1,5 +1,10 @@
 import { Page } from "../models/page.js"
 import { StoryBook } from "../models/storybook.js"
+import path from 'path'
+import { fileURLToPath } from 'url';
+import fs from "fs"
+import { log } from "console";
+
 // Add authentication later
 
 // @route POST api/pages/
@@ -71,14 +76,32 @@ const addPage = async (req, res, next) => {
 const deletePage = async (req, res, next) => {
   try {
     const page = await Page.findByPk(req.params.id);
+    const book = await StoryBook.findByPk(page.StoryBookId);
     if (!page) {
       return res.status(404).json({ error: "Page not found" });
     }
+
+    // console.log(page.image.path)
+    // if (page.image.path) {
+    //   console.log("TRUE")
+    //   const __filename = fileURLToPath(import.meta.url);
+    //   const __dirname = path.dirname(__filename);
+    //   const imagePath = path.join(__dirname, '..', page.image.path);
+    //   console.log(imagePath)
+    //
+    //   if (fs.existsSync(imagePath)) {
+    //     fs.unlinkSync(imagePath)
+    //   } else {
+    //     console.error("image path doesnt exist")
+    //   }
+    // }
+
     await page.destroy();
     book.changed('updatedAt', true);
     await book.save();
-    res.status(204).json();
+    res.status(204).json(page);
   } catch (error) {
+    console.error(error)
     return res.status(400).json({ error: "Cannot delete page" });
   }
 }
