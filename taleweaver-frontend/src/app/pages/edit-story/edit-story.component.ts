@@ -45,8 +45,14 @@ export class EditStoryComponent implements OnInit {
   onImageGenerated() {
     if (this.pageListComponent) {
       console.log("onIMAGEGENERATED!")
+      this.pageListComponent.reloadPages();
+    }
+  }
+
+  onPageDeleted() {
+    if (this.pageListComponent) {
+      console.log("on page deleted")
       this.pageListComponent.loadPages();
     }
-
   }
 }

@@ -27,6 +27,7 @@ import { QuillBinding } from 'y-quill';
 import { WebsocketProvider } from 'y-websocket';
 import { Awareness } from 'y-protocols/awareness';
 import { GoogleApiService } from '../../services/google/google-api.service';
+import { YjsService } from '../../services/yjs.service';
 
 // Register the QuillCursors module
 Quill.register('modules/cursors', QuillCursors);
@@ -49,6 +50,7 @@ export class ImageGeneratorComponent
   @Input() bookId!: string;
   @Input() pageId: number | null = null;
   @Output() imageGenerated = new EventEmitter<void>();
+  @Output() pageDeleted = new EventEmitter<void>();
   @ViewChild('editorContainer', { static: false }) editorContainer!: ElementRef;
 
   @Input() bookTitle: string
@@ -82,6 +84,7 @@ export class ImageGeneratorComponent
     private fb: FormBuilder,
     private imagesService: ImagesService,
     private pagesService: PageService,
+    private yjsService: YjsService
   ) {
     this.form = this.fb.group({
       text: [''],
@@ -149,8 +152,11 @@ export class ImageGeneratorComponent
   initializeYjs(): void {
     this.cleanupYjs();
 
-    this.ydoc = new Y.Doc();
-    this.provider = new WebsocketProvider('ws://localhost:3000', this.bookId, this.ydoc);
+    this.yjsService.init(this.bookId)
+    this.ydoc = this.yjsService.ydoc
+    this.provider = this.yjsService.provider
+    // this.ydoc = new Y.Doc();
+    // this.provider = new WebsocketProvider('ws://localhost:3000', this.bookId, this.ydoc);
 
     const randomColor = this.colors[Math.floor(Math.random() * this.colors.length)];
     this.provider.awareness.setLocalStateField('user', {
@@ -180,13 +186,18 @@ export class ImageGeneratorComponent
         console.log('key', key)
         if (key === `page-${this.pageId}`) {
           this.imageUrl = this.imageMap.get(`page-${this.pageId}`) || '';
+          this.imageGenerated.emit();
+        }
+
+        if (key.includes('-deleted')) {
+          console.log("HER HERERERE")
+          this.pageDeleted.emit()
         }
       })
 
       // if (event.keysChanged.has(`page-${this.pageId}`)) {
       //   this.imageUrl = this.imageMap.get(`page-${this.pageId}`) || '';
       // }
-      this.imageGenerated.emit();
     });
 
   }
@@ -196,12 +207,8 @@ export class ImageGeneratorComponent
     if (this.binding) {
       this.binding.destroy();
     }
-    if (this.provider) {
-      this.provider.destroy();
-    }
-    if (this.ydoc) {
-      this.ydoc.destroy();
-    }
+
+    this.yjsService.clean()
   }
 
   autoSaveSetup(): void {
@@ -274,7 +281,7 @@ export class ImageGeneratorComponent
     this.pagesService.deletePage(this.pageId!).subscribe({
       next: (res) => {
         this.imageMap.set(`page-${this.pageId}-deleted`, 'deleted'); // Update Yjs map
-        this.imageGenerated.emit();
+        this.pageDeleted.emit()
         return
       },
       error: (error): void => {

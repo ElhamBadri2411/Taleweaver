@@ -41,7 +41,24 @@ export class PageListComponent implements OnInit {
         if (this.pages.length === 0) {
           this.addNewPage()
         } else {
+          console.log("selected first page")
           this.selectPage(this.pages[0].id)
+
+        }
+      },
+      error: (error) => {
+        console.error(error)
+      }
+    })
+  }
+
+  reloadPages(): void {
+    this.pageService.getPagesByStoryBookId(+this.bookId).subscribe({
+      next: (pages) => {
+        this.pages = pages
+
+        if (this.pages.length === 0) {
+          this.addNewPage()
         }
       },
       error: (error) => {
@@ -52,7 +69,6 @@ export class PageListComponent implements OnInit {
 
   ngOnInit() {
     this.loadPages()
-
   }
 
   selectPage(id: number) {
