@@ -1,6 +1,6 @@
 <div class="content">
   <div class="functions flex justify-between px-10 py-5 shadow-xl">
-    <div class="card card-side bg-secondary shadow-xl mx-5">
+    <div class="card card-side bg-secondary shadow-xl mx-5 feature">
       <div class="card-body">
         <h2 class="card-title text-accent-content">Create a new Tale ...</h2>
         <p class="text-accent-content text-sm">
@@ -13,7 +13,7 @@
         </div>
       </div>
     </div>
-    <div class="card card-side bg-purple-900 shadow-xl mx-5">
+    <div class="card card-side bg-purple-900 shadow-xl mx-5 feature">
       <div class="card-body">
         <h2 class="card-title text-accent-content">Generate a new Tale...</h2>
         <p class="text-accent-content text-sm">
@@ -42,7 +42,7 @@
     </div> -->
   </div>
 
-  <div *ngIf="storyBooks.length === 0" class="my-10 text-center">
+  <div *ngIf="storyBooks.length === 0" class="my-10 text-center no-story">
     <div *ngIf="filter === ''; else hasFilter">No Stroy Books Yet, Create One Now!</div>
     <ng-template #hasFilter>No Story Books Title Matches Your Search</ng-template>
   </div>
@@ -98,7 +98,7 @@
     } }
   </div>
 
-  <div class="join flex justify-center mb-5">
+  <div class="join flex justify-center mb-5 page-control">
     <button *ngIf="page === 1; else notFirst" class="join-item btn btn-disabled shadow-inner shadow-base-300"><<</button>
     <ng-template #notFirst>
       <button class="join-item btn shadow-inner shadow-base-300" (click)="previous()"><<</button>
@@ -117,7 +117,7 @@
     *ngIf="isModalOpen"
     class="fixed inset-0 z-50 flex items-center justify-center bg-base-300 bg-opacity-50"
   >
-    <div class="bg-base-300 rounded-lg p-6 shadow-lg">
+    <div class="bg-base-300 rounded-lg p-6 shadow-lg close-confirm">
       <h2 class="text-xl font-bold mb-4">Confirm Deletion</h2>
       <p>Are you sure you want to delete this Story Book?</p>
       <div class="mt-4 flex justify-between">

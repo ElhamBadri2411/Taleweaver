@@ -91,3 +91,24 @@
   transform: rotateY(-30deg);
   box-shadow: 20px 10px 50px rgba(0, 0, 0, 0.2);
 }
+
+@media screen and (min-width: 1919px) {
+  .feature {
+    zoom: 143%;
+  }
+  .no-story {
+    zoom: 143%;
+  }
+
+  .books-wrapper {
+    zoom: 143%;
+  }
+
+  .page-control{
+    zoom: 143%;
+  }
+
+  .close-confirm {
+    zoom: 143%;
+  }
+}

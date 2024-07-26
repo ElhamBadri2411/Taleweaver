@@ -49,3 +49,13 @@
         font-size: 0.8rem;
     }
 }
+
+@media screen and (min-width: 1919px) {
+    .title{
+        padding-top: 25vh;
+        zoom: 133%;
+    }
+    .content{
+        zoom: 133%;
+    }
+}
