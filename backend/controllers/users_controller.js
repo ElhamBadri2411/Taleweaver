@@ -1,6 +1,5 @@
 import { User } from "../models/user.js";
 import { OAuth2Client } from "google-auth-library";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -30,7 +29,7 @@ const createUser = async (req, res, next) => {
       });
     }
 
-    const token = jwt.sign({ userId: user.googleId }, process.env.JWT_SECRET, {});
+    const token = id_token;
     res.status(201).json(token);
   } catch (error) {
     console.error(error);

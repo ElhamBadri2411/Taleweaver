@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -18,14 +18,20 @@ export const verifyToken = (req, res, next) => {
             return res.sendStatus(401);
         }
 
-        jwt.verify(token, process.env.JWT_SECRET, (err, userId) => {
-            if (err) {
-                console.log(err);
-                return res.sendStatus(403);
-            }
-            req.userId = userId.userId;
-            next();
+        const client = new OAuth2Client(process.env.CLIENT_ID);
+        const ticket = client.verifyIdToken({
+            idToken: token,
+            audience: process.env.CLIENT_ID,
         });
+
+        ticket.then((data) => {
+            req.userId = data.getPayload()['sub'];
+            next();
+        }).catch((error) => {
+            console.error(error);
+            res.sendStatus(401);
+        });
+        
     } else {
         res.sendStatus(401);
     }

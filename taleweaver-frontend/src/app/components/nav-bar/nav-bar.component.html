@@ -30,7 +30,7 @@
                 <summary>
                     <div class="avatar placeholder">
                         <div class="bg-neutral-content text-neutral w-8 rounded-full">
-                            <span *ngIf="isSignedIn(); else guest" class="text-m font-bold" >{{DisplayName[0]}}</span>
+                            <span *ngIf="isSignedIn(); else guest" class="text-m font-bold" >{{displayName[0]}}</span>
                             <ng-template #guest>
                                 <span class="text-m font-bold">G</span>
                             </ng-template>

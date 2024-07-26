@@ -19,7 +19,7 @@ import { bootstrapXLg } from '@ng-icons/bootstrap-icons';
 })
 
 export class NavBarComponent {
-  DisplayName: string = '';
+  displayName: string = '';
   searchTerm: string = '';
   fetchedDisplayName: boolean = false;
 
@@ -36,7 +36,7 @@ export class NavBarComponent {
       if (this.google.isLoggedIn()) {
         const id = this.google.getUserId(); 
         this.userService.getUserById(id).subscribe((user) => {
-          this.DisplayName = user.displayName;
+          this.displayName = user.displayName;
           this.fetchedDisplayName = true;
         });
       }
