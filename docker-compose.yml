@@ -11,6 +11,20 @@ services:
       - ./certs:/etc/nginx/certs
       - ./vhost:/etc/nginx/vhost.d
       - ./html:/usr/share/nginx/html
+  nginx-proxy-acme:
+    image: nginxproxy/acme-companion
+    container_name: nginx-proxy-acme
+    depends_on:
+      - nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+      - ./vhost:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+      - ./acme:/etc/acme.sh
+    environment:
+      - DEFAULT_EMAIL=elhambadri24@gmail.com
+      - NGINX_PROXY_CONTAINER=nginx-proxy
   taleweaver_frontend:
     container_name: talweaver_frontend
     image: ghcr.io/utsc-cscc09-programming-on-the-web/taleweaver_frontend:deploy
@@ -18,6 +32,10 @@ services:
       - "80:80"
     depends_on:
       - taleweaver_backend
+    environment:
+      - VIRTUAL_HOST=taleweaver.microblog.tech
+      - LETSENCRYPT_HOST=taleweaver.microblog.tech
+
     restart: always
   taleweaver_backend:
     container_name: taleweaver_backend
@@ -39,6 +57,9 @@ services:
       - taleweaver_db
       - taleweaver_redis
     restart: always
+    environment:
+      - VIRTUAL_HOST=api.taleweaver.microblog.tech
+      - LETSENCRYPT_HOST=api.taleweaver.microblog.tech
 
   taleweaver_worker:
     container_name: taleweaver_worker
