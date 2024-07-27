@@ -58,7 +58,7 @@ app.use("/api/users", userRoutes)
 
 
 const server = http.createServer(app)
-const wss = new WebSocketServer({ server })
+const wss = new WebSocketServer({ server, path: "/ws" })
 
 const docs = new Map()
 
