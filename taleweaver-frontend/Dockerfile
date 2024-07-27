@@ -5,12 +5,13 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json ./
 COPY package-lock.json ./
-RUN npm ci --verbose
+RUN npm ci --silent
 COPY . ./
 RUN npm run build
+RUN ls -al /app/dist/taleweaver-frontend
 
 # Serve these static files with NGINX.
 FROM nginx:1.21.6-alpine
-COPY --from=build /app/dist/taleweaver-frontend /usr/share/nginx/html
+COPY --from=build /app/dist/taleweaver-frontend/browser /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
