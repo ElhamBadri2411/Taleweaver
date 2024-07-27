@@ -63,20 +63,18 @@ jobs:
     steps:
     - name: Deploy to Lightsail
       uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
       env:
         PRIVATE_KEY: ${{ secrets.LIGHTSAIL_SSH_PRIVATE_KEY }}
         HOST: ${{ secrets.LIGHTSAIL_IP }}
         USER: ${{ secrets.LIGHTSAIL_USERNAME }}
         ENV_FILE: ${{ secrets.ENV_FILE }}
-      run: |
-        echo "$ENV_FILE" > .env
-        docker compose pull
-        docker compose down 
-        docker compose up -d
-        docker system prune -f
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+        script: |
+          echo "$ENV_FILE" > .env
+          docker compose pull
+          docker compose down 
+          docker compose up -d
+          docker system prune -f
