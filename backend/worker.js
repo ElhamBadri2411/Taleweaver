@@ -5,7 +5,7 @@ import { configDotenv } from 'dotenv';
 configDotenv()
 
 const connection = {
-  host: 'talweaver_redis',
+  host: process.env.REDIS_HOST || 'taleweaver_redis',
   port: process.env.REDIS_PORT || 6379
 };
 
