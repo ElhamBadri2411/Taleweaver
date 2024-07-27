@@ -4,6 +4,7 @@ import userRoutes from "./routes/users_router.js"
 import storybookRouter from "./routes/storybooks_router.js";
 import pageRouter from "./routes/page_router.js";
 import ttsRouter from "./routes/tts_router.js";
+import accessRouter from "./routes/access_router.js";
 import db from "./utils/db.js";
 import { configDotenv } from "dotenv";
 import imageRoutes from "./routes/images_router.js"
@@ -55,6 +56,7 @@ app.use("/api/tts", ttsRouter)
 app.use("/api/storybooks", storybookRouter)
 app.use("/api/pages", pageRouter)
 app.use("/api/users", userRoutes)
+app.use("/api/accesses", accessRouter)
 
 
 const server = http.createServer(app)

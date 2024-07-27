@@ -1,4 +1,5 @@
 import { StoryBook } from "../models/storybook.js";
+import { Access } from "../models/access.js";
 import { User } from "../models/user.js";
 import { storyQueue } from "../bullmq.js";
 import { Op } from "sequelize";
@@ -38,6 +39,11 @@ const createStoryBook = async (req, res, next) => {
       description,
       UserGoogleId: user.googleId,
     });
+    await Access.create({
+      googleId: user.googleId,
+      storyBookId: storyBook.id,
+      role: "owner",
+    });
     res.status(201).json(storyBook);
   } catch (error) {
     return res.status(400).json({ error: "Cannot create storyBook" });
@@ -49,17 +55,32 @@ const createStoryBook = async (req, res, next) => {
 // @access private
 const getStoryBookById = async (req, res, next) => {
   try {
+    // Get the storybook
     const storyBook = await StoryBook.findByPk(req.params.id, {
       include: User.googleId,
     });
+    
     if (!storyBook) {
       return res.status(404).json({ error: "StoryBook not found" });
     }
 
-    if (req.userId !== storyBook.UserGoogleId) {
+    // Check if the user has access to the book
+    const access = await Access.findOne({
+      where: {
+        googleId: req.userId,
+        storyBookId: req.params.id,
+      },
+    });
+
+    if (!access) {
+      //Check if the book is public
+      if (storyBook.public) {
+        return res.status(200).json({ storyBook, access: "read" });
+      }
       return res.status(403).json({ error: "Forbidden" });
     }
-    res.status(200).json(storyBook);
+
+    res.status(200).json({ storyBook, access: access.role, public: storyBook.public });
   } catch (error) {
     return res.status(400).json({ error: "Cannot get storyBook" });
   }
@@ -74,8 +95,6 @@ const getStoryBooks = async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 
-    console.log("\n ----filter:", filter);
-
     if (!req.params.id) {
       return res.status(400).json({ error: "Invalid input parameters" });
     }
@@ -86,9 +105,22 @@ const getStoryBooks = async (req, res, next) => {
 
     const offset = (page - 1) * limit;
 
+    const bookIds = await Access.findAll({
+      where: {
+        googleId: req.params.id,
+      },
+      params: ["storyBookId"],
+    });
+
+    if (!bookIds) {
+      return res.status(404).json({ error: "Books not found" });
+    }
+
     const books = await StoryBook.findAndCountAll({
       where: {
-        UserGoogleId: req.params.id,
+        id: {
+          [Op.in]: bookIds.map((book) => book.storyBookId),
+        },
         title: {
           [Op.like]: `%${filter}%`,
         },
@@ -110,6 +142,73 @@ const getStoryBooks = async (req, res, next) => {
     });
   } catch (error) {
     return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// @route GET api/storybooks/public/
+// @desc Get all public storybooks
+// @access private
+const getPublicStoryBooks = async (req, res, next) => {
+  try {
+    const filter = req.query.filter || "";
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const offset = (page - 1) * limit;
+
+    const books = await StoryBook.findAndCountAll({
+      where: {
+        public: true,
+        title: {
+          [Op.like]: `%${filter}%`,
+        },
+      },
+      order: [["createdAt", "DESC"]],
+      limit: limit,
+      offset: offset,
+    });
+
+    if (!books) {
+      return res.status(404).json({ error: "Books not found" });
+    }
+
+    const pageOfBook = Math.ceil(books.count / limit);
+    res.status(200).json({
+      pageOfBook: pageOfBook,
+      books: books.rows,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// @route PATCH api/storybooks/public/:id
+// @desc  Change the public status of a storybook
+// @access private
+const changeStoryBookPublicStatus = async (req, res, next) => {
+  try {
+    const access = await Access.findOne({
+      where: {
+        googleId: req.userId,
+        storyBookId: req.params.id,
+      },
+    });
+
+    if (!access || access.role !== "owner") {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+
+    const storyBook = await StoryBook.findByPk(req.params.id);
+    if (!storyBook) {
+      return res.status(404).json({ error: "StoryBook not found" });
+    }
+    await storyBook.update({
+      public: !storyBook.public,
+    });
+    await storyBook.reload();
+    res.status(200).json(storyBook);
+  } catch (error) {
+    return res.status(400).json({ error: "Cannot change storyBook status" });
   }
 };
 
@@ -175,6 +274,11 @@ const generateStoryBook = async (req, res, next) => {
       UserGoogleId: userId,
       isGenerating: true,
     });
+    await Access.create({
+      googleId: userId,
+      storyBookId: story.id,
+      role: "owner",
+    });
     const jobId = `job_${story.id}`;
     await storyQueue.add(
       "generateStory",
@@ -210,6 +314,8 @@ export {
   createStoryBook,
   getStoryBookById,
   getStoryBooks,
+  getPublicStoryBooks,
+  changeStoryBookPublicStatus,
   renameStoryBook,
   deleteStoryBook,
   generateStoryBook,

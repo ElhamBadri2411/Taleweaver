@@ -6,3 +6,7 @@
         zoom: 143%;
     }
 }
+
+.content-wrapper{
+    min-height: 69vh;
+}

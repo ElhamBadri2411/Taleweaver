@@ -98,7 +98,7 @@
     } }
   </div>
 
-  <div class="join flex justify-center mb-5 page-control">
+  <div *ngIf="storyBooks.length !== 0" class="join flex justify-center mb-5 page-control">
     <button *ngIf="page === 1; else notFirst" class="join-item btn btn-disabled shadow-inner shadow-base-300"><<</button>
     <ng-template #notFirst>
       <button class="join-item btn shadow-inner shadow-base-300" (click)="previous()"><<</button>

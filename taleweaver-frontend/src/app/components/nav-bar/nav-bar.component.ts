@@ -23,7 +23,7 @@ export class NavBarComponent {
   searchTerm: string = '';
   fetchedDisplayName: boolean = false;
 
-  @Input() dashboard: Boolean;
+  @Input() search: Boolean;
   constructor(
     private readonly google: GoogleApiService,
     private userService: UserService,
@@ -53,6 +53,10 @@ export class NavBarComponent {
 
   goToDashboard() {
     this.router.navigate(['/dashboard']);
+  }
+
+  goToLibrary() {
+    this.router.navigate(['/library']);
   }
 
   clearSearch() {

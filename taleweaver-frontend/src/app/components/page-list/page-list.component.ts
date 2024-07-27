@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -33,6 +34,7 @@ export class PageListComponent implements OnInit {
   pageList: Y.Array<any>
 
   constructor(private pageService: PageService,
+    private router: Router,
     private yjsService: YjsService) {
     this.pages = [];
   }
@@ -51,6 +53,7 @@ export class PageListComponent implements OnInit {
       },
       error: (error) => {
         console.error(error)
+        this.router.navigate(['/dashboard'])
       }
     })
   }

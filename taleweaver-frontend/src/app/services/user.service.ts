@@ -39,4 +39,13 @@ export class UserService {
   createUser(id_token: string): Observable<string> {
     return this.http.post<string>(`${this.endpoint}`, { id_token });
   }
+
+  /**
+   * Fetches all users.
+   * @param id The id of the story book.
+   * @returns An Observable that emits an array of User objects.
+   */
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.endpoint}`, { headers: this.getHeaders() });
+  }
 }

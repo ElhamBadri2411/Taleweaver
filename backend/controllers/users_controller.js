@@ -1,4 +1,5 @@
 import { User } from "../models/user.js";
+import { Op, where } from "sequelize";
 import { OAuth2Client } from "google-auth-library";
 import dotenv from "dotenv";
 dotenv.config();
@@ -55,7 +56,23 @@ const getUserById = async (req, res, next) => {
   }
 }
 
+const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.findAll({
+      where: {
+        googleId: {
+          [Op.ne]: req.userId
+        },
+      },
+    });
+    res.status(200).json(users);
+  } catch (error) {
+    return res.status(400).json({ error: "Cannot get users" });
+  }
+}
+
 export {
   createUser,
   getUserById,
+  getAllUsers,
 }

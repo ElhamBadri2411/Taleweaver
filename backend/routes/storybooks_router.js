@@ -5,6 +5,8 @@ import {
   createStoryBook,
   getStoryBookById,
   getStoryBooks,
+  getPublicStoryBooks,
+  changeStoryBookPublicStatus,
   renameStoryBook,
   deleteStoryBook,
   generateStoryBook,
@@ -18,6 +20,8 @@ storybookRouter.post("/", verifyToken, createStoryBook);
 storybookRouter.post("/generate", verifyToken, generateStoryBook);
 storybookRouter.get("/status/:id", verifyToken, getGenerationStatus);
 storybookRouter.get("/users/:id", verifyToken, getStoryBooks);
+storybookRouter.get("/public", verifyToken, getPublicStoryBooks);
+storybookRouter.patch("/public/:id", verifyToken, changeStoryBookPublicStatus);
 storybookRouter.get("/:id", verifyToken, getStoryBookById);
 storybookRouter.patch("/:id", verifyToken, renameStoryBook);
 storybookRouter.delete("/:id", verifyToken, deleteStoryBook);
