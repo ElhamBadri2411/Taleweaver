@@ -1,14 +1,19 @@
-FROM node:14
+# Dockerfile adapted from
+# https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
+FROM node:16
 
-WORKDIR /app
+# Create app directory
+WORKDIR /usr/src/app
 
-COPY package*.json ./Dockerfile
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY package*.json ./
 
 RUN npm install
 
-COPY . . 
+# Bundle app source
+COPY . .
 
 EXPOSE 3000
-
-CMD ["node", "app.js"]
-
+CMD [ "node", "app.js" ]

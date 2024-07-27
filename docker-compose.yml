@@ -1,6 +1,15 @@
 
 services:
-  # TODO: Add frontend
+  taleweaver_frontend:
+    container_name: talweaver_frontend
+    image: taleweaver/frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - taleweaver_backend
+    restart: always
+
+
   taleweaver_backend:
     container_name: taleweaver_backend
     build: ./backend/ 
@@ -12,9 +21,36 @@ services:
       - POSTGRES_USER=temp
       - POSTGRES_PASSWORD=temp
       - POSTGRES_HOST=taleweaver_db
+      - REDIS_HOST=taleweaver_redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=${JWT_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_URL=${OPENAI_API_URL}
+      - GOOGLE_TEXT_TO_SPEECH_API_KEY=${GOOGLE_TEXT_TO_SPEECH_API_KEY}
     depends_on:
       - taleweaver_db
+      - taleweaver_redis
     restart: always
+
+    taleweaver_worker:
+      container_name: taleweaver_worker
+      image: taleweaver/backend
+      command: npm run worker
+      environment:
+        - POSTGRES_DB=${POSTGRES_DB:-temp}
+        - POSTGRES_USER=${POSTGRES_USER:-temp}
+        - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-temp}
+        - POSTGRES_HOST=taleweaver_db
+        - REDIS_HOST=taleweaver_redis
+        - REDIS_PORT=6379
+        - JWT_SECRET=${JWT_SECRET:-randomsecretstring123secret}
+        - OPENAI_API_KEY=${OPENAI_API_KEY}
+        - OPENAI_API_URL=${OPENAI_API_URL}
+        - GOOGLE_TEXT_TO_SPEECH_API_KEY=${GOOGLE_TEXT_TO_SPEECH_API_KEY}
+      depends_on:
+        - taleweaver_db
+        - taleweaver_redis
+      restart: always
 
   taleweaver_db:
     container_name: taleweaver_db
