@@ -69,6 +69,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Log in to the Container registry
+      run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+
     - name: Transfer Docker Compose file to server
       uses: appleboy/scp-action@master
       with:
@@ -86,6 +89,7 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.LIGHTSAIL_SSH_PRIVATE_KEY }}
+        envs: ENV_FILE
         script: |
           echo "$ENV_FILE" > .env
           docker compose pull
