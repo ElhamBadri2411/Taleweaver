@@ -8,7 +8,6 @@ COPY package-lock.json ./
 RUN npm ci --silent
 COPY . ./
 RUN npm run build
-RUN ls -al /app/dist/taleweaver-frontend
 
 # Serve these static files with NGINX.
 FROM nginx:1.21.6-alpine
