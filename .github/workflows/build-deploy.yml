@@ -8,8 +8,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  FRONTEND_IMAGE_NAME: ${{ github.repository }}_frontend
-  BACKEND_IMAGE_NAME: ${{ github.repository }}_backend
+  FRONTEND_IMAGE_NAME: taleweaver_frontend
+  BACKEND_IMAGE_NAME: taleweaver_backend
 
 jobs:
   build-and-push-images:
