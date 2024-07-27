@@ -28,8 +28,8 @@ services:
   taleweaver_frontend:
     container_name: talweaver_frontend
     image: ghcr.io/utsc-cscc09-programming-on-the-web/taleweaver_frontend:deploy
-    ports:
-      - "80:80"
+    expose:
+      - 80
     depends_on:
       - taleweaver_backend
     environment:
@@ -41,8 +41,8 @@ services:
     container_name: taleweaver_backend
     build: ./backend/ 
     image: ghcr.io/utsc-cscc09-programming-on-the-web/taleweaver_backend:deploy
-    ports:
-      - "3000:3000"
+    expose:
+      - 3000
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -53,13 +53,12 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - GOOGLE_TEXT_TO_SPEECH_API_KEY=${GOOGLE_TEXT_TO_SPEECH_API_KEY}
+      - VIRTUAL_HOST=api.taleweaver.microblog.tech
+      - LETSENCRYPT_HOST=api.taleweaver.microblog.tech
     depends_on:
       - taleweaver_db
       - taleweaver_redis
     restart: always
-    environment:
-      - VIRTUAL_HOST=api.taleweaver.microblog.tech
-      - LETSENCRYPT_HOST=api.taleweaver.microblog.tech
 
   taleweaver_worker:
     container_name: taleweaver_worker
@@ -86,9 +85,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=temp
-      - POSTGRES_USER=temp
-      - POSTGRES_PASSWORD=temp
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - taleweaver_db_data:/var/lib/postgresql/data
   
