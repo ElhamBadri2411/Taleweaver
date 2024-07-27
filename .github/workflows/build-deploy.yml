@@ -24,6 +24,11 @@ jobs:
     - name: Log in to the Container registry
       run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
 
+    - name: Build images
+      run: | 
+        docker build -t $FRONTEND_IMAGE_NAME ./taleweaver_frontend
+        docker build -t $BACKEND_IMAGE_NAME ./backend
+
     - name: Push frontend image to GitHub Container Registry
       run: |
         IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$FRONTEND_IMAGE_NAME
