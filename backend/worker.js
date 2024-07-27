@@ -1,10 +1,11 @@
 import { Worker, QueueEvents } from 'bullmq';
 import { generatePageContent } from './tasks.js';
+import { configDotenv } from 'dotenv';
 
-
+configDotenv()
 
 const connection = {
-  host: process.env.REDIS_HOST,
+  host: 'talweaver_redis',
   port: process.env.REDIS_PORT || 6379
 };
 

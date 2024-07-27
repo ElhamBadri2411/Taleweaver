@@ -26,7 +26,7 @@ services:
       - DEFAULT_EMAIL=elhambadri24@gmail.com
       - NGINX_PROXY_CONTAINER=nginx-proxy
   taleweaver_frontend:
-    container_name: talweaver_frontend
+    container_name: taleweaver_frontend
     image: ghcr.io/utsc-cscc09-programming-on-the-web/taleweaver_frontend:deploy
     expose:
       - 80
