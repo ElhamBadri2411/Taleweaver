@@ -33,8 +33,8 @@ services:
     depends_on:
       - taleweaver_backend
     environment:
-      - VIRTUAL_HOST=taleweaver.microblog.tech
-      - LETSENCRYPT_HOST=taleweaver.microblog.tech
+      - VIRTUAL_HOST=taleweaver.me
+      - LETSENCRYPT_HOST=taleweaver.me
 
     restart: always
   taleweaver_backend:
@@ -53,8 +53,8 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - GOOGLE_TEXT_TO_SPEECH_API_KEY=${GOOGLE_TEXT_TO_SPEECH_API_KEY}
-      - VIRTUAL_HOST=api.taleweaver.microblog.tech
-      - LETSENCRYPT_HOST=api.taleweaver.microblog.tech
+      - VIRTUAL_HOST=api.taleweaver.me
+      - LETSENCRYPT_HOST=api.taleweaver.me
     depends_on:
       - taleweaver_db
       - taleweaver_redis
