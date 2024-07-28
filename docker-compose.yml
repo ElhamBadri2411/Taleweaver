@@ -59,6 +59,8 @@ services:
       - taleweaver_db
       - taleweaver_redis
     restart: always
+    volumes:
+      - generate-images:/usr/src/app/generated-images
 
   taleweaver_worker:
     container_name: taleweaver_worker
@@ -78,6 +80,8 @@ services:
       - taleweaver_db
       - taleweaver_redis
     restart: always
+    volumes:
+      - generate-images:/usr/src/app/generated-images
 
   taleweaver_db:
     container_name: taleweaver_db
@@ -99,3 +103,4 @@ services:
 
 volumes:
   taleweaver_db_data: {}
+  generate-images: {}
