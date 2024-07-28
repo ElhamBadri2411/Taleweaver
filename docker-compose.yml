@@ -27,7 +27,7 @@ services:
       - NGINX_PROXY_CONTAINER=nginx-proxy
   taleweaver_frontend:
     container_name: taleweaver_frontend
-    image: ghcr.io/utsc-cscc09-programming-on-the-web/taleweaver_frontend:deploy
+    image: ghcr.io/utsc-cscc09-programming-on-the-web/taleweaver_frontend:latest
     expose:
       - 80
     depends_on:
@@ -40,7 +40,7 @@ services:
   taleweaver_backend:
     container_name: taleweaver_backend
     build: ./backend/ 
-    image: ghcr.io/utsc-cscc09-programming-on-the-web/taleweaver_backend:deploy
+    image: ghcr.io/utsc-cscc09-programming-on-the-web/taleweaver_backend:latest
     expose:
       - 3000
     environment:
@@ -64,7 +64,7 @@ services:
 
   taleweaver_worker:
     container_name: taleweaver_worker
-    image: ghcr.io/utsc-cscc09-programming-on-the-web/taleweaver_backend:deploy
+    image: ghcr.io/utsc-cscc09-programming-on-the-web/taleweaver_backend:latest
     command: npm run worker
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
