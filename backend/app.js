@@ -26,7 +26,7 @@ export const app = express()
 configDotenv()
 
 const corsoptions = {
-  origin: "http://localhost:4200",
+  origin: "https://taleweaver.me",
   credentials: true
 };
 

@@ -1,20 +1,87 @@
 
 services:
-  # TODO: Add frontend
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+      - ./vhost:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+  nginx-proxy-acme:
+    image: nginxproxy/acme-companion
+    container_name: nginx-proxy-acme
+    depends_on:
+      - nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+      - ./vhost:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+      - ./acme:/etc/acme.sh
+    environment:
+      - DEFAULT_EMAIL=elhambadri24@gmail.com
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+  taleweaver_frontend:
+    container_name: taleweaver_frontend
+    image: ghcr.io/utsc-cscc09-programming-on-the-web/taleweaver_frontend:deploy
+    expose:
+      - 80
+    depends_on:
+      - taleweaver_backend
+    environment:
+      - VIRTUAL_HOST=taleweaver.me
+      - LETSENCRYPT_HOST=taleweaver.me
+
+    restart: always
   taleweaver_backend:
     container_name: taleweaver_backend
     build: ./backend/ 
-    image: taleweaver/backend
-    ports:
-      - "3000:3000"
+    image: ghcr.io/utsc-cscc09-programming-on-the-web/taleweaver_backend:deploy
+    expose:
+      - 3000
     environment:
-      - POSTGRES_DB=temp
-      - POSTGRES_USER=temp
-      - POSTGRES_PASSWORD=temp
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_HOST=taleweaver_db
+      - REDIS_HOST=taleweaver_redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=${JWT_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GOOGLE_TEXT_TO_SPEECH_API_KEY=${GOOGLE_TEXT_TO_SPEECH_API_KEY}
+      - VIRTUAL_HOST=api.taleweaver.me
+      - LETSENCRYPT_HOST=api.taleweaver.me
     depends_on:
       - taleweaver_db
+      - taleweaver_redis
     restart: always
+    volumes:
+      - generate-images:/usr/src/app/generated-images
+
+  taleweaver_worker:
+    container_name: taleweaver_worker
+    image: ghcr.io/utsc-cscc09-programming-on-the-web/taleweaver_backend:deploy
+    command: npm run worker
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=taleweaver_db
+      - REDIS_HOST=taleweaver_redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=${JWT_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GOOGLE_TEXT_TO_SPEECH_API_KEY=${GOOGLE_TEXT_TO_SPEECH_API_KEY}
+    depends_on:
+      - taleweaver_db
+      - taleweaver_redis
+    restart: always
+    volumes:
+      - generate-images:/usr/src/app/generated-images
 
   taleweaver_db:
     container_name: taleweaver_db
@@ -22,9 +89,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=temp
-      - POSTGRES_USER=temp
-      - POSTGRES_PASSWORD=temp
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - taleweaver_db_data:/var/lib/postgresql/data
   
@@ -36,3 +103,4 @@ services:
 
 volumes:
   taleweaver_db_data: {}
+  generate-images: {}
