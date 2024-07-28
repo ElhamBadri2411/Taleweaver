@@ -15,11 +15,7 @@ export class YjsService {
   }
 
   init(bookId: string): void {
-    this.provider = new WebsocketProvider(
-      environment.wsUrl, 
-      bookId, 
-      this.ydoc
-    );
+    this.provider = new WebsocketProvider(environment.wsUrl, bookId, this.ydoc);
   }
 
   clean(): void {
