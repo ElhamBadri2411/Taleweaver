@@ -3,9 +3,11 @@ import { generatePageContent } from './tasks.js';
 import { configDotenv } from 'dotenv';
 
 configDotenv()
+console.log(process.env.REDIS_HOST)
+console.log(process.env.REDIS_PORT)
 
 const connection = {
-  host: process.env.REDIS_HOST || 'taleweaver_redis',
+  host: process.env.REDIS_HOST || 'localhost',
   port: process.env.REDIS_PORT || 6379
 };
 
