@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Cormorant+Garamond:300,400,600|Tulpen+One&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Cormorant+Garamond:300,400,600|Tulpen+One&display=swap");
 
 .storybook {
   height: 300px;
@@ -15,7 +15,7 @@
 
 .storybook-cover {
   background: #665564;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   height: 300px; /* Updated height */
   width: 200px; /* Updated width */
   position: absolute;
@@ -63,7 +63,7 @@
 }
 
 .storybook-skin::before {
-  content: '';
+  content: "";
   position: absolute;
   width: 100%;
   height: 15px;
@@ -104,7 +104,7 @@
     zoom: 143%;
   }
 
-  .page-control{
+  .page-control {
     zoom: 143%;
   }
 

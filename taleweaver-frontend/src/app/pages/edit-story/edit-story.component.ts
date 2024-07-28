@@ -21,38 +21,38 @@ export class EditStoryComponent implements OnInit {
 
   @ViewChild(PageListComponent) pageListComponent: PageListComponent;
 
-  constructor(private route: ActivatedRoute,
-    private storyService: StoryService
-  ) { }
+  constructor(
+    private route: ActivatedRoute,
+    private storyService: StoryService,
+  ) {}
 
   ngOnInit() {
     this.bookId = this.route.snapshot.paramMap.get('bookId') || '';
-    this.getPagesLen()
+    this.getPagesLen();
   }
 
   onPageSelected(pageId: number) {
     this.selectedPageId = pageId;
-    this.getPagesLen()
+    this.getPagesLen();
   }
 
   getPagesLen() {
-    this.pagesLen = this.pageListComponent.pages.length
+    this.pagesLen = this.pageListComponent.pages.length;
   }
 
   onImageGenerated() {
     if (this.pageListComponent) {
-      console.log("onIMAGEGENERATED!")
+      console.log('onIMAGEGENERATED!');
       this.pageListComponent.reloadPages();
-      this.getPagesLen()
-
+      this.getPagesLen();
     }
   }
 
   onPageDeleted() {
     if (this.pageListComponent) {
-      console.log("on page deleted")
+      console.log('on page deleted');
       this.pageListComponent.loadPages();
-      this.getPagesLen()
+      this.getPagesLen();
     }
   }
 }

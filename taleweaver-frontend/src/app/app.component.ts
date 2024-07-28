@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
-import { NavBarComponent } from "./components/nav-bar/nav-bar.component";
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { CommonModule } from '@angular/common';
-import { CreditComponent } from "./pages/credit/credit.component";
+import { CreditComponent } from './pages/credit/credit.component';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +13,8 @@ import { CreditComponent } from "./pages/credit/credit.component";
 })
 export class AppComponent {
   title = 'taleweaver-frontend';
-  
-  constructor(private router: Router){}
+
+  constructor(private router: Router) {}
 
   ableToSearch(): boolean {
     return this.router.url === '/dashboard' || this.router.url === '/library';

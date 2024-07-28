@@ -9,7 +9,7 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroPlus } from '@ng-icons/heroicons/outline';
 import { environment } from '../../../environments/environment';
 import { YjsService } from '../../services/yjs.service';
-import * as Y from 'yjs'
+import * as Y from 'yjs';
 
 @Component({
   selector: 'app-page-list',
@@ -26,65 +26,67 @@ import * as Y from 'yjs'
 })
 export class PageListComponent implements OnInit {
   @Input() bookId: string;
-  @Output() pageSelected = new EventEmitter<number>()
+  @Output() pageSelected = new EventEmitter<number>();
 
   pages: Page[];
   selectedPageId: number | null = null;
-  imageUrlBase = environment.apiUrl
-  pageList: Y.Array<any>
+  imageUrlBase = environment.apiUrl;
+  pageList: Y.Array<any>;
 
-  constructor(private pageService: PageService,
+  constructor(
+    private pageService: PageService,
     private router: Router,
-    private yjsService: YjsService) {
+    private yjsService: YjsService,
+  ) {
     this.pages = [];
   }
 
   loadPages() {
     this.pageService.getPagesByStoryBookId(+this.bookId).subscribe({
       next: (pages) => {
-        this.pages = pages
+        this.pages = pages;
 
         if (this.pages.length === 0) {
-          this.addNewPage()
+          this.addNewPage();
         } else {
-          console.log("selected first page")
-          this.selectPage(this.pages[0].id)
+          console.log('selected first page');
+          this.selectPage(this.pages[0].id);
         }
       },
       error: (error) => {
-        console.error(error)
-        this.router.navigate(['/dashboard'])
-      }
-    })
+        console.error(error);
+        this.router.navigate(['/dashboard']);
+      },
+    });
   }
 
   reloadPages(): void {
     this.pageService.getPagesByStoryBookId(+this.bookId).subscribe({
       next: (pages) => {
-        this.pages = pages
+        this.pages = pages;
 
         if (this.pages.length === 0) {
-          this.addNewPage()
+          this.addNewPage();
         }
       },
       error: (error) => {
-        console.error(error)
-      }
-    })
+        console.error(error);
+      },
+    });
   }
 
   ngOnInit() {
-    this.pageList = this.yjsService.ydoc.getArray('page-list')
+    this.pageList = this.yjsService.ydoc.getArray('page-list');
 
     this.pageList.observe((event) => {
-      this.loadPages()
-    })
-    this.loadPages()
+      this.loadPages();
+    });
+    this.loadPages();
   }
 
   selectPage(id: number) {
-    this.selectedPageId = id
-    this.pageSelected.emit(id)
+    this.selectedPageId = id;
+    this.pageSelected.emit(id);
   }
 
   addNewPage() {
@@ -92,11 +94,11 @@ export class PageListComponent implements OnInit {
       next: (newPage) => {
         this.pages.push(newPage);
         this.selectPage(+newPage.id);
-        this.pageList.push([newPage])
+        this.pageList.push([newPage]);
       },
       error: (error) => {
         console.error('Error adding new page:', error);
-      }
+      },
     });
   }
 }

@@ -13,7 +13,7 @@ export class GoogleApiService {
   constructor(
     private readonly oAuthService: OAuthService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
   ) {
     this.initConfigurations();
   }
@@ -35,7 +35,7 @@ export class GoogleApiService {
         this.router.events
           .pipe(
             filter((event) => event instanceof NavigationEnd),
-            take(1)
+            take(1),
           )
           .subscribe(() => {
             const idToken = this.oAuthService.getIdToken();
@@ -48,7 +48,7 @@ export class GoogleApiService {
               },
               (error: any) => {
                 console.error('Error creating user:', error);
-              }
+              },
             );
           });
       } else {

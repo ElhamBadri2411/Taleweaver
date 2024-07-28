@@ -1,8 +1,7 @@
 import { DataTypes } from "sequelize";
-import db from "../utils/db.js"
+import db from "../utils/db.js";
 import { User } from "./user.js";
 import { Page } from "./page.js";
-
 
 export const StoryBook = db.define("StoryBook", {
   title: {
@@ -11,18 +10,17 @@ export const StoryBook = db.define("StoryBook", {
   },
   description: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   public: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false
+    defaultValue: false,
   },
   isGenerating: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false
-  }
-})
+    defaultValue: false,
+  },
+});
 
-
-StoryBook.hasMany(Page, { onDelete: 'CASCADE', hooks: true });
+StoryBook.hasMany(Page, { onDelete: "CASCADE", hooks: true });
 Page.belongsTo(StoryBook);

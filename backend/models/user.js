@@ -14,17 +14,17 @@ export const User = db.define("User", {
     allowNull: false,
     unique: true,
     validate: {
-      isEmail: true
-    }
+      isEmail: true,
+    },
   },
   displayName: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
 });
 
 // Define associations
-User.hasMany(StoryBook, { onDelete: 'CASCADE', hooks: true });
+User.hasMany(StoryBook, { onDelete: "CASCADE", hooks: true });
 StoryBook.belongsTo(User);
 
 export default User;

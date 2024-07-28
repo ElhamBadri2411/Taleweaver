@@ -5,13 +5,12 @@ import {
   generateAudio,
   checkAudio,
   deleteAudio,
-} from "../controllers/tts_controller.js"
+} from "../controllers/tts_controller.js";
 
-const router = Router()
+const router = Router();
 
 router.post("/", verifyToken, generateAudio);
 router.get("/:bookId", verifyToken, checkAudio);
 router.delete("/:bookId", verifyToken, deleteAudio);
 
-
-export default router
+export default router;

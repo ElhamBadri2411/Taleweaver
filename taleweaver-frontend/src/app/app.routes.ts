@@ -56,5 +56,5 @@ export const routes: Routes = [
     canActivate: [AuthService],
   },
 
-  { path: '**', redirectTo: '', pathMatch: 'full' }
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

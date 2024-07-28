@@ -8,9 +8,8 @@ describe('BookGenerationFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BookGenerationFormComponent]
-    })
-    .compileComponents();
+      imports: [BookGenerationFormComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(BookGenerationFormComponent);
     component = fixture.componentInstance;

@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DataService {
-  constructor() { }
+  constructor() {}
   private filter = new BehaviorSubject<string>('');
   private bookContentSubject = new BehaviorSubject<string>('');
   private access = new BehaviorSubject<string>('');

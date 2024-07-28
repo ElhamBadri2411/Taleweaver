@@ -19,14 +19,14 @@ const createUser = async (req, res, next) => {
       audience: process.env.CLIENT_ID,
     });
     const payload = ticket.getPayload();
-    const userid = payload['sub'];
+    const userid = payload["sub"];
 
     let user = await User.findOne({ where: { googleId: userid } });
     if (!user) {
       user = await User.create({
         googleId: userid,
-        displayName: payload['name'],
-        email: payload['email'],
+        displayName: payload["name"],
+        email: payload["email"],
       });
     }
 
@@ -46,7 +46,9 @@ const getUserById = async (req, res, next) => {
     if (req.userId !== req.params.id) {
       return res.status(403).json({ error: "Forbidden" });
     }
-    const user = await User.findByPk(req.params.id, { attributes: ["googleId", "displayName"] });
+    const user = await User.findByPk(req.params.id, {
+      attributes: ["googleId", "displayName"],
+    });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -54,14 +56,14 @@ const getUserById = async (req, res, next) => {
   } catch (error) {
     return res.status(400).json({ error: "Cannot get user" });
   }
-}
+};
 
 const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.findAll({
       where: {
         googleId: {
-          [Op.ne]: req.userId
+          [Op.ne]: req.userId,
         },
       },
     });
@@ -69,10 +71,6 @@ const getAllUsers = async (req, res, next) => {
   } catch (error) {
     return res.status(400).json({ error: "Cannot get users" });
   }
-}
+};
 
-export {
-  createUser,
-  getUserById,
-  getAllUsers,
-}
+export { createUser, getUserById, getAllUsers };

@@ -10,13 +10,12 @@ import { bootstrapGoogle } from '@ng-icons/bootstrap-icons';
   imports: [NgIconComponent],
   templateUrl: './index.component.html',
   styleUrl: './index.component.css',
-  viewProviders: [provideIcons({ bootstrapGoogle })]
+  viewProviders: [provideIcons({ bootstrapGoogle })],
 })
-
 export class IndexComponent {
   constructor(
     private readonly google: GoogleApiService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -29,7 +28,7 @@ export class IndexComponent {
     this.google.signIn();
   }
 
-  isSignedIn(){
+  isSignedIn() {
     return this.google.isLoggedIn();
   }
 }

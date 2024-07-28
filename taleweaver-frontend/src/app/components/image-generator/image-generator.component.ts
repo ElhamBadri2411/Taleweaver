@@ -46,7 +46,8 @@ Quill.register('modules/cursors', QuillCursors);
   viewProviders: [provideIcons({ heroSparklesSolid, heroXCircleSolid })],
 })
 export class ImageGeneratorComponent
-  implements OnInit, OnChanges, OnDestroy, AfterViewInit {
+  implements OnInit, OnChanges, OnDestroy, AfterViewInit
+{
   @Input() bookId!: string;
   @Input() pageId: number | null = null;
   @Input() pagesLen: number;
@@ -54,8 +55,8 @@ export class ImageGeneratorComponent
   @Output() pageDeleted = new EventEmitter<void>();
   @ViewChild('editorContainer', { static: false }) editorContainer!: ElementRef;
 
-  @Input() bookTitle: string
-  @Input() bookDesc: string
+  @Input() bookTitle: string;
+  @Input() bookDesc: string;
 
   private destroy = new Subject<void>();
   private autoSave = new Subject<string>();
@@ -77,8 +78,16 @@ export class ImageGeneratorComponent
   activeUsers: { name: string; color: string }[] = [];
 
   private colors: string[] = [
-    '#1be7ff', '#6eeb83', '#e4ff1a', '#ff9a1f', '#ff5714',
-    '#ff3c6f', '#cb6ce6', '#6c95e6', '#6ce6d6', '#e66c6c'
+    '#1be7ff',
+    '#6eeb83',
+    '#e4ff1a',
+    '#ff9a1f',
+    '#ff5714',
+    '#ff3c6f',
+    '#cb6ce6',
+    '#6c95e6',
+    '#6ce6d6',
+    '#e66c6c',
   ];
 
   constructor(
@@ -86,7 +95,7 @@ export class ImageGeneratorComponent
     private imagesService: ImagesService,
     private pagesService: PageService,
     private yjsService: YjsService,
-    private googleApiService: GoogleApiService
+    private googleApiService: GoogleApiService,
   ) {
     this.form = this.fb.group({
       text: [''],
@@ -97,15 +106,18 @@ export class ImageGeneratorComponent
     this.initializeYjs();
     this.autoSaveSetup();
 
-    console.log("this.binding =", this.binding)
+    console.log('this.binding =', this.binding);
 
     this.provider.awareness.on('change', this.handleAwarenessChange.bind(this));
-    window.addEventListener('beforeunload', this.cleanupAwarenessState.bind(this));
+    window.addEventListener(
+      'beforeunload',
+      this.cleanupAwarenessState.bind(this),
+    );
     window.addEventListener('beforeunload', this.cleanupYjs.bind(this));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("IT BE CHANGING")
+    console.log('IT BE CHANGING');
     if (changes['pageId'] && !changes['pageId'].isFirstChange()) {
       this.loadPageData();
     }
@@ -114,7 +126,10 @@ export class ImageGeneratorComponent
   ngOnDestroy(): void {
     this.cleanupYjs();
     this.cleanupAwarenessState();
-    window.removeEventListener('beforeunload', this.cleanupAwarenessState.bind(this));
+    window.removeEventListener(
+      'beforeunload',
+      this.cleanupAwarenessState.bind(this),
+    );
     window.removeEventListener('beforeunload', this.cleanupYjs.bind(this));
     this.provider.awareness.off('change', this.handleAwarenessChange);
     this.destroy.next();
@@ -131,14 +146,14 @@ export class ImageGeneratorComponent
         theme: 'bubble',
         modules: {
           toolbar: false, // Disable the toolbar
-          cursors: true,  // Enable the cursors module
+          cursors: true, // Enable the cursors module
         },
-        placeholder: "Write your story here ..."
+        placeholder: 'Write your story here ...',
       });
 
       // Listen to Quill editor changes and update the form control
       this.quillEditor.on('text-change', () => {
-        console.log("TEX CHANGE")
+        console.log('TEX CHANGE');
         this.form.get('text')?.patchValue(this.quillEditor.getText());
       });
 
@@ -154,28 +169,33 @@ export class ImageGeneratorComponent
   initializeYjs(): void {
     this.cleanupYjs();
 
-    this.yjsService.init(this.bookId)
-    this.ydoc = this.yjsService.ydoc
-    this.provider = this.yjsService.provider
+    this.yjsService.init(this.bookId);
+    this.ydoc = this.yjsService.ydoc;
+    this.provider = this.yjsService.provider;
     // this.ydoc = new Y.Doc();
     // this.provider = new WebsocketProvider('ws://localhost:3000', this.bookId, this.ydoc);
 
-    const randomColor = this.colors[Math.floor(Math.random() * this.colors.length)];
+    const randomColor =
+      this.colors[Math.floor(Math.random() * this.colors.length)];
     let displayName: string = this.googleApiService.getUserName();
     this.provider.awareness.setLocalStateField('user', {
       name: displayName,
-      color: randomColor
+      color: randomColor,
     });
 
     if (this.pageId !== null) {
       this.type = this.ydoc.getText(`page-${this.pageId}`);
       if (this.quillEditor) {
-
         if (!this.binding) {
-          this.binding = new QuillBinding(this.type, this.quillEditor, this.provider.awareness);
+          this.binding = new QuillBinding(
+            this.type,
+            this.quillEditor,
+            this.provider.awareness,
+          );
         }
 
-        if (this.quillEditor.getLength() === 0) { // Length 1 means only the default empty line
+        if (this.quillEditor.getLength() === 0) {
+          // Length 1 means only the default empty line
           const delta = this.type.toDelta();
           this.quillEditor.setContents(delta);
         }
@@ -183,35 +203,33 @@ export class ImageGeneratorComponent
     }
 
     this.imageMap = this.ydoc.getMap('images');
-    this.imageMap.observe(event => {
-
-      event.keysChanged.forEach(key => {
-        console.log('key', key)
+    this.imageMap.observe((event) => {
+      event.keysChanged.forEach((key) => {
+        console.log('key', key);
         if (key === `page-${this.pageId}`) {
           this.imageUrl = this.imageMap.get(`page-${this.pageId}`) || '';
           this.imageGenerated.emit();
         }
 
         if (key.includes('-deleted')) {
-          console.log("HER HERERERE")
-          this.pageDeleted.emit()
+          console.log('HER HERERERE');
+          this.pageDeleted.emit();
         }
-      })
+      });
 
       // if (event.keysChanged.has(`page-${this.pageId}`)) {
       //   this.imageUrl = this.imageMap.get(`page-${this.pageId}`) || '';
       // }
     });
-
   }
 
   cleanupYjs(): void {
-    console.log("cleaning");
+    console.log('cleaning');
     if (this.binding) {
       this.binding.destroy();
     }
 
-    this.yjsService.clean()
+    this.yjsService.clean();
   }
 
   autoSaveSetup(): void {
@@ -261,7 +279,11 @@ export class ImageGeneratorComponent
           if (this.binding) {
             this.binding.destroy();
           }
-          this.binding = new QuillBinding(this.type, this.quillEditor, this.provider.awareness);
+          this.binding = new QuillBinding(
+            this.type,
+            this.quillEditor,
+            this.provider.awareness,
+          );
 
           // Only set content from backend if Yjs type is empty
           if (this.type.length === 0 && res.paragraph) {
@@ -284,16 +306,14 @@ export class ImageGeneratorComponent
     this.pagesService.deletePage(this.pageId!).subscribe({
       next: (res) => {
         this.imageMap.set(`page-${this.pageId}-deleted`, 'deleted'); // Update Yjs map
-        this.pageDeleted.emit()
-        return
+        this.pageDeleted.emit();
+        return;
       },
       error: (error): void => {
-        console.error(error)
-        return
-
-      }
-    })
-
+        console.error(error);
+        return;
+      },
+    });
   }
 
   generateImage() {
@@ -309,7 +329,7 @@ export class ImageGeneratorComponent
       (error: any) => {
         console.error('Error generating image:', error);
         this.isGeneratingImage = false;
-      }
+      },
     );
   }
 
@@ -326,12 +346,16 @@ export class ImageGeneratorComponent
         cursors.createCursor(clientId, state.user.name, state.user.color);
 
         if (state.selection) {
-          cursors.moveCursor(clientId, state.selection.index, state.selection.length);
+          cursors.moveCursor(
+            clientId,
+            state.selection.index,
+            state.selection.length,
+          );
         }
 
         this.activeUsers.push({
           name: state.user.name,
-          color: state.user.color
+          color: state.user.color,
         });
       }
     });

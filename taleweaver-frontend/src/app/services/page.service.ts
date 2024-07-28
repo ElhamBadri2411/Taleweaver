@@ -10,11 +10,11 @@ import { Page } from '../classes/Page';
 export class PageService {
   private endpoint = environment.apiUrl + 'pages';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
   getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
   }
 
@@ -24,9 +24,13 @@ export class PageService {
    * @returns Observable<Page>
    */
   addPage(id: number): Observable<Page> {
-    return this.http.post<Page>(`${this.endpoint}/new`, {
-      storyBookId: id
-    }, { headers: this.getHeaders() });
+    return this.http.post<Page>(
+      `${this.endpoint}/new`,
+      {
+        storyBookId: id,
+      },
+      { headers: this.getHeaders() },
+    );
   }
 
   /**
@@ -35,7 +39,9 @@ export class PageService {
    * @returns Observable<Page>
    */
   getPageById(id: number): Observable<Page> {
-    return this.http.get<Page>(`${this.endpoint}/${id}`, { headers: this.getHeaders() });
+    return this.http.get<Page>(`${this.endpoint}/${id}`, {
+      headers: this.getHeaders(),
+    });
   }
 
   /**
@@ -44,7 +50,9 @@ export class PageService {
    * @returns Observable<Page>
    */
   getPagesByStoryBookId(id: number): Observable<Page[]> {
-    return this.http.get<Page[]>(`${this.endpoint}/storybooks/${id}`, { headers: this.getHeaders() });
+    return this.http.get<Page[]>(`${this.endpoint}/storybooks/${id}`, {
+      headers: this.getHeaders(),
+    });
   }
 
   /**
@@ -53,23 +61,25 @@ export class PageService {
    * @returns Observable<Page>
    */
   updatePage(id: number, paragraph: string): Observable<Page> {
-    return this.http.patch<Page>(`${this.endpoint}/${id}`, {
-      paragraph
-    },
-      { headers: this.getHeaders() });
+    return this.http.patch<Page>(
+      `${this.endpoint}/${id}`,
+      {
+        paragraph,
+      },
+      { headers: this.getHeaders() },
+    );
   }
-
 
   /**
    *
    * Delete a page of a storybook by id
    * @param id The id of the page
    * @returns Observable<Page>
-    */
+   */
 
   deletePage(id: number): Observable<Page> {
     return this.http.delete<Page>(`${this.endpoint}/${id}`, {
-      headers: this.getHeaders()
-    })
+      headers: this.getHeaders(),
+    });
   }
 }

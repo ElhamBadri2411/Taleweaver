@@ -3,7 +3,13 @@
     <app-page-list [bookId]="bookId" (pageSelected)="onPageSelected($event)" />
   </div>
   <div class="flex-grow flex justify-center items-center image-generate">
-    <app-image-generator [bookId]="bookId" [pageId]="selectedPageId" [pagesLen]="pagesLen"
-      (imageGenerated)="onImageGenerated()" (pageDeleted)="onPageDeleted()" class="w-full h-full p-4 lg:p-0" />
+    <app-image-generator
+      [bookId]="bookId"
+      [pageId]="selectedPageId"
+      [pagesLen]="pagesLen"
+      (imageGenerated)="onImageGenerated()"
+      (pageDeleted)="onPageDeleted()"
+      class="w-full h-full p-4 lg:p-0"
+    />
   </div>
 </div>

@@ -59,7 +59,7 @@ const getStoryBookById = async (req, res, next) => {
     const storyBook = await StoryBook.findByPk(req.params.id, {
       include: User.googleId,
     });
-    
+
     if (!storyBook) {
       return res.status(404).json({ error: "StoryBook not found" });
     }
@@ -80,7 +80,9 @@ const getStoryBookById = async (req, res, next) => {
       return res.status(403).json({ error: "Forbidden" });
     }
 
-    res.status(200).json({ storyBook, access: access.role, public: storyBook.public });
+    res
+      .status(200)
+      .json({ storyBook, access: access.role, public: storyBook.public });
   } catch (error) {
     return res.status(400).json({ error: "Cannot get storyBook" });
   }
@@ -283,7 +285,7 @@ const generateStoryBook = async (req, res, next) => {
     await storyQueue.add(
       "generateStory",
       { storyId: story.id, title, description },
-      { jobId: jobId }
+      { jobId: jobId },
     );
     res
       .status(200)

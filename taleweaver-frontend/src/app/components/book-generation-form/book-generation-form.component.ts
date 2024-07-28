@@ -27,7 +27,7 @@ export class BookGenerationFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private storyService: StoryService,
-    private router: Router
+    private router: Router,
   ) {
     this.form = this.fb.group({
       title: [
@@ -64,6 +64,5 @@ export class BookGenerationFormComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }
-
