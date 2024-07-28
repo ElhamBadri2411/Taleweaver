@@ -1,19 +1,18 @@
-import OpenAI from 'openai';
-import path from 'path';
-import { fileURLToPath } from 'url';
-//Need this import or it dies 
-import User from './models/user.js';
-import { StoryBook } from './models/storybook.js';
-import { Page } from './models/page.js';
-import { generateImage } from './controllers/images_controller.js';
-import db from './utils/db.js'
+import OpenAI from "openai";
+import path from "path";
+import { fileURLToPath } from "url";
+//Need this import or it dies
+import User from "./models/user.js";
+import { StoryBook } from "./models/storybook.js";
+import { Page } from "./models/page.js";
+import { generateImage } from "./controllers/images_controller.js";
+import db from "./utils/db.js";
 
 const OPEN_API_KEY = process.env.OPEN_API_KEY;
 const openai = new OpenAI({ apiKey: OPEN_API_KEY });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 
 try {
   await db.authenticate();
@@ -42,47 +41,56 @@ Image Prompt: A bright red car with big, friendly eyes driving through a vibrant
 
 Now, generate the 7-page outline based on the provided description and format. Ensure that the image descriptions have a "storybook/kid" theme, are fully self-contained, and do not use specific character names.
 `;
-}
-
+};
 
 const generatePageContent = async (job) => {
-  const { storyId, title, description } = job.data
+  const { storyId, title, description } = job.data;
 
   try {
     const story = await StoryBook.findByPk(storyId);
-    if (!story) throw new Error('Story not found');
+    if (!story) throw new Error("Story not found");
 
     // Generate story outline
     const outlineResponse = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
         { role: "system", content: "You are a children's story writer." },
-        { role: "user", content: `${generateStoryPrompt(title, description)}` }
-      ]
+        { role: "user", content: `${generateStoryPrompt(title, description)}` },
+      ],
     });
 
-    const outline = outlineResponse.choices[0].message.content.split('\nPage ');
-    console.log(outline)
+    const outline = outlineResponse.choices[0].message.content.split("\nPage ");
+    console.log(outline);
 
     for (let i = 0; i < outline.length; i++) {
-      const pageContent = outline[i].split('\n');
-      const paragraph = pageContent.find(line => line.startsWith('Paragraph:')).replace('Paragraph: ', '').trim();
-      const imagePrompt = pageContent.find(line => line.startsWith('Image Prompt:')).replace('Image Prompt: ', '').trim();
+      const pageContent = outline[i].split("\n");
+      const paragraph = pageContent
+        .find((line) => line.startsWith("Paragraph:"))
+        .replace("Paragraph: ", "")
+        .trim();
+      const imagePrompt = pageContent
+        .find((line) => line.startsWith("Image Prompt:"))
+        .replace("Image Prompt: ", "")
+        .trim();
 
       const page = await Page.create({
         paragraph,
         position: i,
-        StoryBookId: storyId
+        StoryBookId: storyId,
       });
 
-      await generateImage({ body: { text: imagePrompt, pageId: page.id } }, null, () => { });
+      await generateImage(
+        { body: { text: imagePrompt, pageId: page.id } },
+        null,
+        () => {},
+      );
       const progress = Math.floor((i / (outline.length - 1)) * 100);
       await job.updateProgress(progress);
     }
 
     await StoryBook.update({ isGenerating: false }, { where: { id: storyId } });
   } catch (error) {
-    console.error('Error in story generation:', error);
+    console.error("Error in story generation:", error);
     await StoryBook.update({ isGenerating: false }, { where: { id: storyId } });
   }
 };

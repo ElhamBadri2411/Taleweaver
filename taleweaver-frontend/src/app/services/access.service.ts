@@ -5,15 +5,15 @@ import { Observable } from 'rxjs';
 import { Access } from '../classes/Access';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AccessService {
   private endpoint = environment.apiUrl + 'accesses';
   private headers = new HttpHeaders({
-    'Authorization': 'Bearer ' + localStorage.getItem('token')
+    Authorization: 'Bearer ' + localStorage.getItem('token'),
   });
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Creates a new access.
@@ -21,11 +21,17 @@ export class AccessService {
    * @param storyBookId The ID of the story book.
    * @param role The role of the user.
    * @returns An Observable that emits an Access object.
-  */
-  createAccess(googleId: string, storyBookId: string, role: string): Observable<Access> {
-    return this.http.post<Access>(this.endpoint, 
-      { googleId, storyBookId, role }, 
-      { headers: this.headers });
+   */
+  createAccess(
+    googleId: string,
+    storyBookId: string,
+    role: string,
+  ): Observable<Access> {
+    return this.http.post<Access>(
+      this.endpoint,
+      { googleId, storyBookId, role },
+      { headers: this.headers },
+    );
   }
 
   /**
@@ -33,19 +39,23 @@ export class AccessService {
    * @param googleId The Google ID of the user.
    * @param storyBookId The ID of the story book.
    * @returns An Observable that emits an Object.
-  */
+   */
   deleteAccess(googleId: string, storyBookId: string): Observable<Object> {
-    return this.http.delete(`${this.endpoint}?googleId=${googleId}&storyBookId=${storyBookId}`, 
-      { headers: this.headers }); 
+    return this.http.delete(
+      `${this.endpoint}?googleId=${googleId}&storyBookId=${storyBookId}`,
+      { headers: this.headers },
+    );
   }
 
   /**
    * Gets an access.
    * @param storyBookId The ID of the story book.
    * @returns An Observable that emits an Access object.
-  */
-  getAccessByStoryBookId(storyBookId: string): Observable<[{email: string}]> {
-    return this.http.get<[{email: string}]>(`${this.endpoint}/${storyBookId}`, 
-      { headers: this.headers });
+   */
+  getAccessByStoryBookId(storyBookId: string): Observable<[{ email: string }]> {
+    return this.http.get<[{ email: string }]>(
+      `${this.endpoint}/${storyBookId}`,
+      { headers: this.headers },
+    );
   }
 }

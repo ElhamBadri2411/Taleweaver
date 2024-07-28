@@ -1,9 +1,9 @@
 @media screen and (max-width: 1280px) {
-    .image-generate {
-        padding-top: 25vh;
-        zoom: 67%;
-    }
-    .page-list {
-        zoom: 99%;
-    }
+  .image-generate {
+    padding-top: 25vh;
+    zoom: 67%;
+  }
+  .page-list {
+    zoom: 99%;
+  }
 }

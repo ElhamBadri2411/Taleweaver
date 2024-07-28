@@ -4,7 +4,10 @@
       <div class="card-body">
         <h2 class="card-title text-accent-content">Create a new Tale ...</h2>
         <p class="text-accent-content text-sm">
-          Unleash your creativity and weave a captivating story. Whether it's a heartwarming adventure or a thrilling mystery, every tale has the power to transport readers to new worlds. Let your imagination run wild and inspire others with your words.
+          Unleash your creativity and weave a captivating story. Whether it's a
+          heartwarming adventure or a thrilling mystery, every tale has the
+          power to transport readers to new worlds. Let your imagination run
+          wild and inspire others with your words.
         </p>
         <div class="card-actions justify-end">
           <button (click)="navigateToCreateNewStory()" class="btn btn-outline">
@@ -17,7 +20,10 @@
       <div class="card-body">
         <h2 class="card-title text-accent-content">Generate a new Tale...</h2>
         <p class="text-accent-content text-sm">
-          Harness the power of AI to craft your next story! With advanced algorithms, you can effortlessly generate imaginative plots and vibrant characters. Watch as your ideas come to life, transforming your creative visions into captivating tales.
+          Harness the power of AI to craft your next story! With advanced
+          algorithms, you can effortlessly generate imaginative plots and
+          vibrant characters. Watch as your ideas come to life, transforming
+          your creative visions into captivating tales.
         </p>
         <div class="card-actions justify-end">
           <button (click)="navigateToGenerateStory()" class="btn btn-outline">
@@ -43,73 +49,96 @@
   </div>
 
   <div *ngIf="storyBooks.length === 0" class="my-10 text-center no-story">
-    <div *ngIf="filter === ''; else hasFilter">No Stroy Books Yet, Create One Now!</div>
-    <ng-template #hasFilter>No Story Books Title Matches Your Search</ng-template>
+    <div *ngIf="filter === ''; else hasFilter">
+      No Stroy Books Yet, Create One Now!
+    </div>
+    <ng-template #hasFilter
+      >No Story Books Title Matches Your Search</ng-template
+    >
   </div>
 
   <div class="books-wrapper mx-5 my-10 flex flex-wrap">
-    @for( storyBook of storyBooks; track storyBook.id; let i = $index){ @if
-    (storyBook.isGenerating){
-    <div
-      class="flex flex-col items-center justify-center border-orange-300 opacity-50 border-2 rounded-tl-md rounded-bl-md mt-6 mx-5 rounded-tr-xl rounded-br-xl h-[300px] w-[200px]"
-    >
-      <div>
-        <span class="loading loading-ring loading-lg"></span>
-      </div>
-      <div>Generating Story...</div>
-    </div>
-    } @else {
-    <div class="flex flex-col">
-      <div
-        class="storybook"
-        [@zoomToLeft]="isClicked[i] ? 'zoom' : 'initial'"
-        (click)="bookClicked(i)"
-        (@zoomToLeft.done)="onAnimationDone($event)"
-      >
-        <div class="storybook-cover">
-          <div class="storybook-skin py-3 pl-3 pr-8">
-            <div class="storybook-skin-content">
-              <div class="storybook-title font-bold text-base truncate">
-                {{ storyBook.title }}
-              </div>
-              <div class="storybook-date lining-nums font-bold">
-                Edited: {{ formatDate(storyBook.createdAt) }}
+    @for (storyBook of storyBooks; track storyBook.id; let i = $index) {
+      @if (storyBook.isGenerating) {
+        <div
+          class="flex flex-col items-center justify-center border-orange-300 opacity-50 border-2 rounded-tl-md rounded-bl-md mt-6 mx-5 rounded-tr-xl rounded-br-xl h-[300px] w-[200px]"
+        >
+          <div>
+            <span class="loading loading-ring loading-lg"></span>
+          </div>
+          <div>Generating Story...</div>
+        </div>
+      } @else {
+        <div class="flex flex-col">
+          <div
+            class="storybook"
+            [@zoomToLeft]="isClicked[i] ? 'zoom' : 'initial'"
+            (click)="bookClicked(i)"
+            (@zoomToLeft.done)="onAnimationDone($event)"
+          >
+            <div class="storybook-cover">
+              <div class="storybook-skin py-3 pl-3 pr-8">
+                <div class="storybook-skin-content">
+                  <div class="storybook-title font-bold text-base truncate">
+                    {{ storyBook.title }}
+                  </div>
+                  <div class="storybook-date lining-nums font-bold">
+                    Edited: {{ formatDate(storyBook.createdAt) }}
+                  </div>
+                </div>
               </div>
             </div>
+            <div class="storybook-page"></div>
+          </div>
+          <div
+            class="flex flex-row justify-around mx-auto bg-base-200 rounded-full shadow-inner shadow-base-300 w-[120px]"
+          >
+            <button class="p-1 pt-2" (click)="navigateToEditPage(storyBook.id)">
+              <ng-icon class="text-2xl" name="bootstrapPencilSquare"></ng-icon>
+            </button>
+            <button class="p-1 pt-2" (click)="openModal(storyBook.id)">
+              <ng-icon class="text-2xl" name="bootstrapTrash"></ng-icon>
+            </button>
           </div>
         </div>
-        <div class="storybook-page"></div>
-      </div>
-      <div class="flex flex-row justify-around mx-auto bg-base-200 rounded-full shadow-inner shadow-base-300 w-[120px]">
-        <button
-          class="p-1 pt-2"
-          (click)="navigateToEditPage(storyBook.id)"
-        >
-          <ng-icon class="text-2xl" name="bootstrapPencilSquare"></ng-icon>
-        </button>
-        <button
-          class="p-1 pt-2"
-          (click)="openModal(storyBook.id)"
-        >
-          <ng-icon class="text-2xl" name="bootstrapTrash"></ng-icon>
-        </button>
-      </div>
-    </div>
-    } }
+      }
+    }
   </div>
 
-  <div *ngIf="storyBooks.length !== 0" class="join flex justify-center mb-5 page-control">
-    <button *ngIf="page === 1; else notFirst" class="join-item btn btn-disabled shadow-inner shadow-base-300"><<</button>
+  <div
+    *ngIf="storyBooks.length !== 0"
+    class="join flex justify-center mb-5 page-control"
+  >
+    <button
+      *ngIf="page === 1; else notFirst"
+      class="join-item btn btn-disabled shadow-inner shadow-base-300"
+    >
+      <<
+    </button>
     <ng-template #notFirst>
-      <button class="join-item btn shadow-inner shadow-base-300" (click)="previous()"><<</button>
+      <button
+        class="join-item btn shadow-inner shadow-base-300"
+        (click)="previous()"
+      >
+        <<
+      </button>
     </ng-template>
 
-    
-    <div class="join-item p-3 bg-base-200">Page {{page}}</div>
-    
-    <button *ngIf="page === totalPage; else notLsat" class="join-item btn btn-disabled shadow-inner shadow-base-300">>></button>
+    <div class="join-item p-3 bg-base-200">Page {{ page }}</div>
+
+    <button
+      *ngIf="page === totalPage; else notLsat"
+      class="join-item btn btn-disabled shadow-inner shadow-base-300"
+    >
+      >>
+    </button>
     <ng-template #notLsat>
-      <button class="join-item btn shadow-inner shadow-base-300" (click)="next()" >>></button>
+      <button
+        class="join-item btn shadow-inner shadow-base-300"
+        (click)="next()"
+      >
+        >>
+      </button>
     </ng-template>
   </div>
 

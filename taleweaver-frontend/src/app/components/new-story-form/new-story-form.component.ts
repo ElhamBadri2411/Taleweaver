@@ -27,7 +27,7 @@ export class NewStoryFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private storyService: StoryService,
-    private router: Router
+    private router: Router,
   ) {
     this.form = this.fb.group({
       title: [
@@ -57,7 +57,7 @@ export class NewStoryFormComponent implements OnInit {
       next: (res) => {
         this.form.reset();
         // reroute to list of stories page after
-        this.router.navigate(['/dashboard'])
+        this.router.navigate(['/dashboard']);
       },
       error: (error) => {
         console.error(error);
@@ -65,5 +65,5 @@ export class NewStoryFormComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

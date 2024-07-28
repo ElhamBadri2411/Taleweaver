@@ -5,19 +5,17 @@ import { Observable } from 'rxjs';
 import { User } from '../classes/User';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private endpoint = environment.apiUrl + 'users';
 
-  constructor(
-    private http: HttpClient
-  ) { }
+  constructor(private http: HttpClient) {}
 
   getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
   }
 
@@ -27,10 +25,11 @@ export class UserService {
    * @returns Observable<User>
    */
   getUserById(id: string): Observable<User> {
-    return this.http.get<User>(`${this.endpoint}/${id}`, { headers: this.getHeaders() });
+    return this.http.get<User>(`${this.endpoint}/${id}`, {
+      headers: this.getHeaders(),
+    });
   }
 
-  
   /**
    * Creates a new user.
    * @param id_token - The ID token of the user.
@@ -46,6 +45,8 @@ export class UserService {
    * @returns An Observable that emits an array of User objects.
    */
   getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.endpoint}`, { headers: this.getHeaders() });
+    return this.http.get<User[]>(`${this.endpoint}`, {
+      headers: this.getHeaders(),
+    });
   }
 }

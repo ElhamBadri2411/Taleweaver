@@ -7,7 +7,7 @@ import {
   getPageById,
   getPagesByStoryBookId,
   updatePage,
-  addPage
+  addPage,
 } from "../controllers/page_controller.js";
 
 const pageRouter = Router();
@@ -20,4 +20,3 @@ pageRouter.get("/storybooks/:id", verifyToken, getPagesByStoryBookId);
 pageRouter.patch("/:id", verifyToken, updatePage);
 
 export default pageRouter;
-

@@ -1,50 +1,61 @@
 <div class="navbar bg-base-200">
-    <!-- logo -->
-    <div class="navbar-start">
-        <div class="flex-none pl-10">
-            <a class="text-xl logo" (click)="goToDashboard()">TaleWeaver</a>
-          </div>
+  <!-- logo -->
+  <div class="navbar-start">
+    <div class="flex-none pl-10">
+      <a class="text-xl logo" (click)="goToDashboard()">TaleWeaver</a>
     </div>
+  </div>
 
-    <!-- Search Bar -->
-    <div *ngIf="search === true" class="navbar-center w-1/2">
-        <div class="form-control w-full mx-4">          
-            <label class="input input-bordered flex items-center gap-2">
-                <input
-                type="text" 
-                placeholder="Search for the story book you created" 
-                class="grow"
-                [(ngModel)]="searchTerm"
-                (keydown)="onKeyDown($event)"/>
-                <button *ngIf="searchTerm" (click)="clearSearch()" class="cursor-pointer">
-                    <ng-icon class="text-2xl" name="bootstrapXLg"></ng-icon>
-                </button>
-            </label>
-        </div>
+  <!-- Search Bar -->
+  <div *ngIf="search === true" class="navbar-center w-1/2">
+    <div class="form-control w-full mx-4">
+      <label class="input input-bordered flex items-center gap-2">
+        <input
+          type="text"
+          placeholder="Search for the story book you created"
+          class="grow"
+          [(ngModel)]="searchTerm"
+          (keydown)="onKeyDown($event)"
+        />
+        <button
+          *ngIf="searchTerm"
+          (click)="clearSearch()"
+          class="cursor-pointer"
+        >
+          <ng-icon class="text-2xl" name="bootstrapXLg"></ng-icon>
+        </button>
+      </label>
     </div>
-    
-    <div class="navbar-end pr-10">
-        <div>
-            <button class="btn rounded-full" (click)="goToLibrary()">Library</button>
-        </div>
-        <ul class="menu rounded-box menu-horizontal z-[1]">
-            <li class="rounded-box bg-base-100 rounded-full">
-              <details>
-                <summary class="hover:rounded-full">
-                    <div class="avatar placeholder">
-                        <div class="bg-neutral-content text-neutral w-8 rounded-full">
-                            <span *ngIf="isSignedIn(); else guest" class="text-m font-bold" >{{displayName[0]}}</span>
-                            <ng-template #guest>
-                                <span class="text-m font-bold">G</span>
-                            </ng-template>
-                        </div>
-                    </div>
-                </summary>
-                <ul class="p-2 w-max">
-                  <li><a *ngIf="isSignedIn()" (click)="signOutWithGoogle()">Logout</a></li>
-                </ul>
-              </details>
+  </div>
+
+  <div class="navbar-end pr-10">
+    <div>
+      <button class="btn rounded-full" (click)="goToLibrary()">Library</button>
+    </div>
+    <ul class="menu rounded-box menu-horizontal z-[1]">
+      <li class="rounded-box bg-base-100 rounded-full">
+        <details>
+          <summary class="hover:rounded-full">
+            <div class="avatar placeholder">
+              <div class="bg-neutral-content text-neutral w-8 rounded-full">
+                <span
+                  *ngIf="isSignedIn(); else guest"
+                  class="text-m font-bold"
+                  >{{ displayName[0] }}</span
+                >
+                <ng-template #guest>
+                  <span class="text-m font-bold">G</span>
+                </ng-template>
+              </div>
+            </div>
+          </summary>
+          <ul class="p-2 w-max">
+            <li>
+              <a *ngIf="isSignedIn()" (click)="signOutWithGoogle()">Logout</a>
             </li>
-        </ul>
-    </div>
+          </ul>
+        </details>
+      </li>
+    </ul>
+  </div>
 </div>

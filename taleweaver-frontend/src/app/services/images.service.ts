@@ -10,11 +10,11 @@ import { Observable } from 'rxjs';
 export class ImagesService {
   private endpoint = environment.apiUrl + 'images';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
   getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
   }
 
@@ -24,8 +24,12 @@ export class ImagesService {
    * @returns Observable<ImageResponse>
    */
   generateImage(text: string, pageId: number): Observable<Image> {
-    return this.http.post<Image>(`${this.endpoint}`, { text, pageId }, {
-      headers: this.getHeaders()
-    });
+    return this.http.post<Image>(
+      `${this.endpoint}`,
+      { text, pageId },
+      {
+        headers: this.getHeaders(),
+      },
+    );
   }
 }

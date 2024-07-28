@@ -6,6 +6,6 @@ export interface Page {
 }
 
 export interface ImageData {
-  prompt: string,
-  path: string
+  prompt: string;
+  path: string;
 }

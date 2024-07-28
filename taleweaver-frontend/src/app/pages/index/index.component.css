@@ -1,61 +1,61 @@
-@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap");
 
 .background {
-    background-image: url('background.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    height: 100vh;
-    width: 100vw;
+  background-image: url("background.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh;
+  width: 100vw;
 }
 
 .title {
-    padding-top: 30vh;
-    padding-left: 10vw;
-    display: block;
-    font-family: 'Rock Salt', serif;
-    color: white;
-    font-size: 3rem;
+  padding-top: 30vh;
+  padding-left: 10vw;
+  display: block;
+  font-family: "Rock Salt", serif;
+  color: white;
+  font-size: 3rem;
 }
 
 /* Large screens */
 @media (min-width: 1024px) {
-    .content {    
-        padding-top: 2%;
-        margin: auto;
-        width: 70%;
-    }
+  .content {
+    padding-top: 2%;
+    margin: auto;
+    width: 70%;
+  }
 
-    .text {
-        font-size: 1.2rem;
-    }
+  .text {
+    font-size: 1.2rem;
+  }
 }
 
 /* Small screens */
 @media (max-width: 1023px) {
-    .title {
-        padding-top: 20vh;
-        padding-left: 5vw;
-        font-size: 1.8rem;
-    }
+  .title {
+    padding-top: 20vh;
+    padding-left: 5vw;
+    font-size: 1.8rem;
+  }
 
-    .content {    
-        padding-top: 5%;
-        margin: auto;
-        width: 90%;
-    }
+  .content {
+    padding-top: 5%;
+    margin: auto;
+    width: 90%;
+  }
 
-    .text {
-        font-size: 0.8rem;
-    }
+  .text {
+    font-size: 0.8rem;
+  }
 }
 
 @media screen and (min-width: 1919px) {
-    .title{
-        padding-top: 25vh;
-        zoom: 133%;
-    }
-    .content{
-        zoom: 133%;
-    }
+  .title {
+    padding-top: 25vh;
+    zoom: 133%;
+  }
+  .content {
+    zoom: 133%;
+  }
 }

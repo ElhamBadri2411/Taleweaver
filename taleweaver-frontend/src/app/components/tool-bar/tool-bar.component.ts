@@ -42,7 +42,7 @@ export class ToolBarComponent {
     private ttsService: TtsService,
     private storyService: StoryService,
     private userService: UserService,
-    private accessService: AccessService
+    private accessService: AccessService,
   ) {}
 
   text: string = '';
@@ -107,19 +107,23 @@ export class ToolBarComponent {
     });
   }
 
-  public(){
+  public() {
     this.isPublic = !this.isPublic;
-    this.storyService.updatePublicStatus(this.bookId, this.isPublic).subscribe(() => {}); 
+    this.storyService
+      .updatePublicStatus(this.bookId, this.isPublic)
+      .subscribe(() => {});
   }
 
   getCollaborators() {
-    this.accessService.getAccessByStoryBookId(this.bookId).subscribe((accesses) => {
-      this.accessList = [];
-      accesses.forEach((access) => {
-        this.accessList.push(access.email);
+    this.accessService
+      .getAccessByStoryBookId(this.bookId)
+      .subscribe((accesses) => {
+        this.accessList = [];
+        accesses.forEach((access) => {
+          this.accessList.push(access.email);
+        });
+        console.log(this.accessList);
       });
-      console.log(this.accessList);
-    });
   }
 
   addCollaborator() {
@@ -134,10 +138,13 @@ export class ToolBarComponent {
     const isChecked = (checked.target as HTMLInputElement).checked;
     console.log(isChecked);
     if (isChecked) {
-      this.accessService.createAccess(googleId, this.bookId, "write").subscribe(() => {});
-    }
-    else {
-      this.accessService.deleteAccess(googleId, this.bookId).subscribe(() => {});
+      this.accessService
+        .createAccess(googleId, this.bookId, 'write')
+        .subscribe(() => {});
+    } else {
+      this.accessService
+        .deleteAccess(googleId, this.bookId)
+        .subscribe(() => {});
     }
   }
 

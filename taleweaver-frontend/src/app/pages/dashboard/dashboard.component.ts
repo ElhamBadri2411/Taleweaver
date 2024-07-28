@@ -41,7 +41,7 @@ import { interval, Subscription } from 'rxjs';
           transform: 'scale(1)',
           opacity: 1,
           zIndex: 0,
-        })
+        }),
       ),
       state(
         'zoom',
@@ -49,7 +49,7 @@ import { interval, Subscription } from 'rxjs';
           transform: 'translateY(-50%) translateX(-50%) scale(2)',
           opacity: 0,
           zIndex: 1000,
-        })
+        }),
       ),
       transition('initial => zoom', [
         animate('0.8s cubic-bezier(0.25, 0.5, 0.25, 1)'),
@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private router: Router,
     private google: GoogleApiService,
     private storyService: StoryService,
-    private dataService: DataService
+    private dataService: DataService,
   ) {}
 
   bookClicked(index: number) {
@@ -114,7 +114,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           },
           (error) => {
             console.error('Error fetching generation status:', error);
-          }
+          },
         );
       }
     });
@@ -139,13 +139,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   getBooks() {
     this.dataService.filter$.subscribe((filter) => {
       this.filter = filter;
-      this.storyService.getStoryBooks(this.id, this.page, filter).subscribe((result) => {
-        this.storyBooks = result.books;
-        this.totalPage = result.pageOfBook;
-        this.storyBooks.forEach((element) => {
-          this.isClicked.push(false);
+      this.storyService
+        .getStoryBooks(this.id, this.page, filter)
+        .subscribe((result) => {
+          this.storyBooks = result.books;
+          this.totalPage = result.pageOfBook;
+          this.storyBooks.forEach((element) => {
+            this.isClicked.push(false);
+          });
         });
-      });
     });
   }
 
@@ -170,15 +172,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  next(){
-    if(this.page < this.totalPage){
+  next() {
+    if (this.page < this.totalPage) {
       this.page++;
       this.getBooks();
     }
   }
 
-  previous(){
-    if(this.page > 1){
+  previous() {
+    if (this.page > 1) {
       this.page--;
       this.getBooks();
     }
