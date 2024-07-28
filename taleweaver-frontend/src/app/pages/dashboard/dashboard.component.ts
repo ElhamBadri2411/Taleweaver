@@ -17,7 +17,6 @@ import {
   state,
 } from '@angular/animations';
 import { DataService } from '../../services/data.service';
-import { flush } from '@angular/core/testing';
 import { interval, Subscription } from 'rxjs';
 
 @Component({

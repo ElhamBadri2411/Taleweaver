@@ -19,11 +19,11 @@ import { bootstrapXLg } from '@ng-icons/bootstrap-icons';
 })
 
 export class NavBarComponent {
-  DisplayName: string = '';
+  displayName: string = '';
   searchTerm: string = '';
   fetchedDisplayName: boolean = false;
 
-  @Input() dashboard: Boolean;
+  @Input() search: Boolean;
   constructor(
     private readonly google: GoogleApiService,
     private userService: UserService,
@@ -36,7 +36,7 @@ export class NavBarComponent {
       if (this.google.isLoggedIn()) {
         const id = this.google.getUserId(); 
         this.userService.getUserById(id).subscribe((user) => {
-          this.DisplayName = user.displayName;
+          this.displayName = user.displayName;
           this.fetchedDisplayName = true;
         });
       }
@@ -53,6 +53,10 @@ export class NavBarComponent {
 
   goToDashboard() {
     this.router.navigate(['/dashboard']);
+  }
+
+  goToLibrary() {
+    this.router.navigate(['/library']);
   }
 
   clearSearch() {

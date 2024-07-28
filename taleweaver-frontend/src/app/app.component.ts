@@ -16,8 +16,8 @@ export class AppComponent {
   
   constructor(private router: Router){}
 
-  isDashboardRoute(): boolean {
-    return this.router.url === '/dashboard';
+  ableToSearch(): boolean {
+    return this.router.url === '/dashboard' || this.router.url === '/library';
   }
 
   isIndexRoute(): boolean {

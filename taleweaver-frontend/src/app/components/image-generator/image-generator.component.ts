@@ -85,7 +85,8 @@ export class ImageGeneratorComponent
     private fb: FormBuilder,
     private imagesService: ImagesService,
     private pagesService: PageService,
-    private yjsService: YjsService
+    private yjsService: YjsService,
+    private googleApiService: GoogleApiService
   ) {
     this.form = this.fb.group({
       text: [''],
@@ -160,8 +161,9 @@ export class ImageGeneratorComponent
     // this.provider = new WebsocketProvider('ws://localhost:3000', this.bookId, this.ydoc);
 
     const randomColor = this.colors[Math.floor(Math.random() * this.colors.length)];
+    let displayName: string = this.googleApiService.getUserName();
     this.provider.awareness.setLocalStateField('user', {
-      name: 'Elham',
+      name: displayName,
       color: randomColor
     });
 

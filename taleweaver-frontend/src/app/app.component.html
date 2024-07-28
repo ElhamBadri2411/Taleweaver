@@ -1,10 +1,13 @@
-<div *ngIf="!isIndexRoute()">
-    <app-nav-bar [dashboard]="isDashboardRoute()"></app-nav-bar>
+<div *ngIf="!isIndexRoute()" class="nav">
+    <app-nav-bar [search]="ableToSearch()"></app-nav-bar>
 </div>
-<router-outlet />
+
+<div class="content-wrapper">
+    <router-outlet/>
+</div>
 
 <div *ngIf="!isCreditRoute() && !isIndexRoute()" 
-    class="cursor-pointer pt-10 pb-5 bg-base-200">
+    class="cursor-pointer pt-10 pb-5 bg-base-200 credit">
     <div class="container mx-auto px-4 text-base-content hover:text-orange-300">
         <p class="text-center" (click)="toCredit()">Credit</p>
     </div>

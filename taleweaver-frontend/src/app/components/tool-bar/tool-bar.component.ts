@@ -4,8 +4,13 @@ import { bootstrapVolumeUpFill } from '@ng-icons/bootstrap-icons';
 import { bootstrapPencilSquare } from '@ng-icons/bootstrap-icons';
 import { bootstrapX } from '@ng-icons/bootstrap-icons';
 import { bootstrapTrash } from '@ng-icons/bootstrap-icons';
+import { bootstrapSendArrowUp } from '@ng-icons/bootstrap-icons';
+import { bootstrapSendArrowDown } from '@ng-icons/bootstrap-icons';
+import { bootstrapPersonAdd } from '@ng-icons/bootstrap-icons';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from '../../services/data.service';
+import { AccessService } from '../../services/access.service';
+import { UserService } from '../../services/user.service';
 import { TtsService } from '../../services/tts.service';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../environments/environment';
@@ -23,6 +28,9 @@ import { StoryService } from '../../services/story.service';
       bootstrapPencilSquare,
       bootstrapX,
       bootstrapTrash,
+      bootstrapSendArrowUp,
+      bootstrapSendArrowDown,
+      bootstrapPersonAdd,
     }),
   ],
 })
@@ -32,13 +40,20 @@ export class ToolBarComponent {
     private route: ActivatedRoute,
     private dataService: DataService,
     private ttsService: TtsService,
-    private storyService: StoryService
+    private storyService: StoryService,
+    private userService: UserService,
+    private accessService: AccessService
   ) {}
 
   text: string = '';
+  access = '';
+  isPublic = false;
+  users: any[] = [];
+  accessList: string[] = [];
   @Output() stateChange = new EventEmitter<string>();
   audioVisible = false;
-  isModalOpen = false;
+  deleteModal = false;
+  addCollaboratorModal = false;
   baseUrl = environment.apiUrl;
   bookId = this.route.snapshot.params['id'];
   audioUrl = `${this.baseUrl}generated-audio/${this.bookId}-output.mp3`;
@@ -65,12 +80,6 @@ export class ToolBarComponent {
     });
   }
 
-  ngOnInit() {
-    this.dataService.bookContent$.subscribe((content) => {
-      this.text = content;
-    });
-  }
-
   closeAudio() {
     this.stateChange.emit('loading');
     this.ttsService.deleteAudio(this.bookId).subscribe(() => {
@@ -79,23 +88,77 @@ export class ToolBarComponent {
     });
   }
 
-  openModal() {
-    this.isModalOpen = true;
+  openDeleteModal() {
+    this.deleteModal = true;
   }
 
-  closeModal() {
-    this.isModalOpen = false;
+  closeDeleteModal() {
+    this.deleteModal = false;
   }
 
   confirmDelete() {
-    // Call your delete logic here
     this.delete();
-    this.closeModal(); // Close the modal after confirming
+    this.closeDeleteModal();
   }
 
   delete() {
     this.storyService.deleteStory(this.bookId).subscribe(() => {
       this.router.navigate(['/dashboard']);
+    });
+  }
+
+  public(){
+    this.isPublic = !this.isPublic;
+    this.storyService.updatePublicStatus(this.bookId, this.isPublic).subscribe(() => {}); 
+  }
+
+  getCollaborators() {
+    this.accessService.getAccessByStoryBookId(this.bookId).subscribe((accesses) => {
+      this.accessList = [];
+      accesses.forEach((access) => {
+        this.accessList.push(access.email);
+      });
+      console.log(this.accessList);
+    });
+  }
+
+  addCollaborator() {
+    this.getCollaborators();
+    this.userService.getAllUsers().subscribe((users) => {
+      this.users = users;
+      this.addCollaboratorModal = true;
+    });
+  }
+
+  updateAccess(googleId: string, checked: Event) {
+    const isChecked = (checked.target as HTMLInputElement).checked;
+    console.log(isChecked);
+    if (isChecked) {
+      this.accessService.createAccess(googleId, this.bookId, "write").subscribe(() => {});
+    }
+    else {
+      this.accessService.deleteAccess(googleId, this.bookId).subscribe(() => {});
+    }
+  }
+
+  closeCollaboratorModal() {
+    this.addCollaboratorModal = false;
+  }
+
+  confirmCollaborator() {
+    console.log('collaborator added');
+  }
+
+  ngOnInit() {
+    this.storyService.getStoryById(this.bookId).subscribe((story) => {
+      this.isPublic = story.public;
+    });
+    this.dataService.bookContent$.subscribe((content) => {
+      this.text = content;
+    });
+
+    this.dataService.access$.subscribe((access) => {
+      this.access = access;
     });
   }
 
