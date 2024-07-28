@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PageService } from '../../services/page.service';
 import { StoryService } from '../../services/story.service';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { DataService } from '../../services/data.service';
 
@@ -28,7 +28,8 @@ export class BookComponent {
     private pageService: PageService,
     private storyService: StoryService,
     private route: ActivatedRoute,
-    private dataService: DataService
+    private dataService: DataService,
+    private router: Router
   ) { }
 
   flipCover() {
@@ -70,9 +71,15 @@ export class BookComponent {
   ngOnInit() {
     this.route.params.subscribe(params => {
       const id = params['id'];
-      this.storyService.getStoryById(id).subscribe((story) => {
-        this.cover = story;
-      });
+      this.storyService.getStoryById(id).subscribe(
+        (res) => {
+          this.cover = res.storyBook;
+          this.dataService.updateAccess(res.access);
+        },
+        (error) => {
+          this.router.navigate(['/dashboard']);
+        }
+      );
       this.pageService.getPagesByStoryBookId(id).subscribe((res) => {
         if (res.length === 0) {
           this.length = 2;

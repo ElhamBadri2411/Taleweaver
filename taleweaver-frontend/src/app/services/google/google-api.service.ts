@@ -78,4 +78,8 @@ export class GoogleApiService {
   getUserId(): string {
     return this.oAuthService.getIdentityClaims()['sub'];
   }
+
+  getUserName(): string {
+    return this.oAuthService.getIdentityClaims()['name'];
+  }
 }

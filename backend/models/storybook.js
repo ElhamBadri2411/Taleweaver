@@ -13,6 +13,10 @@ export const StoryBook = db.define("StoryBook", {
     type: DataTypes.STRING,
     allowNull: false
   },
+  public: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
   isGenerating: {
     type: DataTypes.BOOLEAN,
     defaultValue: false

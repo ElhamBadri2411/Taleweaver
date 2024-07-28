@@ -7,13 +7,23 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class YjsService {
-  private doc: Y.Doc;
-  private wsProvider: WebsocketProvider;
+  public ydoc: Y.Doc;
+  public provider: WebsocketProvider;
 
-  constructor() { }
+  constructor() {
+    this.ydoc = new Y.Doc();
+  }
 
-  init(pageId: string): void {
-    this.doc = new Y.Doc()
-    this.wsProvider = new WebsocketProvider(environment.wsUrl, `page-${pageId}`, this.doc)
+  init(bookId: string): void {
+    this.provider = new WebsocketProvider(environment.wsUrl, bookId, this.ydoc);
+  }
+
+  clean(): void {
+    if (this.provider) {
+      this.provider.destroy()
+    }
+    if (this.ydoc) {
+      this.ydoc.destroy()
+    }
   }
 }

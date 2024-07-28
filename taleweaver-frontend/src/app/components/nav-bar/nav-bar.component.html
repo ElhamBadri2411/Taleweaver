@@ -7,7 +7,7 @@
     </div>
 
     <!-- Search Bar -->
-    <div *ngIf="dashboard === true" class="navbar-center w-1/2">
+    <div *ngIf="search === true" class="navbar-center w-1/2">
         <div class="form-control w-full mx-4">          
             <label class="input input-bordered flex items-center gap-2">
                 <input
@@ -24,13 +24,16 @@
     </div>
     
     <div class="navbar-end pr-10">
+        <div>
+            <button class="btn rounded-full" (click)="goToLibrary()">Library</button>
+        </div>
         <ul class="menu rounded-box menu-horizontal z-[1]">
-            <li class="rounded-box bg-base-100">
+            <li class="rounded-box bg-base-100 rounded-full">
               <details>
-                <summary>
+                <summary class="hover:rounded-full">
                     <div class="avatar placeholder">
                         <div class="bg-neutral-content text-neutral w-8 rounded-full">
-                            <span *ngIf="isSignedIn(); else guest" class="text-m font-bold" >{{DisplayName[0]}}</span>
+                            <span *ngIf="isSignedIn(); else guest" class="text-m font-bold" >{{displayName[0]}}</span>
                             <ng-template #guest>
                                 <span class="text-m font-bold">G</span>
                             </ng-template>

@@ -42,14 +42,16 @@ export class StoryService {
    * @param id The id of the story to be fetched
    * @returns Observable<StoryBook>
    */
-  getStoryById(id: number): Observable<StoryBook> {
-    return this.http.get<StoryBook>(`${this.endpoint}/${id}`, { headers: this.headers });
+  getStoryById(id: number): Observable<{ storyBook: StoryBook, access: string, public: boolean }> {
+    return this.http.get<{ storyBook: StoryBook, access: string, public: boolean }>(`${this.endpoint}/${id}`, { headers: this.headers });
   }
 
   /**
    * Fetches all the storybooks of a user
    * @param id User id of the user we want to fetch the books for
    * @param filter Filter to be applied to the books
+   * @param limit Limit the number of books to be fetched
+   * @param page The page number to be fetched
    * @returns Observable<StoryBook>
    */
   getStoryBooks(id: string, page: number, filter?: string, limit?: number): Observable<{ pageOfBook: number, books: StoryBook[] }> {
@@ -59,6 +61,33 @@ export class StoryService {
           :`${this.endpoint}/users/${id}?page=${page}&filter=${filter}`) 
         : `${this.endpoint}/users/${id}?page=${page}`;
     return this.http.get<{ pageOfBook: number, books: StoryBook[] }>(url, { headers: this.headers });
+  }
+
+  /**
+   * Fetches all the public storybooks
+   * @param filter Filter to be applied to the books
+   * @param limit Limit the number of books to be fetched
+   * @param page The page number to be fetched
+   * @returns Observable<StoryBook>
+   */
+  getPublicStoryBooks(page: number, filter?: string, limit?: number): Observable<{ pageOfBook: number, books: StoryBook[] }> {
+    const url = filter 
+        ? (limit 
+          ? `${this.endpoint}/public?page=${page}&filter=${filter}&limit=${limit}`
+          :`${this.endpoint}/public?page=${page}&filter=${filter}`) 
+        : `${this.endpoint}/public?page=${page}`;
+    return this.http.get<{ pageOfBook: number, books: StoryBook[] }>(url, { headers: this.headers });
+  }
+
+  /**
+   * Update the public status of a storybook
+   * @param id The id of the story to be fetched
+   * @returns Observable<StoryBook>
+   */
+  updatePublicStatus(id: number, isPublic: boolean): Observable<StoryBook> {
+    return this.http.patch<StoryBook>(`${this.endpoint}/public/${id}`, {
+      isPublic,
+    }, { headers: this.headers });
   }
 
   /**

@@ -17,6 +17,7 @@ export class EditStoryComponent implements OnInit {
   bookTitle: string;
   bookDesc: string;
   selectedPageId: number | null = null;
+  pagesLen: number;
 
   @ViewChild(PageListComponent) pageListComponent: PageListComponent;
 
@@ -26,26 +27,32 @@ export class EditStoryComponent implements OnInit {
 
   ngOnInit() {
     this.bookId = this.route.snapshot.paramMap.get('bookId') || '';
-    this.storyService.getStoryById(+this.bookId).subscribe({
-      next: (res) => {
-        this.bookTitle = res.title
-        this.bookDesc = res.description
-      },
-      error: (err) => {
-        console.log(err)
-      }
-    })
-
+    this.getPagesLen()
   }
 
   onPageSelected(pageId: number) {
     this.selectedPageId = pageId;
+    this.getPagesLen()
+  }
+
+  getPagesLen() {
+    this.pagesLen = this.pageListComponent.pages.length
   }
 
   onImageGenerated() {
     if (this.pageListComponent) {
-      this.pageListComponent.loadPages();
-    }
+      console.log("onIMAGEGENERATED!")
+      this.pageListComponent.reloadPages();
+      this.getPagesLen()
 
+    }
+  }
+
+  onPageDeleted() {
+    if (this.pageListComponent) {
+      console.log("on page deleted")
+      this.pageListComponent.loadPages();
+      this.getPagesLen()
+    }
   }
 }
