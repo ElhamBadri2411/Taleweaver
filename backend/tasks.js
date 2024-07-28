@@ -24,7 +24,7 @@ try {
 
 const generateStoryPrompt = (title, description) => {
   return `
-Create a 7-page outline for a children's story titled '${title}' with the description '${description}' Each page should include a brief description of the events and an image description suitable for DALL-E image generation. Avoid using specific character names in the image descriptions. Describe each page thoroughly and ensure the image descriptions have a "storybook/kid" theme. Make sure each image description is self-contained and does not rely on previous context.
+Create a 5-page outline for a children's story titled '${title}' with the description '${description}' Each page should include a brief description of the events and an image description suitable for DALL-E image generation. Avoid using specific character names in the image descriptions. Describe each page thoroughly and ensure the image descriptions have a "storybook/kid" theme. Make sure each image description is self-contained and does not rely on previous context.
 
 Format the response as:
 'Page n\\nParagraph: [content]\\nImage Prompt: [image description]'
@@ -39,7 +39,7 @@ Page 2
 Paragraph: The car drove through the forest and soon arrived at a vast desert. The golden sands stretched as far as the eye could see, with the sun shining brightly in the sky.
 Image Prompt: A bright red car with big, friendly eyes driving through a vibrant, golden desert with soft dunes and a smiling sun overhead. The scene is illustrated in a playful, storybook style with warm colors and gentle lines.
 
-Now, generate the 7-page outline based on the provided description and format. Ensure that the image descriptions have a "storybook/kid" theme, are fully self-contained, and do not use specific character names.
+Now, generate the 5-page outline based on the provided description and format. Ensure that the image descriptions have a "storybook/kid" theme, are fully self-contained, and do not use specific character names.
 `;
 };
 
@@ -82,7 +82,7 @@ const generatePageContent = async (job) => {
       await generateImage(
         { body: { text: imagePrompt, pageId: page.id } },
         null,
-        () => {},
+        () => { },
       );
       const progress = Math.floor((i / (outline.length - 1)) * 100);
       await job.updateProgress(progress);
