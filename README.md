@@ -3,8 +3,8 @@
 ## **Team** 201-Created
 
 ### Link
-Check out taleweaver here: [taleweaver.me](https://taleweaver.me)
-Here's a video like to our demo: [Click here]()
+- Check out taleweaver here: [taleweaver.me](https://taleweaver.me)
+- Here's a video like to our demo: [Click here](https://www.youtube.com/watch?v=4nU_HVw5qvE)
 
 ### Team Members
 
