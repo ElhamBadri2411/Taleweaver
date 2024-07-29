@@ -2,11 +2,14 @@
 
 ## **Team** 201-Created
 
+### Link
+Check out taleweaver here: [taleweaver.me](https://taleweaver.me)
+Here's a video like to our demo: [Click here]()
+
 ### Team Members
 
-1. Allan Henriques - allan.henriques@mail.utoronto.ca
-2. Elham Badri - elham.badri@mail.utoronto.ca
-3. Yuxin Chen - katy.chen@mail.utoronto.ca
+1. Elham Badri - elham.badri@mail.utoronto.ca
+2. Yuxin Chen - katy.chen@mail.utoronto.ca
 
 ### Brief Description of the Web Application
 
@@ -54,5 +57,5 @@ TaleWeaver is a web application that allows users to create personalized picture
     - Conduct thorough testing and debugging to ensure
     - Prepare and record a 3-minute video demo showcasing the core features of the application.
     - Upload the video demo to YouTube and include the link in the README.md file.
-    - Ensure the application is fully deployed to Google Cloud.
+    - Ensure the application is fully deployed to Lightsail.
     - Ensure all code and deployment files are pushed to the main branch of the GitHub
