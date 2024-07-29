@@ -8,6 +8,7 @@ import {
   getPagesByStoryBookId,
   updatePage,
   addPage,
+  updatePageOrder
 } from "../controllers/page_controller.js";
 
 const pageRouter = Router();
@@ -17,6 +18,7 @@ pageRouter.post("/new", verifyToken, addPage);
 pageRouter.delete("/:id", verifyToken, deletePage);
 pageRouter.get("/:id", verifyToken, getPageById);
 pageRouter.get("/storybooks/:id", verifyToken, getPagesByStoryBookId);
+pageRouter.patch("/storybooks/:id/order", verifyToken, updatePageOrder);
 pageRouter.patch("/:id", verifyToken, updatePage);
 
 export default pageRouter;

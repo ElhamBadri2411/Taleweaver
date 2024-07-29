@@ -43,7 +43,7 @@ export class ToolBarComponent {
     private storyService: StoryService,
     private userService: UserService,
     private accessService: AccessService,
-  ) {}
+  ) { }
 
   text: string = '';
   access = '';
@@ -111,7 +111,7 @@ export class ToolBarComponent {
     this.isPublic = !this.isPublic;
     this.storyService
       .updatePublicStatus(this.bookId, this.isPublic)
-      .subscribe(() => {});
+      .subscribe(() => { });
   }
 
   getCollaborators() {
@@ -122,7 +122,6 @@ export class ToolBarComponent {
         accesses.forEach((access) => {
           this.accessList.push(access.email);
         });
-        console.log(this.accessList);
       });
   }
 
@@ -136,15 +135,14 @@ export class ToolBarComponent {
 
   updateAccess(googleId: string, checked: Event) {
     const isChecked = (checked.target as HTMLInputElement).checked;
-    console.log(isChecked);
     if (isChecked) {
       this.accessService
         .createAccess(googleId, this.bookId, 'write')
-        .subscribe(() => {});
+        .subscribe(() => { });
     } else {
       this.accessService
         .deleteAccess(googleId, this.bookId)
-        .subscribe(() => {});
+        .subscribe(() => { });
     }
   }
 

@@ -1,6 +1,7 @@
 import { Page } from "../models/page.js";
 import { StoryBook } from "../models/storybook.js";
 import { Access } from "../models/access.js";
+import db from "../utils/db.js"
 
 // Add authentication later
 
@@ -218,6 +219,57 @@ const updatePage = async (req, res, next) => {
   }
 };
 
+// @route PATCH api/pages/storybooks/:id/order
+// @desc Update the order of pages in a storybook
+// @access private
+const updatePageOrder = async (req, res, next) => {
+  const transaction = await db.transaction();
+
+  try {
+    const { id } = req.params;
+    const { pages } = req.body;
+
+    // Check if the user has access to this storybook
+    const access = await Access.findOne({
+      where: {
+        googleId: req.userId,
+        storyBookId: id,
+      },
+    });
+
+    if (!access || access.length === 0) {
+      await transaction.rollback();
+      return res.status(403).json({ error: "Forbidden" });
+    }
+
+    // Update the position of each page
+    for (let i = 0; i < pages.length; i++) {
+      const page = pages[i];
+      await Page.update(
+        { position: i + 1 },
+        {
+          where: { id: page.id, StoryBookId: id },
+          transaction
+        }
+      );
+    }
+
+    // Update the storybook's updatedAt timestamp
+    const storyBook = await StoryBook.findByPk(id);
+    if (storyBook) {
+      storyBook.changed("updatedAt", true);
+      await storyBook.save({ transaction });
+    }
+
+    await transaction.commit();
+    res.status(200).json({ message: "Page order updated successfully" });
+  } catch (error) {
+    await transaction.rollback();
+    console.error("Error updating page order:", error);
+    return res.status(400).json({ error: "Cannot update page order" });
+  }
+};
+
 export {
   createPage,
   deletePage,
@@ -225,4 +277,5 @@ export {
   getPagesByStoryBookId,
   updatePage,
   addPage,
+  updatePageOrder
 };

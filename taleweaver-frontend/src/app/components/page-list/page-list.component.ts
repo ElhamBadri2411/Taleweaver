@@ -10,6 +10,7 @@ import { heroPlus } from '@ng-icons/heroicons/outline';
 import { environment } from '../../../environments/environment';
 import { YjsService } from '../../services/yjs.service';
 import * as Y from 'yjs';
+import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-page-list',
@@ -19,6 +20,7 @@ import * as Y from 'yjs';
     ReactiveFormsModule,
     HttpClientModule,
     NgIconComponent,
+    DragDropModule,
   ],
   templateUrl: './page-list.component.html',
   styleUrl: './page-list.component.css',
@@ -48,8 +50,7 @@ export class PageListComponent implements OnInit {
 
         if (this.pages.length === 0) {
           this.addNewPage();
-        } else {
-          console.log('selected first page');
+        } else if (!this.selectedPageId || !this.pages.some(p => p.id === this.selectedPageId)) {
           this.selectPage(this.pages[0].id);
         }
       },
@@ -101,4 +102,24 @@ export class PageListComponent implements OnInit {
       },
     });
   }
+
+  onDrop(event: CdkDragDrop<Page[]>) {
+    moveItemInArray(this.pages, event.previousIndex, event.currentIndex);
+    this.updatePageOrder();
+  }
+
+  updatePageOrder() {
+    this.pageService.updatePageOrder(this.bookId, this.pages).subscribe({
+      next: () => {
+        this.pageList.delete(0, this.pageList.length);
+        this.pageList.push(this.pages);
+      },
+      error: (error) => {
+        console.error('Error updating page order:', error);
+        // Revert the local change if the server update fails
+        this.loadPages();
+      }
+    });
+  }
 }
+

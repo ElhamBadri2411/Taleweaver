@@ -1,0 +1,7 @@
+.cdk-drag-dragging {
+  opacity: 0;
+}
+
+.cdk-drag-preview {
+  opacity: 0;
+}

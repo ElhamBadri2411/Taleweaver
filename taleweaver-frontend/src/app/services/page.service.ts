@@ -10,7 +10,7 @@ import { Page } from '../classes/Page';
 export class PageService {
   private endpoint = environment.apiUrl + 'pages';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
   getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
@@ -82,4 +82,15 @@ export class PageService {
       headers: this.getHeaders(),
     });
   }
+
+  /**
+     * Update the order of pages in a storybook
+     * @param bookId The id of the storybook
+     * @param pages The list of pages with their new order
+     * @returns Observable<any>
+     */
+  updatePageOrder(bookId: string, pages: Page[]): Observable<any> {
+    return this.http.patch(`${this.endpoint}/storybooks/${bookId}/order`, { pages }, { headers: this.getHeaders() });
+  }
+
 }

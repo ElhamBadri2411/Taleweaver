@@ -24,7 +24,7 @@ export class EditStoryComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private storyService: StoryService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.bookId = this.route.snapshot.paramMap.get('bookId') || '';
@@ -42,7 +42,6 @@ export class EditStoryComponent implements OnInit {
 
   onImageGenerated() {
     if (this.pageListComponent) {
-      console.log('onIMAGEGENERATED!');
       this.pageListComponent.reloadPages();
       this.getPagesLen();
     }
@@ -50,7 +49,6 @@ export class EditStoryComponent implements OnInit {
 
   onPageDeleted() {
     if (this.pageListComponent) {
-      console.log('on page deleted');
       this.pageListComponent.loadPages();
       this.getPagesLen();
     }

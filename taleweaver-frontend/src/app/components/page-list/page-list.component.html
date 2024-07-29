@@ -4,10 +4,13 @@
   Pages
 </div>
 <div
+  cdkDropList
+  (cdkDropListDropped)="onDrop($event)"
   class="flex flex-col gap-y-4 px-4 py-2 border-r-primary-content bg-base-300 border-r-2 max-w-64 max-h-[96vh] min-h-[96vh] overflow-y-auto sm:max-w-full md:max-w-64"
 >
   @for (page of pages; track page.id; let idx = $index) {
     <div
+      cdkDrag
       (click)="selectPage(page.id)"
       class="group w-20 h-20 sm:w-40 sm:h-40 sm:min-w-40 sm:min-h-40 bg-base-200 rounded-lg relative border-transparent border-2 hover:border-secondary-content hover:cursor-pointer transition-all duration-200 ease-in"
     >

@@ -46,8 +46,7 @@ Quill.register('modules/cursors', QuillCursors);
   viewProviders: [provideIcons({ heroSparklesSolid, heroXCircleSolid })],
 })
 export class ImageGeneratorComponent
-  implements OnInit, OnChanges, OnDestroy, AfterViewInit
-{
+  implements OnInit, OnChanges, OnDestroy, AfterViewInit {
   @Input() bookId!: string;
   @Input() pageId: number | null = null;
   @Input() pagesLen: number;
@@ -106,7 +105,6 @@ export class ImageGeneratorComponent
     this.initializeYjs();
     this.autoSaveSetup();
 
-    console.log('this.binding =', this.binding);
 
     this.provider.awareness.on('change', this.handleAwarenessChange.bind(this));
     window.addEventListener(
@@ -117,7 +115,6 @@ export class ImageGeneratorComponent
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('IT BE CHANGING');
     if (changes['pageId'] && !changes['pageId'].isFirstChange()) {
       this.loadPageData();
     }
@@ -153,7 +150,6 @@ export class ImageGeneratorComponent
 
       // Listen to Quill editor changes and update the form control
       this.quillEditor.on('text-change', () => {
-        console.log('TEX CHANGE');
         this.form.get('text')?.patchValue(this.quillEditor.getText());
       });
 
@@ -205,14 +201,12 @@ export class ImageGeneratorComponent
     this.imageMap = this.ydoc.getMap('images');
     this.imageMap.observe((event) => {
       event.keysChanged.forEach((key) => {
-        console.log('key', key);
         if (key === `page-${this.pageId}`) {
           this.imageUrl = this.imageMap.get(`page-${this.pageId}`) || '';
           this.imageGenerated.emit();
         }
 
         if (key.includes('-deleted')) {
-          console.log('HER HERERERE');
           this.pageDeleted.emit();
         }
       });
@@ -224,7 +218,6 @@ export class ImageGeneratorComponent
   }
 
   cleanupYjs(): void {
-    console.log('cleaning');
     if (this.binding) {
       this.binding.destroy();
     }

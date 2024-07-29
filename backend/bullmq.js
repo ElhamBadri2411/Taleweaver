@@ -1,4 +1,6 @@
 import { Queue } from "bullmq";
+import { configDotenv } from "dotenv";
+configDotenv();
 
 const connection = {
   host: process.env.REDIS_HOST || "localhost",
